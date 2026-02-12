@@ -937,9 +937,14 @@
       let file = e.target.files[0];
       if (!file) return;
 
+      startProgress(); // ALWAYS start immediately
+
       const index = e.target.id.replace("photo", "");
       const thumb = document.getElementById("thumb" + index);
-      if (!thumb) return;
+      if (!thumb) {
+        finishProgress();
+        return;
+      }
 
       // -------- HEIC CONVERSION BLOCK --------
       if (
@@ -948,8 +953,6 @@
         file.name.toLowerCase().endsWith(".heic") ||
         file.name.toLowerCase().endsWith(".heif")
       ) {
-        startProgress();
-
         try {
           const convertedBlob = await heic2any({
             blob: file,
@@ -962,12 +965,10 @@
           });
 
         } catch (err) {
+          console.error("HEIC conversion failed.", err);
           finishProgress();
-          alert("Unable to convert HEIC image.");
           return;
         }
-
-        finishProgress();
       }
       // -------- END HEIC BLOCK --------
 
@@ -975,10 +976,14 @@
 
       reader.onload = function (event) {
         const img = new Image();
+
         img.onload = function () {
 
           const canvas = document.createElement("canvas");
-          const maxSize = 900; // Picture quality on Print (600 - 1400)
+
+          // GOOD BALANCE FOR LOCAL STORAGE
+          const maxSize = 1100;
+
           let width = img.width;
           let height = img.height;
 
@@ -1009,10 +1014,12 @@
           if (delBtn) delBtn.style.display = "inline-block";
 
           try {
-            sessionStorage.setItem("photo" + index, compressedDataUrl);
+            localStorage.setItem("photo" + index, compressedDataUrl);
           } catch (err) {
-            console.warn("Session storage full, photo not saved.");
+            console.error("Local storage full. Photo not saved.", err);
           }
+
+          finishProgress(); // FINISH ONLY HERE
         };
 
         img.src = event.target.result;
@@ -1022,7 +1029,6 @@
     }
   });
 </script>
-
 
 <script>
   function deletePhoto(index) {
@@ -1062,13 +1068,3 @@ if ("serviceWorker" in navigator) {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
