@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Property Inspection Checklist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ================================================================ -->
+<!-- ========================== Librarys ============================ -->
+<!-- ================================================================ -->
+
+<script src="https://unpkg.com/heic2any/dist/heic2any.min.js"></script>
+
+
+
+<!-- ================================================================ -->
+<!-- ============================== CSS ============================= -->
+<!-- ================================================================ -->
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background-color: #f1f1f1
+    }
+
+    #pageWrapper {
+      background-color: #f1f1f1;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .page-logo {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .page-logo img {
+      max-width: 200px;
+      width: 100%;
+      height: auto;
+      background: black;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    h1 {
+      text-align: center;   /* Center the title */
+      margin-bottom: 20px;  /* Space below the title */
+      color: black;       /* Title color */  
+    }
+
+    h2 {
+      margin-top: 20px;    /* Space above each section */
+      margin-bottom: 5px;  /* Space below each section */
+    }
+
+    .grid-container-no-color {
+      display: grid;
+      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr; /* column grid */
+      column-gap: 5px; /* horizontal spacing */
+      row-gap: 5px;    /* vertical spacing */
+      width: 100%;
+      max-width: 600px;
+      margin: 0px auto;
+      align-items: center;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      break-inside: avoid;
+      page-break-inside: avoid
+    }
+
+    .grid-container-yes-color {
+      display: grid;
+      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr; /* column grid */
+      column-gap: 5px; /* horizontal spacing */
+      row-gap: 5px;    /* vertical spacing */
+      width: 100%;
+      max-width: 600px;
+      margin: 0px auto;
+      align-items: center;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      background-color: #d0dfff;
+      break-inside: avoid;
+      page-break-inside: avoid
+    }
+
+    .header {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .radio-circle {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Hide default radio */
+    .radio-circle input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 1px; height: 1px;
+      margin: -1px; border: 0; padding: 0;
+      clip: rect(0 0 0 0); clip-path: inset(50%);
+      overflow: hidden;
+    }
+
+    .radio-circle input[type="radio"]:focus + label {
+      outline: 2px solid #0067c5; /* visible focus */
+      outline-offset: 2px;
+    }
+
+    /* Custom circle */
+    .radio-circle label {
+      width: 30px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    /* Fill circle when selected */
+    .radio-circle input[type="radio"]:checked + label {
+      background-color: #333;
+      border-color: #333;
+    }
+
+    .text-input {         
+      grid-column: 2 / 6;     /* Text box spans columns 2 to 6 */
+    }
+
+    .text-input textarea {
+      width: 100%;            /* fill container */
+      box-sizing: border-box; /* include padding/border in width */
+      padding: 5px;          /* your desired padding */
+      resize: none;           /* doesn't allow dragging to resize */
+      min-height: 50px;      /* optional initial height */
+      max-width: 100%;        /* prevent overflow */
+      min-width: 100%;        /* prevent underflow */
+      overflow: hidden;      /* hide scrollbars initially */
+      font-size: 1rem;
+    }
+
+    .merge-rows {
+      grid-row: span 2;     /* span two rows */
+      display: flex;
+      align-items: flex-start;     /* vertical centering */
+      height: 100%;         /* ensures full row height is used */
+      min-width: 0;       /* prevent content from forcing expansion */
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    @media print {
+      body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      }
+
+      .grid-container-no-color, .grid-container-yes-color {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      }
+
+      .no-print {
+      display: none !important;
+      }
+    }
+
+    .form-container {
+        text-align: left; /* default for mobile */
+        margin-left: 0;
+    }
+
+    /* Desktop and larger screens */
+    @media (min-width:450px) {
+      .form-container {
+        /* Center the container itself */
+        max-width: 450px;      /* match your grid max-width for visual harmony */
+        margin: 0 auto;        /* centers the block */
+        text-align: left;      /* keep contents left-aligned */
+      }
+    }
+
+    /* Sections should be natural block containers without clipping */
+    .section {
+      position: relative;         /* creates the sticky boundary */
+      /* DO NOT set overflow: hidden on this container or any ancestor */
+    }
+
+    /* The combined sticky header (title + headers row) */
+    .section-sticky {
+      position: sticky;
+      top: var(--app-header-height, 0px);       /* pin to top of viewport */
+      background: #f1f1f1;           /* cover content underneath while stuck */
+      z-index: 10;                /* ensure it stays above the grid cells */
+      /* Optional: add shadow when stuck (pure CSS can’t detect state; feel free to leave shadow always) */
+      box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+      padding-top: 16px;   /* space ABOVE the title */
+      padding-bottom: 0px; /* optional: subtle balance */
+    }
+
+    /* Keep your existing styles (example) */
+    .section-title {
+      color: #0067c5;
+      margin: 0;
+      padding: 8px 0;
+      text-align: center;
+    }
+
+    .divider-2 {
+      border: 0;
+      height: 2px;
+      background-color: #333;
+      margin: 0;
+    }
+
+    .divider-1 {
+      border: 0;
+      height: 1px;
+      background-color: #333;
+      margin: 0;
+    }
+
+    /* Make sure your grid header row has a solid background so it reads cleanly */
+    .headers-row {
+      background: #f1f1f1;
+    }
+
+    /* If you have a fixed site header/nav, offset the sticky top */
+    :root {
+      --app-header-height: 0px; /* e.g., 56px if you have a fixed nav */
+    }
+
+    /* Print (remove stickiness completely) */
+    @media print {
+      :root {
+        --app-header-height: 0 !important; /* ensure no offset is applied */
+      }
+
+      .section-sticky {
+        position: static !important;
+        top: auto !important;
+        box-shadow: none !important;      /* cleaner print */
+      }
+    }
+
+    .export-instructions {
+      max-width: 450px;
+      margin: 20px auto 40px auto;
+      padding: 14px 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      background: #f9fbff;
+      border: 1px solid #e2e8f5;
+    }
+
+    .export-instructions h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .export-instructions ol {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    @media print {
+      .export-instructions {
+        display: none;
+      }
+    }
+
+    .action-button {
+      display: inline-block;
+      font-size: 18px;
+      padding: 10px 18px;
+      background-color: #0067c5;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .action-button:hover {
+      background-color: #004c93;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;   /* centers horizontally */
+      gap: 12px;             /* spacing between buttons */
+      margin-bottom: 16px;
+    }
+
+    .made-by {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 40px;
+      margin-bottom: 80px;
+    }
+
+    .photo-button {
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+
+    .photo-thumb {
+      display: block;
+      margin-top: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      object-fit: cover;
+
+      /* SCREEN SIZE (small) */
+      max-width: 80px;
+      max-height: 80px;
+    }
+
+    /* PRINT SIZE (medium) */
+    @media print {
+      .photo-thumb {
+        max-width: 350px;
+        max-height: 350px;
+        border: none;
+        margin-top: 10px;
+      }
+    }
+
+    .photo-delete {
+      font-size: 14px;
+      padding: 6px 10px;
+      margin-left: 6px;
+      background-color: #c50000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      line-height: 1;
+      display: none;
+    }
+
+    .photo-delete:hover {
+      background-color: #930000;
+    }
+
+    .clear-button {
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+
+    /* ===== Floating Photo Progress Bar ===== */
+    #photoProgressWrapper {
+      position: fixed;        /* 🔥 makes it stay on screen */
+      top: 0;                 /* stick to top */
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: #ddd;
+      z-index: 9999;          /* above everything */
+      overflow: hidden;
+      display: none;          /* hidden by default */
+    }
+
+    #photoProgressBar {
+      height: 100%;
+      width: 0%;
+      background: #0067c5;
+      transition: width 0.2s linear;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ================================================================ -->
+<!-- ============================ Header ============================ -->
+<!-- ================================================================ -->
+
+<div id="pageWrapper">
+
+<div class="page-logo">
+  <img src="https://suntide.com/wp-content/uploads/2025/05/Suntide_logo_white-1-300x163.png" alt="Suntide Company Logo">
+
+</div>
+
+
+<h1>Property Inspection Checklist</h1>
+
+<div id="photoProgressWrapper" class="no-print">
+  <div id="photoProgressBar"></div>
+</div>
+
+<div class="form-container">
+<button id="clearAll" type="button" style="margin-left:0px; margin-bottom:10px; font-size:18px" class="action-button clear-button no-print">Clear All</button>
+<br>
+
+<label for="property" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Property:</label>
+<input type="text" id="property" name="property" style="width:250px; font-size: 1rem;" class="save-text">
+<br>
+
+<label for="propertyManager" style="display: inline-block; margin-bottom:10px; font-size:18px">Property Manager:</label>
+<input type="text" id="propertyManager" name="propertyManager" style="width:182px; font-size: 1rem;" class="save-text">
+<br>
+
+<label for="date" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Inspection Date:</label>
+<input type="date" id="date" name="date" style="width:140px; font-size: 1rem;" class="save-text">
+</div>
+<br>
+
+<!-- ================================================================ -->
+<!-- ========================== Check List ========================== -->
+<!-- ================================================================ -->
+
+<!-- Renders the entire check list programically -->
+<div id="sections-root"></div>
+<br>
+
+<!-- Export instructions -->
+<div class="export-instructions no-print">
+
+  <h3>Export Instructions</h3>
+  <ol>
+    <li>Click <strong>Print / Save as PDF</strong> and save to your phone.</li>
+    <li>Email the Property Inspection report to Maya (MTulashie@suntide.com) and attach the saved PDF.</li>
+  </ol>
+  <br>
+  <div class="button-group">
+    <button class="action-button" onclick="printChecklist()">
+      Print / Save as PDF
+    </button>
+  </div>
+</div>
+
+<hr class="divider-1 no-print">
+<div class="made-by no-print">
+  Made by Adam - v1.3 - 2026
+</div>
+
+
+<!-- ================================================================ -->
+<!-- ============================ Scripts =========================== -->
+<!-- ================================================================ -->
+
+<script>  /* Auto adjusts textarea box sizes */
+  document.addEventListener("input", function (e) {
+    if (e.target.tagName.toLowerCase() === "textarea") {
+      e.target.style.height = "auto";        // reset height
+      e.target.style.height = e.target.scrollHeight + "px"; // adjust to content
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener("load", function () {
+    
+    // =========================
+    // DEFAULT TODAY'S DATE
+    // =========================
+    const dateInput = document.getElementById("date");
+    if (dateInput && !dateInput.value) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const today = `${year}-${month}-${day}`;
+      dateInput.value = today;
+    }
+
+    // =========================
+    // LOAD RADIOS
+    // =========================
+    const radioNames = new Set();
+
+    document.querySelectorAll(".save-radio").forEach(radio => {
+      radioNames.add(radio.name);
+    });
+
+    radioNames.forEach(name => {
+      const savedValue = localStorage.getItem(name);
+      if (savedValue) {
+        const el = document.querySelector(
+          'input[name="' + name + '"][value="' + savedValue + '"]'
+        );
+        if (el) el.checked = true;
+      }
+    });
+
+    // =========================
+    // LOAD TEXTAREAS
+    // =========================
+    document.querySelectorAll(".save-text").forEach(area => {
+      const savedText = localStorage.getItem(area.id);
+      if (savedText) {
+        area.value = savedText;
+
+        // 🔥 Auto-resize after loading saved text
+        area.style.height = "auto";
+        area.style.height = area.scrollHeight + "px";
+      }
+    });
+
+
+    // =========================
+    // SAVE RADIOS
+    // =========================
+    document.querySelectorAll(".save-radio").forEach(radio => {
+      radio.addEventListener("change", function () {
+        localStorage.setItem(this.name, this.value);
+      });
+    });
+
+    // =========================
+    // SAVE TEXTAREAS
+    // =========================
+    document.querySelectorAll(".save-text").forEach(area => {
+      area.addEventListener("input", function () {
+        localStorage.setItem(this.id, this.value);
+      });
+    });
+
+    // =========================
+    // CLEAR ALL BUTTON
+    // =========================
+    const clearBtn = document.getElementById("clearAll");
+    if (clearBtn) {
+      clearBtn.addEventListener("click", function () {
+
+        // Confirm clear
+        if (!confirm("Are you sure you want to clear all inspection data?")) {
+        return;
+        }
+
+        // Clear radios
+        radioNames.forEach(name => {
+          document.querySelectorAll('input[name="' + name + '"]')
+            .forEach(r => r.checked = false);
+          localStorage.removeItem(name);
+        });
+
+        // Clear textareas
+        document.querySelectorAll(".save-text").forEach(area => {
+          area.value = "";
+          area.style.height = "";   // Reset to original CSS height
+          localStorage.removeItem(area.id);
+        });
+
+        // Clear photos
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith("photo")) {
+            localStorage.removeItem(key);
+          }
+        });
+
+        // Hide thumbnails
+        document.querySelectorAll("img[id^='thumb']").forEach(img => {
+          img.src = "";
+          img.style.display = "none";
+        });
+
+        // Hide all photo delete (x) buttons
+        document.querySelectorAll("button[id^='delete']").forEach(btn => {
+          btn.style.display = "none";
+        });
+
+        // 🔥 IMPORTANT: Reset file inputs
+        document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
+          input.value = "";
+        });
+      });
+    }
+
+    // =========================
+    // LOAD SAVED PHOTOS
+    // =========================
+    document.querySelectorAll("img[id^='thumb']").forEach(img => {
+      const index = img.id.replace("thumb", "");
+      const savedPhoto = localStorage.getItem("photo" + index);
+      if (savedPhoto) {
+        img.src = savedPhoto;
+        img.style.display = "block";
+
+        const delBtn = document.getElementById("delete" + index);
+        if (delBtn) delBtn.style.display = "inline-block";
+      }
+    });
+  });
+</script>
+
+<script>  /* Automatiically creates section headers and grids */
+(function () {
+  // 1) Define your sections: title + items
+  const sections = [
+    {
+      title: "1. Building R&M",
+      items: [
+        "Exterior Facade / Paint",
+        "Glass / Framing",
+        "Fencing / Walls",
+        "Overhangs / Canopy / Awnings",
+        "Trash Enclosure",
+        "Common Doors / Security",
+        "Mechanical Room / Janitors Closet",
+        "Doors / Locks - Bldg Security",
+        "Stairwells / Hallways",
+        "Conference Rooms",
+        "Atriums",
+        "Other",
+      ],
+    },
+    {
+      title: "2. Vacancies",
+      items: [
+        "Clear of any debris",
+        "Windows, baseboards, and sills clean",
+        "Blinds / Window Treatments",
+        "Ceiling Tiles",
+        "Lights",
+        "Thermostat",
+        "Other",
+      ],
+    },
+    {
+      title: "3. Lighting / Electrical",
+      items: [
+        "Parking Lot",
+        "Overhang / Canopy / Awnings",
+        "Security / Wall Packs",
+        "Photocell / Timer Operation",
+        "Decorative / Landscape",
+        "Emergency / Exit",
+        "Infrared Inspection",
+        "Maintenance Rooms / Janitors Closets",
+        "Emergency Generator",
+        "Common Areas / Hallways / Stairwells",
+        "Other",
+      ],
+    },
+    { 
+      title: "4. Sidewalks", 
+      items: [
+        "Concrete Condition",
+        "Concrete Cleanliness",
+        "Trip Hazards",
+        "Trash / Site Pickup",
+      ],
+    },
+    {
+      title: "5. Parking Lot / Asphalt / Coating",
+      items: [
+        "Overall Condition",
+        "Pot Holes / Low Spots / Crackfilling",
+        "Sweeping & Cleanliness",
+        "Striping Condition",
+        "Parking Parmp / Ramp Condition Assessment",
+        "Stormwater / Sewer Drains / Catch Basins",
+        "Sump Pumps(s)",
+        "Other",
+      ],
+    },
+    {
+      title: "6. Landscaping / Snow Removal",
+      items: [
+        "Plantings / Shrubs & Bushes",
+        "Turf / Grass",
+        "Trees",
+        "Irrigation",
+        "Parking Lot & Walkway Snow / Ice Condition",
+        "Snow Storage / Drive Lane Visibility",
+        "Rock Beds",
+        "Retaining Walls",
+        "Other",
+      ],
+    },
+    {
+      title: "7. Roof",
+      items: [
+        "Condition / Professional Assessment",
+        "Repairs",
+        "Debris / Grease from hoods",
+        "Drainage / Gutters",
+        "Heat Tape",
+        "Other",
+      ],
+    },
+    {
+      title: "8. Paint",
+      items: [
+        "Sign Posts",
+        "Light Poles",
+        "Bollards",
+        "Facade",
+        "Overhangs",
+        "Trash Enclosure",
+        "Doors & Frames",
+        "Mechanical Rooms / Janitors Closets",
+        "Elevators",
+        "Stairwells",
+        "Hallways",
+        "Other",
+      ],
+    },
+    {
+      title: "9. Fire / Life / Safety",
+      items: [
+        "Fire Extinguishers Inspection",
+        "Fire Panel Inspection",
+        "Fire Sprinkler Inspection",
+        "RPZ / Backflow Test",
+        "Other",
+      ],
+    }
+    // Add more sections exactly like above:
+    // { title: "Lighting / Electrical", items: [ ... ] },
+    // { title: "Signage", items: [ ... ] },
+  ];
+
+  // 2) Utility to create elements quickly
+  function el(tag, attrs = {}, children = []) {
+    const node = document.createElement(tag);
+    Object.entries(attrs).forEach(([k, v]) => {
+      if (k === "className") node.className = v;
+      else if (k === "html") node.innerHTML = v;
+      else node.setAttribute(k, v);
+    });
+    (Array.isArray(children) ? children : [children]).forEach(c => {
+      if (c == null) return;
+      node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+    });
+    return node;
+  }
+
+  // 3) Build the shared rating header row (Good/Fair/Poor/N/A)
+  function buildRatingHeaderRow() {
+    const row = el("div", { className: "grid-container-no-color headers-row" }, [
+      el("div", { className: "header" }, ""),   // empty left cell
+      el("div", { className: "header" }, "Good"),
+      el("div", { className: "header" }, "Fair"),
+      el("div", { className: "header" }, "Poor"),
+      el("div", { className: "header" }, "N/A"),
+    ]);
+    return row;
+  }
+
+  // 4) Build a single grid row for an item
+  function buildItemRow(globalIndex, label) {
+    const gridClass = globalIndex % 2 === 0 ? "grid-container-no-color" : "grid-container-yes-color";
+    const name = `radio${globalIndex}`;
+    const ids = {
+      good: `good${globalIndex}`,
+      fair: `fair${globalIndex}`,
+      poor: `poor${globalIndex}`,
+      na:   `na${globalIndex}`,
+      txt:  `textarea${globalIndex}`,
+      labelCell: `mergeContainer${globalIndex}`,
+    };
+
+    return el("div", { className: gridClass }, [
+      el("div", { className: "merge-rows", id: ids.labelCell }, label),
+
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: ids.good, name, value: "good", className: "save-radio" }),
+        el("label", { for: ids.good, "aria-label": "Good" })
+      ]),
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: ids.fair, name, value: "fair", className: "save-radio" }),
+        el("label", { for: ids.fair, "aria-label": "Fair" })
+      ]),
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: ids.poor, name, value: "poor", className: "save-radio" }),
+        el("label", { for: ids.poor, "aria-label": "Poor" })
+      ]),
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: ids.na, name, value: "na", className: "save-radio" }),
+        el("label", { for: ids.na, "aria-label": "Not applicable" })
+      ]),
+
+      el("div", { className: "text-input" }, [
+        el("textarea", {
+          id: ids.txt,
+          className: "save-text",
+          placeholder: "Enter details here"
+        })
+      ]),
+
+      // Photo Upload + Thumbnail
+      el("div", { className: "text-input" }, [
+
+        el("input", {
+          type: "file",
+          accept: "image/*",
+          id: `photo${globalIndex}`,
+          className: "no-print",
+          style: "display:none"
+        }),
+
+        el("button", {
+          type: "button",
+          className: "action-button photo-button no-print",
+          onclick: `document.getElementById('photo${globalIndex}').click()`
+        }, "Upload Picture"),
+
+        el("button", {
+          type: "button",
+          id: `delete${globalIndex}`,
+          className: "photo-delete no-print",
+          onclick: `deletePhoto(${globalIndex})`
+        }, "X"),
+
+        el("img", {
+          id: `thumb${globalIndex}`,
+          className: "photo-thumb",
+          style: "display:none"
+        })
+      ])
+    ]); 
+  }
+
+  // 5) Build an entire section (sticky header + rating headers + rows)
+  function buildSection(section, startIndex) {
+    let globalIndex = startIndex;
+    const sectionEl = el("section", { className: "section" });
+
+    // Sticky header block (title + rating header row + divider)
+    const sticky = el("div", { className: "section-sticky" }, [
+      el("h2", { className: "section-title" }, section.title),
+      el("hr", { className: "divider-2" }),
+      buildRatingHeaderRow(),
+      el("hr", { className: "divider-1" }),
+    ]);
+
+    sectionEl.appendChild(sticky);
+
+    // Rows
+    section.items.forEach(label => {
+      sectionEl.appendChild(buildItemRow(globalIndex, label));
+      globalIndex++;
+    });
+
+    return { node: sectionEl, nextIndex: globalIndex };
+  }
+
+  // 6) Render all sections into the root container
+  const root = document.getElementById("sections-root");
+  let nextIndex = 0;
+  sections.forEach((sec, i) => {
+    // optional divider between sections
+    if (i > 0) {
+      root.appendChild(el("br"));
+    }
+    const { node, nextIndex: idx } = buildSection(sec, nextIndex);
+    root.appendChild(node);
+    nextIndex = idx;
+  });
+})();
+</script>
+
+<script>
+  function printChecklist() {
+
+    const property = document.getElementById("property");
+    const manager = document.getElementById("propertyManager");
+    const date = document.getElementById("date");
+
+    // --- Reset borders every time user clicks ---
+    [property, manager, date].forEach(el => {
+      el.style.border = "";
+    });
+
+    let missing = [];
+
+    if (!property.value.trim()) missing.push("Property");
+    if (!manager.value.trim()) missing.push("Property Manager");
+    if (!date.value) missing.push("Date");
+
+    // --- IF ANY MISSING ---
+    if (missing.length > 0) {
+
+      // Highlight missing fields
+      if (!property.value.trim()) property.style.border = "2px solid red";
+      if (!manager.value.trim()) manager.style.border = "2px solid red";
+      if (!date.value) date.style.border = "2px solid red";
+
+      alert(
+        "Please complete the following fields before printing:\n\n" +
+        missing.join("\n")
+      );
+
+      return; // STOP PRINTING
+    }
+
+    // --- All good ---
+    window.print();
+  }
+</script>
+
+<script>
+  const progressWrap = document.getElementById("photoProgressWrapper");
+  const progressBar = document.getElementById("photoProgressBar");
+
+  function startProgress() {
+    progressWrap.style.display = "block";
+    progressBar.style.width = "0%";
+    let w = 0;
+    progressBar._interval = setInterval(() => {
+      w += 8;
+      if (w > 90) w = 90; // never hit 100 until done
+      progressBar.style.width = w + "%";
+    }, 120);
+  }
+
+  function finishProgress() {
+    clearInterval(progressBar._interval);
+    progressBar.style.width = "100%";
+    setTimeout(() => {
+      progressWrap.style.display = "none";
+      progressBar.style.width = "0%";
+    }, 300);
+  }
+
+  document.addEventListener("change", async function (e) {
+    if (e.target.type === "file" && e.target.id.startsWith("photo")) {
+
+      let file = e.target.files[0];
+      if (!file) return;
+
+      const index = e.target.id.replace("photo", "");
+      const thumb = document.getElementById("thumb" + index);
+      if (!thumb) return;
+
+      // -------- HEIC CONVERSION BLOCK --------
+      if (
+        file.type === "image/heic" ||
+        file.type === "image/heif" ||
+        file.name.toLowerCase().endsWith(".heic") ||
+        file.name.toLowerCase().endsWith(".heif")
+      ) {
+        startProgress();
+
+        try {
+          const convertedBlob = await heic2any({
+            blob: file,
+            toType: "image/jpeg",
+            quality: 0.85
+          });
+
+          file = new File([convertedBlob], "converted.jpg", {
+            type: "image/jpeg"
+          });
+
+        } catch (err) {
+          finishProgress();
+          alert("Unable to convert HEIC image.");
+          return;
+        }
+
+        finishProgress();
+      }
+      // -------- END HEIC BLOCK --------
+
+      const reader = new FileReader();
+
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+
+          const canvas = document.createElement("canvas");
+          const maxSize = 5000;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+
+          thumb.src = compressedDataUrl;
+          thumb.style.display = "block";
+
+          const delBtn = document.getElementById("delete" + index);
+          if (delBtn) delBtn.style.display = "inline-block";
+
+          try {
+            localStorage.setItem("photo" + index, compressedDataUrl);
+          } catch (err) {
+            alert("Storage full. Delete some photos.");
+          }
+        };
+
+        img.src = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+
+<script>
+  function deletePhoto(index) {
+    const thumb = document.getElementById("thumb" + index);
+    const fileInput = document.getElementById("photo" + index);
+    const delBtn = document.getElementById("delete" + index);
+
+    if (thumb) {
+      thumb.src = "";
+      thumb.style.display = "none";
+    }
+
+    if (fileInput) {
+      fileInput.value = "";
+    }
+
+    if (delBtn) {
+      delBtn.style.display = "none";
+    }
+
+    localStorage.removeItem("photo" + index);
+  }
+</script>
+
+</div>
+</body>
+</html>
