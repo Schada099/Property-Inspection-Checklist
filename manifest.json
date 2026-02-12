@@ -1,6 +1,6 @@
 {
   "name": "Property Inspection Checklist",
-  "short_name": "Inspection",
+  "short_name": "Property Inspections",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f1f1f1",
@@ -17,4 +17,5 @@
       "type": "image/png"
     }
   ]
+
 }
