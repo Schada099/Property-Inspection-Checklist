@@ -10,7 +10,9 @@
 
 <script src="https://unpkg.com/heic2any/dist/heic2any.min.js"></script>
 
-
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0067c5">
+<link rel="apple-touch-icon" href="icon-192.png">
 
 <!-- ================================================================ -->
 <!-- ============================== CSS ============================= -->
@@ -1047,5 +1049,16 @@
 </script>
 
 </div>
+<!-- ================================================================ -->
+<!-- ========================== Register ============================ -->
+<!-- ================================================================ -->
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
+
 </body>
 </html>
