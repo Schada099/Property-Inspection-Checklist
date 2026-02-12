@@ -1009,9 +1009,9 @@
           if (delBtn) delBtn.style.display = "inline-block";
 
           try {
-            localStorage.setItem("photo" + index, compressedDataUrl);
+            sessionStorage.setItem("photo" + index, compressedDataUrl);
           } catch (err) {
-            alert("Storage full. Delete some photos.");
+            console.warn("Session storage full, photo not saved.");
           }
         };
 
@@ -1062,6 +1062,7 @@ if ("serviceWorker" in navigator) {
 
 </body>
 </html>
+
 
 
 
