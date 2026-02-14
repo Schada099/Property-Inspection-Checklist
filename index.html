@@ -37,7 +37,7 @@
     }
 
     .page-logo img {
-      max-width: 250px;
+      max-width: 300px;
       width: 100%;
       height: auto;
       padding: 5px;
@@ -329,15 +329,56 @@
       max-height: 80px;
     }
 
-    /* PRINT SIZE (medium) */
-    @media print {
-      .photo-thumb {
-        max-width: 350px;
-        max-height: 350px;
-        border: none;
-        margin-top: 10px;
-      }
-    }
+/* PRINT SIZE (dynamic sizing based on count) */
+@media print {
+  /* Break photo container out of grid */
+  [id^="thumbWrap"] {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 4px 0 !important;
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Make the parent text-input container also span full width */
+  .text-input:has([id^="thumbWrap"]) {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Default photo size */
+  .photo-thumb {
+    margin: 2px;
+    border: none;
+    display: inline-block;
+    object-fit: cover;
+  }
+
+  /* 1 photo = large (full width) */
+  [id^="thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
+    max-width: 100%;
+    max-height: 300px;
+  }
+
+  /* 2 photos = medium (half width each) */
+  [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
+    max-width: calc(50% - 4px);
+    max-height: 300px;
+  }
+
+  /* 3 photos = small (third width each) */
+  [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
+    max-width: calc(33.333% - 4px);
+    max-height: 250px;
+  }
+
+  /* Hide buttons */
+  .photo-button,
+  .photo-delete {
+    display: none !important;
+  }
+}
 
     .photo-delete {
       font-size: 14px;
@@ -350,6 +391,7 @@
       cursor: pointer;
       line-height: 1;
       display: none;
+      vertical-align: top;
     }
 
     .photo-delete:hover {
@@ -558,17 +600,26 @@
           localStorage.removeItem(area.id);
         });
 
-        // Clear photos
+        // Clear photos from localstorage
         Object.keys(localStorage).forEach(key => {
           if (key.startsWith("photo")) {
             localStorage.removeItem(key);
           }
         });
 
-        // Hide thumbnails
-        document.querySelectorAll("img[id^='thumb']").forEach(img => {
-          img.src = "";
-          img.style.display = "none";
+        // REMOVE ALL THUMBNAILS FROM SCREEN
+        document.querySelectorAll("div[id^='thumbWrap']").forEach(wrap => {
+          wrap.innerHTML = "";
+        });
+
+        // 🔥 Reset all photo buttons
+        document.querySelectorAll("button[onclick*='photo']").forEach(btn => {
+          if (btn.textContent.includes("Upload")) {
+            btn.textContent = "Upload Picture (0/3)";
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            btn.style.cursor = "pointer";
+          }
         });
 
         // Hide all photo delete (x) buttons
@@ -576,7 +627,7 @@
           btn.style.display = "none";
         });
 
-        // 🔥 IMPORTANT: Reset file inputs
+        // IMPORTANT: Reset file inputs
         document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
           input.value = "";
         });
@@ -586,15 +637,21 @@
     // =========================
     // LOAD SAVED PHOTOS
     // =========================
-    document.querySelectorAll("img[id^='thumb']").forEach(img => {
-      const index = img.id.replace("thumb", "");
-      const savedPhoto = localStorage.getItem("photo" + index);
-      if (savedPhoto) {
-        img.src = savedPhoto;
-        img.style.display = "block";
+    document.querySelectorAll("div[id^='thumbWrap']").forEach(wrap => {
+      const index = wrap.id.replace("thumbWrap", "");
+      const saved = JSON.parse(localStorage.getItem("photo" + index) || "[]");
+      const deleteBtn = document.getElementById("delete" + index);
 
-        const delBtn = document.getElementById("delete" + index);
-        if (delBtn) delBtn.style.display = "inline-block";
+      saved.forEach(src => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.className = "photo-thumb";
+        wrap.appendChild(img);
+      });
+
+      // 🔥 SHOW X BUTTON IF PHOTOS EXIST
+      if (saved.length > 0 && deleteBtn) {
+        deleteBtn.style.display = "inline-block";
       }
     });
   });
@@ -804,7 +861,8 @@
           accept: "image/*",
           id: `photo${globalIndex}`,
           className: "no-print",
-          style: "display:none"
+          style: "display:none",
+          multiple: true
         }),
 
         el("button", {
@@ -820,10 +878,9 @@
           onclick: `deletePhoto(${globalIndex})`
         }, "X"),
 
-        el("img", {
-          id: `thumb${globalIndex}`,
-          className: "photo-thumb",
-          style: "display:none"
+        el("div", {
+          id: `thumbWrap${globalIndex}`,
+          style: "display:flex; gap:6px; flex-wrap:wrap;"
         })
       ])
     ]); 
@@ -917,7 +974,7 @@
     let w = 0;
     progressBar._interval = setInterval(() => {
       w += 8;
-      if (w > 90) w = 90; // never hit 100 until done
+      if (w > 90) w = 90;
       progressBar.style.width = w + "%";
     }, 120);
   }
@@ -931,125 +988,157 @@
     }, 300);
   }
 
+  // 🔥 MOVED OUTSIDE - Now globally accessible
+  function updatePhotoButton(index) {
+    const saved = JSON.parse(localStorage.getItem("photo" + index) || "[]");
+    const button = document.querySelector(`button[onclick*="photo${index}"].photo-button`);
+    
+    if (button) {
+      const count = saved.length;
+      if (count === 0) {
+        button.textContent = "Upload Picture (0/3)";
+        button.disabled = false;
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+      } else if (count < 3) {
+        button.textContent = `Upload Picture (${count}/3)`;
+        button.disabled = false;
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+      } else {
+        button.textContent = "Max Photos (3/3)";
+        button.disabled = true;
+        button.style.opacity = "0.6";
+        button.style.cursor = "not-allowed";
+      }
+    }
+  }
+
   document.addEventListener("change", async function (e) {
     if (e.target.type === "file" && e.target.id.startsWith("photo")) {
 
-      let file = e.target.files[0];
-      if (!file) return;
-
-      startProgress(); // ALWAYS start immediately
+      startProgress();
 
       const index = e.target.id.replace("photo", "");
-      const thumb = document.getElementById("thumb" + index);
-      if (!thumb) {
+      const wrap = document.getElementById("thumbWrap" + index);
+
+      let existingPhotos = JSON.parse(localStorage.getItem("photo" + index) || "[]");
+
+      if (existingPhotos.length >= 3) {
+        alert("Maximum 3 photos allowed.");
         finishProgress();
+        e.target.value = "";
         return;
       }
 
-      // -------- HEIC CONVERSION BLOCK --------
-      if (
-        file.type === "image/heic" ||
-        file.type === "image/heif" ||
-        file.name.toLowerCase().endsWith(".heic") ||
-        file.name.toLowerCase().endsWith(".heif")
-      ) {
-        try {
-          const convertedBlob = await heic2any({
-            blob: file,
-            toType: "image/jpeg",
-            quality: 0.85
-          });
+      const remainingSlots = 3 - existingPhotos.length;
+      const files = Array.from(e.target.files).slice(0, remainingSlots);
 
-          file = new File([convertedBlob], "converted.jpg", {
-            type: "image/jpeg"
-          });
+      for (let file of files) {
 
-        } catch (err) {
-          console.error("HEIC conversion failed.", err);
-          finishProgress();
-          return;
+        // ---- HEIC CONVERSION ----
+        if (
+          file.type === "image/heic" ||
+          file.type === "image/heif" ||
+          file.name.toLowerCase().endsWith(".heic") ||
+          file.name.toLowerCase().endsWith(".heif")
+        ) {
+          try {
+            const convertedBlob = await heic2any({
+              blob: file,
+              toType: "image/jpeg",
+              quality: 0.85
+            });
+
+            file = new File([convertedBlob], "converted.jpg", {
+              type: "image/jpeg"
+            });
+          } catch {
+            continue;
+          }
         }
-      }
-      // -------- END HEIC BLOCK --------
 
-      const reader = new FileReader();
+        const reader = new FileReader();
 
-      reader.onload = function (event) {
-        const img = new Image();
+        reader.onload = function (event) {
+          const img = new Image();
 
-        img.onload = function () {
+          img.onload = function () {
 
-          const canvas = document.createElement("canvas");
+            const canvas = document.createElement("canvas");
+            const maxSize = 1000;
 
-          // GOOD BALANCE FOR LOCAL STORAGE
-          const maxSize = 1100;
+            let width = img.width;
+            let height = img.height;
 
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > maxSize) {
+            if (width > height && width > maxSize) {
               height *= maxSize / width;
               width = maxSize;
-            }
-          } else {
-            if (height > maxSize) {
+            } else if (height > maxSize) {
               width *= maxSize / height;
               height = maxSize;
             }
-          }
 
-          canvas.width = width;
-          canvas.height = height;
+            canvas.width = width;
+            canvas.height = height;
 
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
 
-          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+            const compressed = canvas.toDataURL("image/jpeg", 0.8);
 
-          thumb.src = compressedDataUrl;
-          thumb.style.display = "block";
+            existingPhotos.push(compressed);
+            localStorage.setItem("photo" + index, JSON.stringify(existingPhotos));
 
-          const delBtn = document.getElementById("delete" + index);
-          if (delBtn) delBtn.style.display = "inline-block";
+            const imgEl = document.createElement("img");
+            imgEl.src = compressed;
+            imgEl.className = "photo-thumb";
+            wrap.appendChild(imgEl);
 
-          try {
-            localStorage.setItem("photo" + index, compressedDataUrl);
-          } catch (err) {
-            console.error("Local storage full. Photo not saved.", err);
-          }
+            const deleteBtn = document.getElementById("delete" + index);
+            if (deleteBtn) deleteBtn.style.display = "inline-block";
 
-          finishProgress(); // FINISH ONLY HERE
+            // 🔥 Update button text
+            updatePhotoButton(index);
+
+            finishProgress();
+          };
+
+          img.src = event.target.result;
         };
 
-        img.src = event.target.result;
-      };
-
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      }
+      
+      e.target.value = "";
     }
+  });
+
+  // 🔥 Initialize button text on page load
+  window.addEventListener("load", function() {
+    document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
+      const index = input.id.replace("photo", "");
+      updatePhotoButton(index);
+    });
   });
 </script>
 
 <script>
   function deletePhoto(index) {
-    const thumb = document.getElementById("thumb" + index);
+    const wrap = document.getElementById("thumbWrap" + index);
     const fileInput = document.getElementById("photo" + index);
-    const delBtn = document.getElementById("delete" + index);
+    const deleteBtn = document.getElementById("delete" + index);
 
-    if (thumb) {
-      thumb.src = "";
-      thumb.style.display = "none";
-    }
-
-    if (fileInput) {
-      fileInput.value = "";
-    }
-
-    if (delBtn) {
-      delBtn.style.display = "none";
-    }
+    if (wrap) wrap.innerHTML = "";
+    if (fileInput) fileInput.value = "";
 
     localStorage.removeItem("photo" + index);
+
+    // 🔥 HIDE X BUTTON
+    if (deleteBtn) deleteBtn.style.display = "none";
+    
+    // 🔥 Update button text and re-enable
+    updatePhotoButton(index);
   }
 </script>
 
@@ -1068,5 +1157,3 @@ if ("serviceWorker" in navigator) {
 
 </body>
 </html>
-
-
