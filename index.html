@@ -329,57 +329,63 @@
       max-height: 80px;
     }
 
-/* PRINT SIZE (dynamic sizing based on count) */
-@media print {
-  /* Break photo container out of grid */
-  [id^="thumbWrap"] {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 4px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 4px 0 !important;
-    grid-column: 1 / -1 !important;
-    justify-content: flex-end !important;
-  }
+    /* PRINT SIZE (dynamic sizing based on count) */
+    @media print {
+      /* Break photo container out of grid */
+      [id^="thumbWrap"] {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;  /* Increased gap from 4px to 8px */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 8px 0 !important;  /* Increased margin */
+        grid-column: 1 / -1 !important;
+        justify-content: flex-end !important;
+      }
 
-  /* Make the parent text-input container also span full width */
-  .text-input:has([id^="thumbWrap"]) {
-    grid-column: 1 / -1 !important;
-  }
+      /* Make the parent text-input container also span full width */
+      .text-input:has([id^="thumbWrap"]) {
+        grid-column: 1 / -1 !important;
+      }
 
-  /* Default photo size */
-  .photo-thumb {
-    margin: 2px;
-    border: none;
-    display: inline-block;
-    object-fit: cover;
-  }
+      /* Default photo size */
+      .photo-thumb {
+        margin: 2px;
+        border: none;
+        display: inline-block;
+        object-fit: contain;  /* Changed from 'cover' to 'contain' to prevent cropping */
+      }
 
-  /* 1 photo = large (full width) */
-  [id^="thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
-    max-width: 100%;
-    max-height: 300px;
-  }
+      /* 1 photo = large (full width) */
+      [id^="thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
+        max-width: 100%;
+        max-height: 400px;  /* Increased from 300px */
+        width: auto;  /* Allow natural width */
+        height: auto;
+      }
 
-  /* 2 photos = medium (half width each) */
-  [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
-    max-width: calc(50% - 4px);
-    max-height: 300px;
-  }
+      /* 2 photos = medium (half width each) */
+      [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
+        max-width: calc(50% - 8px);  /* Account for gap */
+        max-height: 350px;  /* Increased from 300px */
+        width: auto;
+        height: auto;
+      }
 
-  /* 3 photos = small (third width each) */
-  [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
-    max-width: calc(33.333% - 4px);
-    max-height: 250px;
-  }
+      /* 3 photos = small (third width each) */
+      [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
+        max-width: calc(33.333% - 8px);  /* Account for gap */
+        max-height: 300px;  /* Increased from 250px */
+        width: auto;  /* Allow natural width */
+        height: auto;
+      }
 
-  /* Hide buttons */
-  .photo-button,
-  .photo-delete {
-    display: none !important;
-  }
-}
+      /* Hide buttons */
+      .photo-button,
+      .photo-delete {
+        display: none !important;
+      }
+    }
 
     .photo-delete {
       font-size: 14px;
