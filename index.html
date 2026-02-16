@@ -244,7 +244,7 @@
       color: #0067c5;
       margin: 0;
       padding: 8px 0;
-      text-align: center;
+      text-align: left;
     }
 
     .divider-2 {
@@ -578,6 +578,45 @@
       }
     }
 
+.section-progress {
+  float: right;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: normal;
+  margin-left: 10px;
+}
+
+.section-progress .progress-bar-container {
+  display: inline-block;
+  width: 100px;
+  height: 14px;
+  background-color: #e0e0e0;
+  border-radius: 7px;
+  overflow: hidden;
+  vertical-align: middle;
+  margin-left: 8px;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+.section-progress .progress-bar-fill {
+  display: block;
+  height: 100%;
+  background-color: #0067c5;
+  transition: width 0.3s ease;
+  border-radius: 6px;
+  width: 0%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+@media print {
+  .section-progress {
+    display: none !important;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -887,7 +926,7 @@
         "Pot Holes / Low Spots / Crackfilling",
         "Sweeping & Cleanliness",
         "Striping Condition",
-        "Parking Parmp / Ramp Condition Assessment",
+        "Parking Ramp / Ramp Condition Assessment",
         "Stormwater / Sewer Drains / Catch Basins",
         "Sump Pumps(s)",
         "Other",
@@ -1056,9 +1095,25 @@
     let globalIndex = startIndex;
     const sectionEl = el("section", { className: "section" });
 
+    // Create section title with progress indicator
+    const titleContainer = el("h2", { className: "section-title" });
+    titleContainer.appendChild(document.createTextNode(section.title));
+    
+    const progressSpan = el("span", { 
+      className: "section-progress no-print",
+      "data-start": startIndex,
+      "data-count": section.items.length
+    }, [
+      el("span", { className: "progress-text" }, "0%"),
+      el("span", { className: "progress-bar-container" }, [
+        el("span", { className: "progress-bar-fill", style: "width: 0%" })
+      ])
+    ]);
+    titleContainer.appendChild(progressSpan);
+
     // Sticky header block (title + rating header row + divider)
     const sticky = el("div", { className: "section-sticky" }, [
-      el("h2", { className: "section-title" }, section.title),
+      titleContainer,
       el("hr", { className: "divider-2" }),
       buildRatingHeaderRow(),
       el("hr", { className: "divider-1" }),
@@ -1088,6 +1143,54 @@
     nextIndex = idx;
   });
 })();
+</script>
+
+<script>
+// Function to update progress for a specific section
+function updateSectionProgress(progressElement) {
+  const startIndex = parseInt(progressElement.getAttribute('data-start'));
+  const itemCount = parseInt(progressElement.getAttribute('data-count'));
+  
+  let completed = 0;
+  
+  // Count how many items in this section have a radio button selected
+  for (let i = startIndex; i < startIndex + itemCount; i++) {
+    const radios = document.querySelectorAll(`input[name="radio${i}"]`);
+    const checkedRadio = Array.from(radios).find(r => r.checked);
+    if (checkedRadio) {
+      completed++;
+    }
+  }
+  
+  const percentage = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
+  
+  // Update the progress display
+  const progressText = progressElement.querySelector('.progress-text');
+  const progressFill = progressElement.querySelector('.progress-bar-fill');
+  
+  if (progressText) progressText.textContent = `${percentage}%`;
+  if (progressFill) progressFill.style.width = `${percentage}%`;
+}
+
+// Function to update all sections
+function updateAllProgress() {
+  document.querySelectorAll('.section-progress').forEach(progressElement => {
+    updateSectionProgress(progressElement);
+  });
+}
+
+// Listen for radio button changes
+document.addEventListener('change', function(e) {
+  if (e.target.classList.contains('save-radio')) {
+    updateAllProgress();
+  }
+});
+
+// Initialize progress on page load (add to existing load event)
+window.addEventListener('load', function() {
+  // Small delay to ensure radios are loaded first
+  setTimeout(updateAllProgress, 100);
+});
 </script>
 
 <script>
