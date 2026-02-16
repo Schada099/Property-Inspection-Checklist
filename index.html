@@ -457,7 +457,7 @@
 
     /* ===== Floating Photo Progress Bar ===== */
     #photoProgressWrapper {
-      position: fixed;        /* 🔥 makes it stay on screen */
+      position: fixed;        /*  makes it stay on screen */
       top: 0;                 /* stick to top */
       left: 0;
       width: 100%;
@@ -769,7 +769,7 @@
       if (savedText) {
         area.value = savedText;
 
-        // 🔥 Auto-resize after loading saved text
+        //  Auto-resize after loading saved text
         area.style.height = "auto";
         area.style.height = area.scrollHeight + "px";
       }
@@ -871,7 +871,7 @@
         wrap.appendChild(img);
       });
 
-      // 🔥 SHOW X BUTTON IF PHOTOS EXIST
+      //  SHOW X BUTTON IF PHOTOS EXIST
       if (saved.length > 0 && deleteBtn) {
         deleteBtn.style.display = "inline-block";
       }
@@ -1274,7 +1274,7 @@ window.addEventListener('load', function() {
     }, 300);
   }
 
-  // 🔥 MOVED OUTSIDE - Now globally accessible
+  //  MOVED OUTSIDE - Now globally accessible
   function updatePhotoButton(index) {
     const saved = JSON.parse(localStorage.getItem("photo" + index) || "[]");
     const button = document.querySelector(`button[onclick*="photo${index}"].photo-button`);
@@ -1386,7 +1386,7 @@ window.addEventListener('load', function() {
             const deleteBtn = document.getElementById("delete" + index);
             if (deleteBtn) deleteBtn.style.display = "inline-block";
 
-            // 🔥 Update button text
+            //  Update button text
             updatePhotoButton(index);
 
             finishProgress();
@@ -1402,7 +1402,7 @@ window.addEventListener('load', function() {
     }
   });
 
-  // 🔥 Initialize button text on page load
+  //  Initialize button text on page load
   window.addEventListener("load", function() {
     document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
       const index = input.id.replace("photo", "");
@@ -1422,10 +1422,10 @@ window.addEventListener('load', function() {
 
     localStorage.removeItem("photo" + index);
 
-    // 🔥 HIDE X BUTTON
+    //  HIDE X BUTTON
     if (deleteBtn) deleteBtn.style.display = "none";
     
-    // 🔥 Update button text and re-enable
+    //  Update button text and re-enable
     updatePhotoButton(index);
   }
 </script>
