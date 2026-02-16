@@ -111,7 +111,7 @@
       outline-offset: 2px;
     }
 
-    /* Custom circle */
+    /* Custom circle - default style */
     .radio-circle label {
       width: 30px;
       height: 20px;
@@ -124,8 +124,42 @@
       transition: background 0.2s, border-color 0.2s;
     }
 
-    /* Fill circle when selected */
-    .radio-circle input[type="radio"]:checked + label {
+    /* GOOD - Green */
+    .radio-circle input[value="good"] + label {
+      border-color: #000000;
+    }
+
+    .radio-circle input[value="good"]:checked + label {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+
+    /* FAIR - Yellow/Orange */
+    .radio-circle input[value="fair"] + label {
+      border-color: #000000;
+    }
+
+    .radio-circle input[value="fair"]:checked + label {
+      background-color: #ffc107;
+      border-color: #ffc107;
+    }
+
+    /* POOR - Red */
+    .radio-circle input[value="poor"] + label {
+      border-color: #000000;
+    }
+
+    .radio-circle input[value="poor"]:checked + label {
+      background-color: #c50000;
+      border-color: #c50000;
+    }
+
+    /* N/A - Black (default) */
+    .radio-circle input[value="na"] + label {
+      border-color: #333;
+    }
+
+    .radio-circle input[value="na"]:checked + label {
       background-color: #333;
       border-color: #333;
     }
@@ -325,8 +359,8 @@
       object-fit: cover;
 
       /* SCREEN SIZE (small) */
-      max-width: 80px;
-      max-height: 80px;
+      max-width: 100px;
+      max-height: 100px;
     }
 
     /* PRINT SIZE (dynamic sizing based on count) */
@@ -335,10 +369,10 @@
       [id^="thumbWrap"] {
         display: flex !important;
         flex-wrap: wrap !important;
-        gap: 8px !important;  /* Increased gap from 4px to 8px */
+        gap: 8px !important;
         width: 100% !important;
         max-width: 100% !important;
-        margin: 8px 0 !important;  /* Increased margin */
+        margin: 8px 0 !important;
         grid-column: 1 / -1 !important;
         justify-content: flex-end !important;
       }
@@ -348,36 +382,37 @@
         grid-column: 1 / -1 !important;
       }
 
-      /* Default photo size */
+      /* Default photo size - Fallback for older Safari */
       .photo-thumb {
-        margin: 2px;
-        border: none;
-        display: inline-block;
-        object-fit: contain;  /* Changed from 'cover' to 'contain' to prevent cropping */
-      }
-
-      /* 1 photo = large (full width) */
-      [id^="thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
-        max-width: 100%;
-        max-height: 400px;  /* Increased from 300px */
-        width: auto;  /* Allow natural width */
-        height: auto;
-      }
-
-      /* 2 photos = medium (half width each) */
-      [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
-        max-width: calc(50% - 8px);  /* Account for gap */
-        max-height: 350px;  /* Increased from 300px */
+        max-width: calc(33.333% - 6px);
+        max-height: 300px;
         width: auto;
         height: auto;
+        margin: 0;
+        border: none;
+        display: inline-block;
+        object-fit: contain;
       }
 
-      /* 3 photos = small (third width each) */
-      [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
-        max-width: calc(33.333% - 8px);  /* Account for gap */
-        max-height: 300px;  /* Increased from 250px */
-        width: auto;  /* Allow natural width */
-        height: auto;
+      /* Modern browsers with :has() support - dynamic sizing */
+      @supports selector(:has(*)) {
+        /* 1 photo = large (full width) */
+        [id^="thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
+          max-width: 100%;
+          max-height: 400px;
+        }
+
+        /* 2 photos = medium (half width each) */
+        [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
+          max-width: calc(50% - 4px);
+          max-height: 350px;
+        }
+
+        /* 3 photos = small (third width each) */
+        [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
+          max-width: calc(33.333% - 6px);
+          max-height: 300px;
+        }
       }
 
       /* Hide buttons */
@@ -409,6 +444,12 @@
       font-size: 14px;
       padding: 6px 10px;
       border-radius: 5px;
+      background-color: #c50000;
+      color: white;
+    }
+
+    .clear-button:hover {
+      background-color: #930000;
     }
 
     /* ===== Floating Photo Progress Bar ===== */
@@ -738,14 +779,10 @@
           wrap.innerHTML = "";
         });
 
-        // 🔥 Reset all photo buttons
-        document.querySelectorAll("button[onclick*='photo']").forEach(btn => {
-          if (btn.textContent.includes("Upload")) {
-            btn.textContent = "Upload Picture (0/3)";
-            btn.disabled = false;
-            btn.style.opacity = "1";
-            btn.style.cursor = "pointer";
-          }
+        // Reset all photo buttons using the updatePhotoButton function
+        document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
+          const index = input.id.replace("photo", "");
+          updatePhotoButton(index);
         });
 
         // Hide all photo delete (x) buttons
@@ -1342,6 +1379,39 @@
   });
 </script>
 
+<script>
+// Touch/Swipe support for photo modal
+(function() {
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const modal = document.getElementById("photoModal");
+  
+  modal.addEventListener("touchstart", function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, false);
+  
+  modal.addEventListener("touchend", function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, false);
+  
+  function handleSwipe() {
+    const swipeThreshold = 50; // Minimum distance for a swipe
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swiped left - show next photo
+        changePhoto(1);
+      } else {
+        // Swiped right - show previous photo
+        changePhoto(-1);
+      }
+    }
+  }
+})();
+</script>
+
 </div>
   
 <!-- ================================================================ -->
@@ -1353,7 +1423,6 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
 </script>
-
 
 </body>
 </html>
