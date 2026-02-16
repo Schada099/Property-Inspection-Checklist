@@ -204,6 +204,18 @@
       .no-print {
       display: none !important;
       }
+
+        /* Force all sections to expand when printing */
+      .section-content {
+        max-height: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+      }
+
+      .section-content.collapsed {
+        max-height: none !important;
+        opacity: 1 !important;
+      }
     }
 
     .form-container {
@@ -631,6 +643,45 @@
       }
     }
 
+    .section-toggle {
+      cursor: pointer;
+      user-select: none;
+      display: inline-block;
+      margin-right: 10px;
+      font-weight: bold;
+      color: #0067c5;
+      transition: transform 0.2s;
+    }
+
+    .section-toggle.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .section-content {
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .section-content.collapsed {
+      max-height: 0 !important;
+      opacity: 0;
+    }
+
+    .section-title {
+      color: #0067c5;
+      margin: 0;
+      padding: 8px 0;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      cursor: pointer;
+    }
+
+    .section-title:hover {
+      background-color: rgba(0, 103, 197, 0.05);
+    }
+
   </style>
 </head>
 <body>
@@ -849,6 +900,15 @@
 
         // UPDATE PROGRESS INDICATORS
         updateAllProgress();
+        });
+
+        // Reset collapsed sections
+        document.querySelectorAll('.section-content').forEach((content, index) => {
+          content.classList.remove('collapsed');
+          content.style.maxHeight = content.scrollHeight + "px";
+          const toggle = content.parentElement.querySelector('.section-toggle');
+          if (toggle) toggle.classList.remove('collapsed');
+          localStorage.removeItem(`section-${index}-collapsed`);
         });
 
       });
@@ -1113,8 +1173,13 @@
     let globalIndex = startIndex;
     const sectionEl = el("section", { className: "section" });
 
-    // Create section title with progress indicator
+    // Create section title with progress indicator and toggle
     const titleContainer = el("h2", { className: "section-title" });
+    
+    // Add collapse/expand arrow
+    const toggleArrow = el("span", { className: "section-toggle no-print" }, "▼");
+    titleContainer.appendChild(toggleArrow);
+    
     titleContainer.appendChild(document.createTextNode(section.title));
     
     const progressSpan = el("span", { 
@@ -1133,17 +1198,58 @@
     const sticky = el("div", { className: "section-sticky" }, [
       titleContainer,
       el("hr", { className: "divider-2" }),
+    ]);
+
+    // Create collapsible content wrapper
+    const contentWrapper = el("div", { className: "section-content" }, [
       buildRatingHeaderRow(),
       el("hr", { className: "divider-1" }),
     ]);
 
     sectionEl.appendChild(sticky);
+    sectionEl.appendChild(contentWrapper);
 
     // Rows
     section.items.forEach(label => {
-      sectionEl.appendChild(buildItemRow(globalIndex, label));
+      contentWrapper.appendChild(buildItemRow(globalIndex, label));
       globalIndex++;
     });
+
+    // Add click handler for collapse/expand
+    titleContainer.addEventListener('click', function() {
+      const isCollapsed = contentWrapper.classList.contains('collapsed');
+      
+      if (isCollapsed) {
+        // Expand
+        contentWrapper.style.maxHeight = contentWrapper.scrollHeight + "px";
+        contentWrapper.classList.remove('collapsed');
+        toggleArrow.classList.remove('collapsed');
+        
+        // Save state
+        localStorage.setItem(`section-${startIndex}-collapsed`, 'false');
+      } else {
+        // Collapse
+        contentWrapper.style.maxHeight = contentWrapper.scrollHeight + "px";
+        setTimeout(() => {
+          contentWrapper.style.maxHeight = "0";
+        }, 10);
+        contentWrapper.classList.add('collapsed');
+        toggleArrow.classList.add('collapsed');
+        
+        // Save state
+        localStorage.setItem(`section-${startIndex}-collapsed`, 'true');
+      }
+    });
+
+    // Restore saved collapse state
+    const savedState = localStorage.getItem(`section-${startIndex}-collapsed`);
+    if (savedState === 'true') {
+      contentWrapper.classList.add('collapsed');
+      contentWrapper.style.maxHeight = "0";
+      toggleArrow.classList.add('collapsed');
+    } else {
+      contentWrapper.style.maxHeight = contentWrapper.scrollHeight + "px";
+    }
 
     return { node: sectionEl, nextIndex: globalIndex };
   }
@@ -1531,6 +1637,19 @@ window.addEventListener('load', function() {
     }
   }
 })();
+</script>
+
+<script>
+// Initialize section heights after page load
+window.addEventListener('load', function() {
+  setTimeout(() => {
+    document.querySelectorAll('.section-content').forEach(content => {
+      if (!content.classList.contains('collapsed')) {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }, 200);
+});
 </script>
 
 </div>
