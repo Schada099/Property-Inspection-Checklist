@@ -45,21 +45,21 @@
     }
 
     h1 {
-      text-align: center;   /* Center the title */
-      margin-bottom: 20px;  /* Space below the title */
-      color: black;       /* Title color */  
+      text-align: center;
+      margin-bottom: 20px;
+      color: black;
     }
 
     h2 {
-      margin-top: 20px;    /* Space above each section */
-      margin-bottom: 5px;  /* Space below each section */
+      margin-top: 20px;
+      margin-bottom: 5px;
     }
 
     .grid-container-no-color {
       display: grid;
-      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr; /* column grid */
-      column-gap: 5px; /* horizontal spacing */
-      row-gap: 5px;    /* vertical spacing */
+      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr;
+      column-gap: 5px;
+      row-gap: 5px;
       width: 100%;
       max-width: 600px;
       margin: 0px auto;
@@ -72,9 +72,9 @@
 
     .grid-container-yes-color {
       display: grid;
-      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr; /* column grid */
-      column-gap: 5px; /* horizontal spacing */
-      row-gap: 5px;    /* vertical spacing */
+      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr;
+      column-gap: 5px;
+      row-gap: 5px;
       width: 100%;
       max-width: 600px;
       margin: 0px auto;
@@ -96,7 +96,6 @@
       justify-content: center;
     }
 
-    /* Hide default radio */
     .radio-circle input[type="radio"] {
       position: absolute;
       opacity: 0;
@@ -107,11 +106,10 @@
     }
 
     .radio-circle input[type="radio"]:focus + label {
-      outline: 2px solid #0067c5; /* visible focus */
+      outline: 2px solid #0067c5;
       outline-offset: 2px;
     }
 
-    /* Custom circle - default style */
     .radio-circle label {
       width: 30px;
       height: 20px;
@@ -124,122 +122,80 @@
       transition: background 0.2s, border-color 0.2s;
     }
 
-    /* GOOD - Green */
-    .radio-circle input[value="good"] + label {
-      border-color: #000000;
-    }
+    .radio-circle input[value="good"] + label { border-color: #000000; }
+    .radio-circle input[value="good"]:checked + label { background-color: #28a745; border-color: #28a745; }
+    .radio-circle input[value="fair"] + label { border-color: #000000; }
+    .radio-circle input[value="fair"]:checked + label { background-color: #ffc107; border-color: #ffc107; }
+    .radio-circle input[value="poor"] + label { border-color: #000000; }
+    .radio-circle input[value="poor"]:checked + label { background-color: #c50000; border-color: #c50000; }
+    .radio-circle input[value="na"] + label { border-color: #333; }
+    .radio-circle input[value="na"]:checked + label { background-color: #333; border-color: #333; }
 
-    .radio-circle input[value="good"]:checked + label {
-      background-color: #28a745;
-      border-color: #28a745;
-    }
-
-    /* FAIR - Yellow/Orange */
-    .radio-circle input[value="fair"] + label {
-      border-color: #000000;
-    }
-
-    .radio-circle input[value="fair"]:checked + label {
-      background-color: #ffc107;
-      border-color: #ffc107;
-    }
-
-    /* POOR - Red */
-    .radio-circle input[value="poor"] + label {
-      border-color: #000000;
-    }
-
-    .radio-circle input[value="poor"]:checked + label {
-      background-color: #c50000;
-      border-color: #c50000;
-    }
-
-    /* N/A - Black (default) */
-    .radio-circle input[value="na"] + label {
-      border-color: #333;
-    }
-
-    .radio-circle input[value="na"]:checked + label {
-      background-color: #333;
-      border-color: #333;
-    }
-
-    .text-input {         
-      grid-column: 2 / 6;     /* Text box spans columns 2 to 6 */
+    .text-input {
+      grid-column: 2 / 6;
     }
 
     .text-input textarea {
-      width: 100%;            /* fill container */
-      box-sizing: border-box; /* include padding/border in width */
-      padding: 5px;          /* your desired padding */
-      resize: none;           /* doesn't allow dragging to resize */
-      min-height: 50px;      /* optional initial height */
-      max-width: 100%;        /* prevent overflow */
-      min-width: 100%;        /* prevent underflow */
-      overflow: hidden;      /* hide scrollbars initially */
+      width: 100%;
+      box-sizing: border-box;
+      padding: 5px;
+      resize: none;
+      min-height: 50px;
+      max-width: 100%;
+      min-width: 100%;
+      overflow: hidden;
       font-size: 1rem;
     }
 
     .merge-rows {
-      grid-row: span 2;     /* span two rows */
+      grid-row: span 2;
       display: flex;
-      align-items: flex-start;     /* vertical centering */
-      height: 100%;         /* ensures full row height is used */
-      min-width: 0;       /* prevent content from forcing expansion */
+      align-items: flex-start;
+      height: 100%;
+      min-width: 0;
       overflow: hidden;
       word-break: break-word;
     }
 
     @media print {
       body {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
-
       .grid-container-no-color, .grid-container-yes-color {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
-
-      .no-print {
-      display: none !important;
-      }
+      .no-print { display: none !important; }
     }
 
     .form-container {
-        text-align: left; /* default for mobile */
-        margin-left: 0;
+      text-align: left;
+      margin-left: 0;
     }
 
-    /* Desktop and larger screens */
     @media (min-width:450px) {
       .form-container {
-        /* Center the container itself */
-        max-width: 450px;      /* match your grid max-width for visual harmony */
-        margin: 0 auto;        /* centers the block */
-        text-align: left;      /* keep contents left-aligned */
+        max-width: 450px;
+        margin: 0 auto;
+        text-align: left;
       }
     }
 
-    /* Sections should be natural block containers without clipping */
     .section {
-      position: relative;         /* creates the sticky boundary */
-      /* DO NOT set overflow: hidden on this container or any ancestor */
+      position: relative;
     }
 
-    /* The combined sticky header (title + headers row) */
     .section-sticky {
       position: sticky;
-      top: var(--app-header-height, 0px);       /* pin to top of viewport */
-      background: #f1f1f1;           /* cover content underneath while stuck */
-      z-index: 10;                /* ensure it stays above the grid cells */
-      /* Optional: add shadow when stuck (pure CSS can’t detect state; feel free to leave shadow always) */
+      top: var(--app-header-height, 0px);
+      background: #f1f1f1;
+      z-index: 10;
       box-shadow: 0 1px 0 rgba(0,0,0,0.1);
-      padding-top: 16px;   /* space ABOVE the title */
-      padding-bottom: 0px; /* optional: subtle balance */
+      padding-top: 16px;
+      padding-bottom: 0px;
     }
 
-    /* Keep your existing styles (example) */
     .section-title {
       color: #0067c5;
       margin: 0;
@@ -264,26 +220,20 @@
       margin: 0;
     }
 
-    /* Make sure your grid header row has a solid background so it reads cleanly */
     .headers-row {
       background: #f1f1f1;
     }
 
-    /* If you have a fixed site header/nav, offset the sticky top */
     :root {
-      --app-header-height: 0px; /* e.g., 56px if you have a fixed nav */
+      --app-header-height: 0px;
     }
 
-    /* Print (remove stickiness completely) */
     @media print {
-      :root {
-        --app-header-height: 0 !important; /* ensure no offset is applied */
-      }
-
+      :root { --app-header-height: 0 !important; }
       .section-sticky {
         position: static !important;
         top: auto !important;
-        box-shadow: none !important;      /* cleaner print */
+        box-shadow: none !important;
       }
     }
 
@@ -311,9 +261,7 @@
     }
 
     @media print {
-      .export-instructions {
-        display: none;
-      }
+      .export-instructions { display: none; }
     }
 
     .action-button {
@@ -328,15 +276,13 @@
       cursor: pointer;
     }
 
-    .action-button:hover {
-      background-color: #004c93;
-    }
+    .action-button:hover { background-color: #004c93; }
 
     .button-group {
       display: flex;
       flex-direction: column;
-      align-items: center;   /* centers horizontally */
-      gap: 12px;             /* spacing between buttons */
+      align-items: center;
+      gap: 12px;
       margin-bottom: 16px;
     }
 
@@ -360,15 +306,11 @@
       border-radius: 4px;
       border: 1px solid #ccc;
       object-fit: cover;
-
-      /* SCREEN SIZE (small) */
       max-width: 100px;
       max-height: 100px;
     }
 
-    /* PRINT SIZE (dynamic sizing based on count) */
     @media print {
-      /* Break photo container out of grid */
       [id^="thumbWrap"] {
         display: flex !important;
         flex-wrap: wrap !important;
@@ -379,13 +321,9 @@
         grid-column: 1 / -1 !important;
         justify-content: flex-end !important;
       }
-
-      /* Make the parent text-input container also span full width */
       .text-input:has([id^="thumbWrap"]) {
         grid-column: 1 / -1 !important;
       }
-
-      /* Default photo size - Fallback for older Safari */
       .photo-thumb {
         max-width: calc(33.333% - 6px);
         max-height: 300px;
@@ -396,33 +334,18 @@
         display: inline-block;
         object-fit: contain;
       }
-
-      /* Modern browsers with :has() support - dynamic sizing */
       @supports selector(:has(*)) {
-        /* 1 photo = large (full width) */
         [id^="thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
-          max-width: 100%;
-          max-height: 400px;
+          max-width: 100%; max-height: 400px;
         }
-
-        /* 2 photos = medium (half width each) */
         [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
-          max-width: calc(50% - 4px);
-          max-height: 350px;
+          max-width: calc(50% - 4px); max-height: 350px;
         }
-
-        /* 3 photos = small (third width each) */
         [id^="thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
-          max-width: calc(33.333% - 6px);
-          max-height: 300px;
+          max-width: calc(33.333% - 6px); max-height: 300px;
         }
       }
-
-      /* Hide buttons */
-      .photo-button,
-      .photo-delete {
-        display: none !important;
-      }
+      .photo-button, .photo-delete { display: none !important; }
     }
 
     .photo-delete {
@@ -439,9 +362,7 @@
       vertical-align: top;
     }
 
-    .photo-delete:hover {
-      background-color: #930000;
-    }
+    .photo-delete:hover { background-color: #930000; }
 
     .clear-button {
       font-size: 14px;
@@ -451,21 +372,18 @@
       color: white;
     }
 
-    .clear-button:hover {
-      background-color: #930000;
-    }
+    .clear-button:hover { background-color: #930000; }
 
-    /* ===== Floating Photo Progress Bar ===== */
     #photoProgressWrapper {
-      position: fixed;        /*  makes it stay on screen */
-      top: 0;                 /* stick to top */
+      position: fixed;
+      top: 0;
       left: 0;
       width: 100%;
       height: 6px;
       background: #ddd;
-      z-index: 9999;          /* above everything */
+      z-index: 9999;
       overflow: hidden;
-      display: none;          /* hidden by default */
+      display: none;
     }
 
     #photoProgressBar {
@@ -475,7 +393,6 @@
       transition: width 0.2s linear;
     }
 
-    /* Photo Modal Overlay */
     .photo-modal {
       display: none;
       position: fixed;
@@ -529,9 +446,7 @@
       transition: color 0.2s;
     }
 
-    .photo-modal-close:hover {
-      color: #ccc;
-    }
+    .photo-modal-close:hover { color: #ccc; }
 
     .photo-modal-nav {
       position: absolute;
@@ -550,17 +465,9 @@
       user-select: none;
     }
 
-    .photo-modal-nav:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
-
-    .photo-modal-prev {
-      left: 20px;
-    }
-
-    .photo-modal-next {
-      right: 20px;
-    }
+    .photo-modal-nav:hover { background: rgba(0, 0, 0, 0.8); }
+    .photo-modal-prev { left: 20px; }
+    .photo-modal-next { right: 20px; }
 
     .photo-modal-counter {
       position: absolute;
@@ -574,11 +481,8 @@
       border-radius: 20px;
     }
 
-    /* Hide modal in print */
     @media print {
-      .photo-modal {
-        display: none !important;
-      }
+      .photo-modal { display: none !important; }
     }
 
     .section-progress {
@@ -589,7 +493,6 @@
       margin-left: 10px;
     }
 
-    /* Stack on mobile */
     @media (max-width: 450px) {
       .section-progress {
         float: none;
@@ -626,26 +529,38 @@
     }
 
     @media print {
-      .section-progress {
-        display: none !important;
-      }
+      .section-progress { display: none !important; }
     }
 
+    /* Type-switch notice */
+    #typeSwitchNotice {
+      max-width: 600px;
+      margin: 0 auto 10px auto;
+      padding: 10px 14px;
+      background: #fff8e1;
+      border: 1px solid #f0c040;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      display: none;
+    }
+
+    /* Placeholder when no type selected */
+    #noTypeMessage {
+      text-align: center;
+      color: #888;
+      font-size: 1.1rem;
+      margin-top: 30px;
+      display: block;
+    }
   </style>
 </head>
 <body>
-
-<!-- ================================================================ -->
-<!-- ============================ Header ============================ -->
-<!-- ================================================================ -->
 
 <div id="pageWrapper">
 
 <div class="page-logo">
   <img src="SuntideLogo.png" alt="Suntide Company Logo">
-
 </div>
-
 
 <h1>Property Inspection Checklist</h1>
 
@@ -654,37 +569,46 @@
 </div>
 
 <div class="form-container">
-<button id="clearAll" type="button" style="margin-left:0px; margin-bottom:10px; font-size:18px" class="action-button clear-button no-print">Clear All</button>
-<br>
+  <button id="clearAll" type="button" style="margin-left:0px; margin-bottom:10px; font-size:18px" class="action-button clear-button no-print">Clear All</button>
+  <br>
 
-<label for="property" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Property:</label>
-<input type="text" id="property" name="property" style="width:250px; font-size: 1rem;" class="save-text" maxlength="27">
-<br>
+  <label for="propertyType" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Property Type:</label>
+  <select id="propertyType" name="propertyType" style="width:200px; font-size: 1rem; padding: 2px;">
+    <option value="">-- Select Type --</option>
+    <option value="Office">Office</option>
+    <option value="Retail">Retail</option>
+  </select>
+  <br>
 
-<label for="propertyManager" style="display: inline-block; margin-bottom:10px; font-size:18px">Property Manager:</label>
-<input type="text" id="propertyManager" name="propertyManager" style="width:182px; font-size: 1rem;" class="save-text" maxlength="20">
-<br>
+  <label for="property" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Property:</label>
+  <input type="text" id="property" name="property" style="width:250px; font-size: 1rem;" class="save-text" maxlength="27">
+  <br>
 
-<label for="date" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Inspection Date:</label>
-<input type="date" id="date" name="date" style="width:140px; font-size: 1rem;" class="save-text">
+  <label for="propertyManager" style="display: inline-block; margin-bottom:10px; font-size:18px">Property Manager:</label>
+  <input type="text" id="propertyManager" name="propertyManager" style="width:182px; font-size: 1rem;" class="save-text" maxlength="20">
+  <br>
+
+  <label for="date" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Inspection Date:</label>
+  <input type="date" id="date" name="date" style="width:140px; font-size: 1rem;" class="save-text">
 </div>
 <br>
 
-<!-- ================================================================ -->
-<!-- ========================== Check List ========================== -->
-<!-- ================================================================ -->
+<div id="typeSwitchNotice" class="no-print">
+  ⚠️ Switching property type will clear all current inspection data. Make sure you have saved or printed before switching.
+</div>
 
-<!-- Renders the entire check list programically -->
-<div id="sections-root"></div>
+<!-- Renders the checklist programmatically -->
+<div id="sections-root">
+  <p id="noTypeMessage">Please select a Property Type above to begin the inspection.</p>
+</div>
 <br>
 
 <!-- Export instructions -->
 <div class="export-instructions no-print">
-
   <h3>Export Instructions</h3>
   <ol>
     <li>Click <strong>Print / Save as PDF</strong> and save to your phone.</li>
-    <li>Email the Property Inspection report to Maya (MTulashie@suntide.com) and attach the saved PDF.</li>
+    <li>Email the Property Inspection report to Maya (<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9e4fddcc5c8dac1c0cce9dadcc7ddc0cdcc87cac6c4">[email&#160;protected]</a>) and attach the saved PDF.</li>
   </ol>
   <br>
   <div class="button-group">
@@ -696,7 +620,7 @@
 
 <hr class="divider-1 no-print">
 <div class="made-by no-print">
-  Made by Adam - v1.4 - 2026
+  Made by Adam - v1.5 - 2026
 </div>
 
 <!-- Photo Preview Modal -->
@@ -712,177 +636,30 @@
   </div>
 </div>
 
-
 <!-- ================================================================ -->
 <!-- ============================ Scripts =========================== -->
 <!-- ================================================================ -->
 
-<script>  /* Auto adjusts textarea box sizes */
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  /* Auto adjusts textarea box sizes */
   document.addEventListener("input", function (e) {
     if (e.target.tagName.toLowerCase() === "textarea") {
-      e.target.style.height = "auto";        // reset height
-      e.target.style.height = e.target.scrollHeight + "px"; // adjust to content
+      e.target.style.height = "auto";
+      e.target.style.height = e.target.scrollHeight + "px";
     }
   });
 </script>
 
 <script>
-  window.addEventListener("load", function () {
-    
-    // =========================
-    // DEFAULT TODAY'S DATE
-    // =========================
-    const dateInput = document.getElementById("date");
-    if (dateInput && !dateInput.value) {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const day = String(now.getDate()).padStart(2, "0");
-      const today = `${year}-${month}-${day}`;
-      dateInput.value = today;
-    }
+// ================================================================
+// SECTION DEFINITIONS
+// ================================================================
+const sectionsByType = {
 
-    // =========================
-    // LOAD RADIOS
-    // =========================
-    const radioNames = new Set();
-
-    document.querySelectorAll(".save-radio").forEach(radio => {
-      radioNames.add(radio.name);
-    });
-
-    radioNames.forEach(name => {
-      const savedValue = localStorage.getItem(name);
-      if (savedValue) {
-        const el = document.querySelector(
-          'input[name="' + name + '"][value="' + savedValue + '"]'
-        );
-        if (el) el.checked = true;
-      }
-    });
-
-    // =========================
-    // LOAD TEXTAREAS
-    // =========================
-    document.querySelectorAll(".save-text").forEach(area => {
-      const savedText = localStorage.getItem(area.id);
-      if (savedText) {
-        area.value = savedText;
-
-        //  Auto-resize after loading saved text
-        area.style.height = "auto";
-        area.style.height = area.scrollHeight + "px";
-      }
-    });
-
-
-    // =========================
-    // SAVE RADIOS
-    // =========================
-    document.querySelectorAll(".save-radio").forEach(radio => {
-      radio.addEventListener("change", function () {
-        localStorage.setItem(this.name, this.value);
-      });
-    });
-
-    // =========================
-    // SAVE TEXTAREAS
-    // =========================
-    document.querySelectorAll(".save-text").forEach(area => {
-      area.addEventListener("input", function () {
-        localStorage.setItem(this.id, this.value);
-      });
-    });
-
-    // =========================
-    // CLEAR ALL BUTTON
-    // =========================
-    const clearBtn = document.getElementById("clearAll");
-    if (clearBtn) {
-      clearBtn.addEventListener("click", function () {
-
-        // Confirm clear
-        if (!confirm("Are you sure you want to clear all inspection data?")) {
-        return;
-        }
-
-        // Clear radios
-        radioNames.forEach(name => {
-          document.querySelectorAll('input[name="' + name + '"]')
-            .forEach(r => r.checked = false);
-          localStorage.removeItem(name);
-        });
-
-        // Clear textareas
-        document.querySelectorAll(".save-text").forEach(area => {
-          area.value = "";
-          area.style.height = "";   // Reset to original CSS height
-          localStorage.removeItem(area.id);
-        });
-
-        // Clear photos from localstorage
-        Object.keys(localStorage).forEach(key => {
-          if (key.startsWith("photo")) {
-            localStorage.removeItem(key);
-          }
-        });
-
-        // REMOVE ALL THUMBNAILS FROM SCREEN
-        document.querySelectorAll("div[id^='thumbWrap']").forEach(wrap => {
-          wrap.innerHTML = "";
-        });
-
-        // Reset all photo buttons using the updatePhotoButton function
-        document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
-          const index = input.id.replace("photo", "");
-          updatePhotoButton(index);
-        });
-
-        // Hide all photo delete (x) buttons
-        document.querySelectorAll("button[id^='delete']").forEach(btn => {
-          btn.style.display = "none";
-        });
-
-        // IMPORTANT: Reset file inputs
-        document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
-          input.value = "";
-
-        // UPDATE PROGRESS INDICATORS
-        updateAllProgress();
-        });
-
-      });
-    }
-
-    // =========================
-    // LOAD SAVED PHOTOS
-    // =========================
-    document.querySelectorAll("div[id^='thumbWrap']").forEach(wrap => {
-      const index = wrap.id.replace("thumbWrap", "");
-      const saved = JSON.parse(localStorage.getItem("photo" + index) || "[]");
-      const deleteBtn = document.getElementById("delete" + index);
-
-      saved.forEach((src, photoIndex) => {  // ← Add photoIndex parameter
-        const img = document.createElement("img");
-        img.src = src;
-        img.className = "photo-thumb";
-        img.style.cursor = "pointer";  // ← Add this line
-        img.onclick = () => openPhotoModal(index, photoIndex);  // ← Add this line
-        wrap.appendChild(img);
-      });
-
-      //  SHOW X BUTTON IF PHOTOS EXIST
-      if (saved.length > 0 && deleteBtn) {
-        deleteBtn.style.display = "inline-block";
-      }
-    });
-  });
-</script>
-
-<script>  /* Automatiically creates section headers and grids */
-(function () {
-  // 1) Define your sections: title + items
-  const sections = [
+  // ---------------------------------------------------------------
+  // OFFICE
+  // ---------------------------------------------------------------
+  "Office": [
     {
       title: "1. Building R&M",
       items: [
@@ -928,8 +705,8 @@
         "Other",
       ],
     },
-    { 
-      title: "4. Sidewalks", 
+    {
+      title: "4. Sidewalks",
       items: [
         "Concrete Condition",
         "Concrete Cleanliness",
@@ -1001,254 +778,565 @@
         "RPZ / Backflow Test",
         "Other",
       ],
-    }
-    // Add more sections exactly like above:
-    // { title: "Lighting / Electrical", items: [ ... ] },
-    // { title: "Signage", items: [ ... ] },
-  ];
+    },
+  ],
 
-  // 2) Utility to create elements quickly
-  function el(tag, attrs = {}, children = []) {
-    const node = document.createElement(tag);
-    Object.entries(attrs).forEach(([k, v]) => {
-      if (k === "className") node.className = v;
-      else if (k === "html") node.innerHTML = v;
-      else node.setAttribute(k, v);
-    });
-    (Array.isArray(children) ? children : [children]).forEach(c => {
-      if (c == null) return;
-      node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
-    });
-    return node;
-  }
+  // ---------------------------------------------------------------
+  // RETAIL
+  // ---------------------------------------------------------------
+  "Retail": [
+    {
+      title: "1. Building R&M",
+      items: [
+        "Exterior Facade / Paint",
+        "Glass / Framing / Storefronts",
+        "Fencing / Walls",
+        "Overhangs / Canopy / Awnings",
+        "Trash Enclosure",
+        "Common Doors / Security",
+        "Mechanical Room / Janitors Closet",
+        "Tenant Entry Doors / Locks",
+        "Loading Docks / Service Areas",
+        "Signage Structures",
+        "Drive-Thru Lanes / Windows",
+        "Other",
+      ],
+    },
+    {
+      title: "2. Vacancies",
+      items: [
+        "Clear of any debris",
+        "Windows, baseboards, and sills clean",
+        "Blinds / Window Treatments",
+        "Ceiling Tiles",
+        "Lights",
+        "Thermostat",
+        "Storefront / Signage Band Clean",
+        "Other",
+      ],
+    },
+    {
+      title: "3. Lighting / Electrical",
+      items: [
+        "Parking Lot",
+        "Overhang / Canopy / Awnings",
+        "Security / Wall Packs",
+        "Photocell / Timer Operation",
+        "Decorative / Landscape",
+        "Emergency / Exit",
+        "Infrared Inspection",
+        "Maintenance Rooms / Janitors Closets",
+        "Emergency Generator",
+        "Signage / Pylon / Monument Lighting",
+        "Other",
+      ],
+    },
+    {
+      title: "4. Sidewalks",
+      items: [
+        "Concrete Condition",
+        "Concrete Cleanliness",
+        "Trip Hazards",
+        "Trash / Site Pickup",
+        "Curb Cuts / ADA Ramps",
+        "Bollards Condition",
+      ],
+    },
+    {
+      title: "5. Parking Lot / Asphalt / Coating",
+      items: [
+        "Overall Condition",
+        "Pot Holes / Low Spots / Crackfilling",
+        "Sweeping & Cleanliness",
+        "Striping Condition",
+        "Fire Lane Striping / Signage",
+        "Stormwater / Sewer Drains / Catch Basins",
+        "Sump Pump(s)",
+        "Cart Corrals / Cart Storage Areas",
+        "Other",
+      ],
+    },
+    {
+      title: "6. Landscaping / Snow Removal",
+      items: [
+        "Plantings / Shrubs & Bushes",
+        "Turf / Grass",
+        "Trees",
+        "Irrigation",
+        "Parking Lot & Walkway Snow / Ice Condition",
+        "Snow Storage / Drive Lane Visibility",
+        "Rock Beds",
+        "Retaining Walls",
+        "Mulch Beds",
+        "Other",
+      ],
+    },
+    {
+      title: "7. Roof",
+      items: [
+        "Condition / Professional Assessment",
+        "Repairs",
+        "Debris / Grease from hoods",
+        "Drainage / Gutters",
+        "Heat Tape",
+        "HVAC Unit Curbs / Flashing",
+        "Other",
+      ],
+    },
+    {
+      title: "8. Paint",
+      items: [
+        "Sign Posts",
+        "Light Poles",
+        "Bollards",
+        "Facade",
+        "Overhangs",
+        "Trash Enclosure",
+        "Doors & Frames",
+        "Mechanical Rooms / Janitors Closets",
+        "Pylon / Monument Sign Structure",
+        "Other",
+      ],
+    },
+    {
+      title: "9. Fire / Life / Safety",
+      items: [
+        "Fire Extinguishers Inspection",
+        "Fire Panel Inspection",
+        "Fire Sprinkler Inspection",
+        "RPZ / Backflow Test",
+        "Knox Box",
+        "Other",
+      ],
+    },
+    {
+      title: "10. Signage",
+      items: [
+        "Pylon / Monument Sign Condition",
+        "Tenant Panel Condition",
+        "Building / Blade Signs",
+        "Directional Signage",
+        "ADA Signage",
+        "Other",
+      ],
+    },
+  ],
+};
 
-  // 3) Build the shared rating header row (Good/Fair/Poor/N/A)
-  function buildRatingHeaderRow() {
-    const row = el("div", { className: "grid-container-no-color headers-row" }, [
-      el("div", { className: "header" }, ""),   // empty left cell
-      el("div", { className: "header" }, "Good"),
-      el("div", { className: "header" }, "Fair"),
-      el("div", { className: "header" }, "Poor"),
-      el("div", { className: "header" }, "N/A"),
-    ]);
-    return row;
-  }
+// ================================================================
+// SECTION BUILDER UTILITIES
+// ================================================================
+function el(tag, attrs, children) {
+  attrs = attrs || {};
+  children = children || [];
+  const node = document.createElement(tag);
+  Object.entries(attrs).forEach(function(pair) {
+    const k = pair[0], v = pair[1];
+    if (k === "className") node.className = v;
+    else if (k === "html") node.innerHTML = v;
+    else node.setAttribute(k, v);
+  });
+  (Array.isArray(children) ? children : [children]).forEach(function(c) {
+    if (c == null) return;
+    node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  });
+  return node;
+}
 
-  // 4) Build a single grid row for an item
-  function buildItemRow(globalIndex, label) {
-    const gridClass = globalIndex % 2 === 0 ? "grid-container-no-color" : "grid-container-yes-color";
-    const name = `radio${globalIndex}`;
-    const ids = {
-      good: `good${globalIndex}`,
-      fair: `fair${globalIndex}`,
-      poor: `poor${globalIndex}`,
-      na:   `na${globalIndex}`,
-      txt:  `textarea${globalIndex}`,
-      labelCell: `mergeContainer${globalIndex}`,
-    };
+function buildRatingHeaderRow() {
+  return el("div", { className: "grid-container-no-color headers-row" }, [
+    el("div", { className: "header" }, ""),
+    el("div", { className: "header" }, "Good"),
+    el("div", { className: "header" }, "Fair"),
+    el("div", { className: "header" }, "Poor"),
+    el("div", { className: "header" }, "N/A"),
+  ]);
+}
 
-    return el("div", { className: gridClass }, [
-      el("div", { className: "merge-rows", id: ids.labelCell }, label),
+function buildItemRow(globalIndex, label, prefix) {
+  const gridClass = globalIndex % 2 === 0 ? "grid-container-no-color" : "grid-container-yes-color";
+  const name = prefix + "_radio" + globalIndex;
+  const photoKey = prefix + "_photo" + globalIndex;
+  const txtId = prefix + "_textarea" + globalIndex;
 
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: ids.good, name, value: "good", className: "save-radio" }),
-        el("label", { for: ids.good, "aria-label": "Good" })
-      ]),
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: ids.fair, name, value: "fair", className: "save-radio" }),
-        el("label", { for: ids.fair, "aria-label": "Fair" })
-      ]),
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: ids.poor, name, value: "poor", className: "save-radio" }),
-        el("label", { for: ids.poor, "aria-label": "Poor" })
-      ]),
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: ids.na, name, value: "na", className: "save-radio" }),
-        el("label", { for: ids.na, "aria-label": "Not applicable" })
-      ]),
+  return el("div", { className: gridClass }, [
+    el("div", { className: "merge-rows" }, label),
 
-      el("div", { className: "text-input" }, [
-        el("textarea", {
-          id: ids.txt,
-          className: "save-text",
-          placeholder: "Enter details here"
-        })
-      ]),
+    el("div", { className: "radio-circle" }, [
+      el("input", { type: "radio", id: prefix + "_good" + globalIndex, name: name, value: "good", className: "save-radio", "data-prefix": prefix }),
+      el("label", { for: prefix + "_good" + globalIndex, "aria-label": "Good" })
+    ]),
+    el("div", { className: "radio-circle" }, [
+      el("input", { type: "radio", id: prefix + "_fair" + globalIndex, name: name, value: "fair", className: "save-radio", "data-prefix": prefix }),
+      el("label", { for: prefix + "_fair" + globalIndex, "aria-label": "Fair" })
+    ]),
+    el("div", { className: "radio-circle" }, [
+      el("input", { type: "radio", id: prefix + "_poor" + globalIndex, name: name, value: "poor", className: "save-radio", "data-prefix": prefix }),
+      el("label", { for: prefix + "_poor" + globalIndex, "aria-label": "Poor" })
+    ]),
+    el("div", { className: "radio-circle" }, [
+      el("input", { type: "radio", id: prefix + "_na" + globalIndex, name: name, value: "na", className: "save-radio", "data-prefix": prefix }),
+      el("label", { for: prefix + "_na" + globalIndex, "aria-label": "Not applicable" })
+    ]),
 
-      // Photo Upload + Thumbnail
-      el("div", { className: "text-input" }, [
+    el("div", { className: "text-input" }, [
+      el("textarea", {
+        id: txtId,
+        className: "save-text",
+        placeholder: "Enter details here"
+      })
+    ]),
 
-        el("input", {
-          type: "file",
-          accept: "image/*",
-          id: `photo${globalIndex}`,
-          className: "no-print",
-          style: "display:none",
-          multiple: true
-        }),
+    // Photo Upload
+    el("div", { className: "text-input" }, [
+      el("input", {
+        type: "file",
+        accept: "image/*",
+        id: prefix + "_photo" + globalIndex,
+        className: "no-print",
+        style: "display:none",
+        multiple: true,
+        "data-photokey": photoKey
+      }),
+      el("button", {
+        type: "button",
+        className: "action-button photo-button no-print",
+        onclick: "document.getElementById('" + prefix + "_photo" + globalIndex + "').click()"
+      }, "Upload Picture"),
+      el("button", {
+        type: "button",
+        id: prefix + "_delete" + globalIndex,
+        className: "photo-delete no-print",
+        onclick: "deletePhoto('" + prefix + "', " + globalIndex + ")"
+      }, "X"),
+      el("div", {
+        id: prefix + "_thumbWrap" + globalIndex,
+        style: "display:flex; gap:6px; flex-wrap:wrap;"
+      })
+    ])
+  ]);
+}
 
-        el("button", {
-          type: "button",
-          className: "action-button photo-button no-print",
-          onclick: `document.getElementById('photo${globalIndex}').click()`
-        }, "Upload Picture"),
+function buildSection(section, startIndex, prefix) {
+  let globalIndex = startIndex;
+  const sectionEl = el("section", { className: "section" });
 
-        el("button", {
-          type: "button",
-          id: `delete${globalIndex}`,
-          className: "photo-delete no-print",
-          onclick: `deletePhoto(${globalIndex})`
-        }, "X"),
+  const titleContainer = el("h2", { className: "section-title" });
+  titleContainer.appendChild(document.createTextNode(section.title));
 
-        el("div", {
-          id: `thumbWrap${globalIndex}`,
-          style: "display:flex; gap:6px; flex-wrap:wrap;"
-        })
-      ])
-    ]); 
-  }
+  const progressSpan = el("span", {
+    className: "section-progress no-print",
+    "data-start": startIndex,
+    "data-count": section.items.length,
+    "data-prefix": prefix
+  }, [
+    el("span", { className: "progress-text" }, "0%"),
+    el("span", { className: "progress-bar-container" }, [
+      el("span", { className: "progress-bar-fill", style: "width: 0%" })
+    ])
+  ]);
+  titleContainer.appendChild(progressSpan);
 
-  // 5) Build an entire section (sticky header + rating headers + rows)
-  function buildSection(section, startIndex) {
-    let globalIndex = startIndex;
-    const sectionEl = el("section", { className: "section" });
+  const sticky = el("div", { className: "section-sticky" }, [
+    titleContainer,
+    el("hr", { className: "divider-2" }),
+    buildRatingHeaderRow(),
+    el("hr", { className: "divider-1" }),
+  ]);
 
-    // Create section title with progress indicator
-    const titleContainer = el("h2", { className: "section-title" });
-    titleContainer.appendChild(document.createTextNode(section.title));
-    
-    const progressSpan = el("span", { 
-      className: "section-progress no-print",
-      "data-start": startIndex,
-      "data-count": section.items.length
-    }, [
-      el("span", { className: "progress-text" }, "0%"),
-      el("span", { className: "progress-bar-container" }, [
-        el("span", { className: "progress-bar-fill", style: "width: 0%" })
-      ])
-    ]);
-    titleContainer.appendChild(progressSpan);
+  sectionEl.appendChild(sticky);
 
-    // Sticky header block (title + rating header row + divider)
-    const sticky = el("div", { className: "section-sticky" }, [
-      titleContainer,
-      el("hr", { className: "divider-2" }),
-      buildRatingHeaderRow(),
-      el("hr", { className: "divider-1" }),
-    ]);
+  section.items.forEach(function(label) {
+    sectionEl.appendChild(buildItemRow(globalIndex, label, prefix));
+    globalIndex++;
+  });
 
-    sectionEl.appendChild(sticky);
+  return { node: sectionEl, nextIndex: globalIndex };
+}
 
-    // Rows
-    section.items.forEach(label => {
-      sectionEl.appendChild(buildItemRow(globalIndex, label));
-      globalIndex++;
-    });
-
-    return { node: sectionEl, nextIndex: globalIndex };
-  }
-
-  // 6) Render all sections into the root container
+// ================================================================
+// RENDER SECTIONS FOR A GIVEN TYPE
+// ================================================================
+function renderSections(type) {
   const root = document.getElementById("sections-root");
-  let nextIndex = 0;
-  sections.forEach((sec, i) => {
-    // optional divider between sections
-    if (i > 0) {
-      root.appendChild(el("br"));
-    }
-    const { node, nextIndex: idx } = buildSection(sec, nextIndex);
-    root.appendChild(node);
-    nextIndex = idx;
-  });
-})();
-</script>
+  root.innerHTML = "";
 
-<script>
-// Function to update progress for a specific section
-function updateSectionProgress(progressElement) {
-  const startIndex = parseInt(progressElement.getAttribute('data-start'));
-  const itemCount = parseInt(progressElement.getAttribute('data-count'));
-  
-  let completed = 0;
-  
-  // Count how many items in this section have a radio button selected
-  for (let i = startIndex; i < startIndex + itemCount; i++) {
-    const radios = document.querySelectorAll(`input[name="radio${i}"]`);
-    const checkedRadio = Array.from(radios).find(r => r.checked);
-    if (checkedRadio) {
-      completed++;
-    }
+  if (!type || !sectionsByType[type]) {
+    const msg = document.createElement("p");
+    msg.id = "noTypeMessage";
+    msg.textContent = "Please select a Property Type above to begin the inspection.";
+    root.appendChild(msg);
+    return;
   }
-  
-  const percentage = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
-  
-  // Update the progress display
-  const progressText = progressElement.querySelector('.progress-text');
-  const progressFill = progressElement.querySelector('.progress-bar-fill');
-  
-  if (progressText) progressText.textContent = `${percentage}%`;
-  if (progressFill) progressFill.style.width = `${percentage}%`;
+
+  const prefix = type; // "Office" or "Retail"
+  const sections = sectionsByType[type];
+
+  let nextIndex = 0;
+  sections.forEach(function(sec, i) {
+    if (i > 0) root.appendChild(el("br"));
+    const result = buildSection(sec, nextIndex, prefix);
+    root.appendChild(result.node);
+    nextIndex = result.nextIndex;
+  });
+
+  // After rendering, load saved data for this type and update progress
+  loadSavedDataForType(prefix);
+  loadSavedPhotosForType(prefix);
+  updateAllProgress();
 }
 
-// Function to update all sections
-function updateAllProgress() {
-  document.querySelectorAll('.section-progress').forEach(progressElement => {
-    updateSectionProgress(progressElement);
+// ================================================================
+// LOAD SAVED DATA
+// ================================================================
+function loadSavedDataForType(prefix) {
+  // Load radios
+  document.querySelectorAll(".save-radio[data-prefix='" + prefix + "']").forEach(function(radio) {
+    const savedValue = localStorage.getItem(radio.name);
+    if (savedValue && radio.value === savedValue) {
+      radio.checked = true;
+    }
+  });
+
+  // Load textareas
+  document.querySelectorAll(".save-text").forEach(function(area) {
+    if (!area.id || !area.id.startsWith(prefix + "_textarea")) return;
+    const savedText = localStorage.getItem(area.id);
+    if (savedText) {
+      area.value = savedText;
+      area.style.height = "auto";
+      area.style.height = area.scrollHeight + "px";
+    }
   });
 }
 
-// Listen for radio button changes
-document.addEventListener('change', function(e) {
-  if (e.target.classList.contains('save-radio')) {
+function loadSavedPhotosForType(prefix) {
+  document.querySelectorAll("div[id^='" + prefix + "_thumbWrap']").forEach(function(wrap) {
+    const index = parseInt(wrap.id.replace(prefix + "_thumbWrap", ""), 10);
+    const photoKey = prefix + "_photo" + index;
+    const saved = JSON.parse(localStorage.getItem(photoKey) || "[]");
+    const deleteBtn = document.getElementById(prefix + "_delete" + index);
+
+    saved.forEach(function(src, photoIndex) {
+      const img = document.createElement("img");
+      img.src = src;
+      img.className = "photo-thumb";
+      img.style.cursor = "pointer";
+      img.onclick = (function(pi) {
+        return function() { openPhotoModal(prefix, index, pi); };
+      })(photoIndex);
+      wrap.appendChild(img);
+    });
+
+    if (saved.length > 0 && deleteBtn) {
+      deleteBtn.style.display = "inline-block";
+    }
+
+    // Update photo button label
+    updatePhotoButton(prefix, index);
+  });
+}
+
+// ================================================================
+// SAVE LISTENERS (delegated - attached once, work for any type)
+// ================================================================
+document.addEventListener("change", function(e) {
+  if (e.target.classList.contains("save-radio")) {
+    localStorage.setItem(e.target.name, e.target.value);
     updateAllProgress();
   }
 });
 
-// Initialize progress on page load (add to existing load event)
-window.addEventListener('load', function() {
-  // Small delay to ensure radios are loaded first
-  setTimeout(updateAllProgress, 100);
-});
-</script>
-
-<script>
-  function printChecklist() {
-
-    const property = document.getElementById("property");
-    const manager = document.getElementById("propertyManager");
-    const date = document.getElementById("date");
-
-    // --- Reset borders every time user clicks ---
-    [property, manager, date].forEach(el => {
-      el.style.border = "";
-    });
-
-    let missing = [];
-
-    if (!property.value.trim()) missing.push("Property");
-    if (!manager.value.trim()) missing.push("Property Manager");
-    if (!date.value) missing.push("Date");
-
-    // --- IF ANY MISSING ---
-    if (missing.length > 0) {
-
-      // Highlight missing fields
-      if (!property.value.trim()) property.style.border = "2px solid red";
-      if (!manager.value.trim()) manager.style.border = "2px solid red";
-      if (!date.value) date.style.border = "2px solid red";
-
-      alert(
-        "Please complete the following fields before printing:\n\n" +
-        missing.join("\n")
-      );
-
-      return; // STOP PRINTING
-    }
-
-    // --- All good ---
-    window.print();
+document.addEventListener("input", function(e) {
+  if (e.target.classList.contains("save-text") && e.target.id) {
+    localStorage.setItem(e.target.id, e.target.value);
   }
+});
+
+// ================================================================
+// PROGRESS TRACKING
+// ================================================================
+function updateSectionProgress(progressElement) {
+  const startIndex = parseInt(progressElement.getAttribute("data-start"));
+  const itemCount = parseInt(progressElement.getAttribute("data-count"));
+  const prefix = progressElement.getAttribute("data-prefix");
+
+  let completed = 0;
+  for (let i = startIndex; i < startIndex + itemCount; i++) {
+    const name = prefix + "_radio" + i;
+    const radios = document.querySelectorAll('input[name="' + name + '"]');
+    if (Array.from(radios).some(function(r) { return r.checked; })) {
+      completed++;
+    }
+  }
+
+  const percentage = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
+  const progressText = progressElement.querySelector(".progress-text");
+  const progressFill = progressElement.querySelector(".progress-bar-fill");
+  if (progressText) progressText.textContent = percentage + "%";
+  if (progressFill) progressFill.style.width = percentage + "%";
+}
+
+function updateAllProgress() {
+  document.querySelectorAll(".section-progress").forEach(function(el) {
+    updateSectionProgress(el);
+  });
+}
+
+// ================================================================
+// PROPERTY TYPE SWITCHER
+// ================================================================
+document.getElementById("propertyType").addEventListener("change", function() {
+  const newType = this.value;
+  const currentType = localStorage.getItem("propertyType");
+
+  if (newType === currentType) return;
+
+  // Warn if there is existing data for the new type
+  if (currentType && newType && newType !== currentType) {
+    const notice = document.getElementById("typeSwitchNotice");
+    if (notice) {
+      notice.style.display = "block";
+      setTimeout(function() { notice.style.display = "none"; }, 6000);
+    }
+  }
+
+  localStorage.setItem("propertyType", newType);
+  renderSections(newType);
+});
+
+// ================================================================
+// WINDOW LOAD
+// ================================================================
+window.addEventListener("load", function() {
+  // Default today's date
+  const dateInput = document.getElementById("date");
+  if (dateInput && !dateInput.value) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    dateInput.value = year + "-" + month + "-" + day;
+  }
+
+  // Load saved header fields
+  ["property", "propertyManager", "date"].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const saved = localStorage.getItem(id);
+    if (saved) el.value = saved;
+    el.addEventListener("input", function() {
+      localStorage.setItem(id, this.value);
+    });
+  });
+
+  // Restore property type and render
+  const savedType = localStorage.getItem("propertyType");
+  if (savedType && sectionsByType[savedType]) {
+    document.getElementById("propertyType").value = savedType;
+    renderSections(savedType);
+  }
+
+  // Progress init (small delay for radios to load)
+  setTimeout(updateAllProgress, 150);
+});
+
+// ================================================================
+// CLEAR ALL
+// ================================================================
+document.getElementById("clearAll").addEventListener("click", function() {
+  if (!confirm("Are you sure you want to clear all inspection data?")) return;
+
+  // Determine current prefix
+  const currentType = localStorage.getItem("propertyType") || "";
+
+  // Reset property type dropdown
+  document.getElementById("propertyType").value = "";
+  localStorage.removeItem("propertyType");
+
+  // Clear radios on screen
+  document.querySelectorAll(".save-radio").forEach(function(r) { r.checked = false; });
+
+  // Clear textareas on screen
+  document.querySelectorAll(".save-text").forEach(function(area) {
+    area.value = "";
+    area.style.height = "";
+  });
+
+  // Clear all localStorage keys for this type
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (
+      key.startsWith(currentType + "_") ||
+      key === "property" ||
+      key === "propertyManager" ||
+      key === "date"
+    ) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach(function(k) { localStorage.removeItem(k); });
+
+  // Clear all photo thumbnails on screen
+  document.querySelectorAll("div[id*='_thumbWrap']").forEach(function(wrap) {
+    wrap.innerHTML = "";
+  });
+
+  // Hide all delete buttons
+  document.querySelectorAll("button[id*='_delete']").forEach(function(btn) {
+    btn.style.display = "none";
+  });
+
+  // Reset file inputs
+  document.querySelectorAll("input[type='file'][id*='_photo']").forEach(function(input) {
+    input.value = "";
+    const parts = input.id.split("_photo");
+    const prefix = parts[0];
+    const index = parseInt(parts[1], 10);
+    updatePhotoButton(prefix, index);
+  });
+
+  renderSections("");
+  updateAllProgress();
+});
+
+// ================================================================
+// PRINT VALIDATION
+// ================================================================
+function printChecklist() {
+  const property = document.getElementById("property");
+  const manager = document.getElementById("propertyManager");
+  const date = document.getElementById("date");
+  const typeSelect = document.getElementById("propertyType");
+
+  [property, manager, date, typeSelect].forEach(function(el) {
+    el.style.border = "";
+  });
+
+  const missing = [];
+  if (!typeSelect.value) missing.push("Property Type");
+  if (!property.value.trim()) missing.push("Property");
+  if (!manager.value.trim()) missing.push("Property Manager");
+  if (!date.value) missing.push("Date");
+
+  if (missing.length > 0) {
+    if (!typeSelect.value) typeSelect.style.border = "2px solid red";
+    if (!property.value.trim()) property.style.border = "2px solid red";
+    if (!manager.value.trim()) manager.style.border = "2px solid red";
+    if (!date.value) date.style.border = "2px solid red";
+
+    alert("Please complete the following fields before printing:\n\n" + missing.join("\n"));
+    return;
+  }
+
+  window.print();
+}
 </script>
+
+<!-- ================================================================ -->
+<!-- PHOTO HANDLING
+// ================================================================ -->
 
 <script>
   const progressWrap = document.getElementById("photoProgressWrapper");
@@ -1258,7 +1346,7 @@ window.addEventListener('load', function() {
     progressWrap.style.display = "block";
     progressBar.style.width = "0%";
     let w = 0;
-    progressBar._interval = setInterval(() => {
+    progressBar._interval = setInterval(function() {
       w += 8;
       if (w > 90) w = 90;
       progressBar.style.width = w + "%";
@@ -1268,17 +1356,19 @@ window.addEventListener('load', function() {
   function finishProgress() {
     clearInterval(progressBar._interval);
     progressBar.style.width = "100%";
-    setTimeout(() => {
+    setTimeout(function() {
       progressWrap.style.display = "none";
       progressBar.style.width = "0%";
     }, 300);
   }
 
-  //  MOVED OUTSIDE - Now globally accessible
-  function updatePhotoButton(index) {
-    const saved = JSON.parse(localStorage.getItem("photo" + index) || "[]");
-    const button = document.querySelector(`button[onclick*="photo${index}"].photo-button`);
-    
+  function updatePhotoButton(prefix, index) {
+    const photoKey = prefix + "_photo" + index;
+    const saved = JSON.parse(localStorage.getItem(photoKey) || "[]");
+    // button's onclick contains the file input id
+    const fileInputId = prefix + "_photo" + index;
+    const button = document.querySelector("button[onclick*=\"'" + fileInputId + "'\"].photo-button");
+
     if (button) {
       const count = saved.length;
       if (count === 0) {
@@ -1287,7 +1377,7 @@ window.addEventListener('load', function() {
         button.style.opacity = "1";
         button.style.cursor = "pointer";
       } else if (count < 3) {
-        button.textContent = `Upload Picture (${count}/3)`;
+        button.textContent = "Upload Picture (" + count + "/3)";
         button.disabled = false;
         button.style.opacity = "1";
         button.style.cursor = "pointer";
@@ -1300,244 +1390,169 @@ window.addEventListener('load', function() {
     }
   }
 
-  document.addEventListener("change", async function (e) {
-    if (e.target.type === "file" && e.target.id.startsWith("photo")) {
+  // Delegated file change handler
+  document.addEventListener("change", async function(e) {
+    if (e.target.type !== "file" || !e.target.id.includes("_photo")) return;
 
-      startProgress();
+    startProgress();
 
-      const index = e.target.id.replace("photo", "");
-      const wrap = document.getElementById("thumbWrap" + index);
+    // Parse prefix and index from id like "Office_photo3"
+    const idParts = e.target.id.split("_photo");
+    const prefix = idParts[0];
+    const index = parseInt(idParts[1], 10);
+    const photoKey = prefix + "_photo" + index;
 
-      let existingPhotos = JSON.parse(localStorage.getItem("photo" + index) || "[]");
+    const wrap = document.getElementById(prefix + "_thumbWrap" + index);
+    let existingPhotos = JSON.parse(localStorage.getItem(photoKey) || "[]");
 
-      if (existingPhotos.length >= 3) {
-        alert("Maximum 3 photos allowed.");
-        finishProgress();
-        e.target.value = "";
-        return;
+    if (existingPhotos.length >= 3) {
+      alert("Maximum 3 photos allowed.");
+      finishProgress();
+      e.target.value = "";
+      return;
+    }
+
+    const remainingSlots = 3 - existingPhotos.length;
+    const files = Array.from(e.target.files).slice(0, remainingSlots);
+
+    for (let file of files) {
+      // HEIC conversion
+      if (
+        file.type === "image/heic" ||
+        file.type === "image/heif" ||
+        file.name.toLowerCase().endsWith(".heic") ||
+        file.name.toLowerCase().endsWith(".heif")
+      ) {
+        try {
+          const convertedBlob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 });
+          file = new File([convertedBlob], "converted.jpg", { type: "image/jpeg" });
+        } catch { continue; }
       }
 
-      const remainingSlots = 3 - existingPhotos.length;
-      const files = Array.from(e.target.files).slice(0, remainingSlots);
-
-      for (let file of files) {
-
-        // ---- HEIC CONVERSION ----
-        if (
-          file.type === "image/heic" ||
-          file.type === "image/heif" ||
-          file.name.toLowerCase().endsWith(".heic") ||
-          file.name.toLowerCase().endsWith(".heif")
-        ) {
-          try {
-            const convertedBlob = await heic2any({
-              blob: file,
-              toType: "image/jpeg",
-              quality: 0.85
-            });
-
-            file = new File([convertedBlob], "converted.jpg", {
-              type: "image/jpeg"
-            });
-          } catch {
-            continue;
-          }
-        }
-
+      await new Promise(function(resolve) {
         const reader = new FileReader();
-
-        reader.onload = function (event) {
+        reader.onload = function(event) {
           const img = new Image();
-
-          img.onload = function () {
-
+          img.onload = function() {
             const canvas = document.createElement("canvas");
             const maxSize = 1000;
-
-            let width = img.width;
-            let height = img.height;
-
-            if (width > height && width > maxSize) {
-              height *= maxSize / width;
-              width = maxSize;
-            } else if (height > maxSize) {
-              width *= maxSize / height;
-              height = maxSize;
-            }
-
+            let width = img.width, height = img.height;
+            if (width > height && width > maxSize) { height *= maxSize / width; width = maxSize; }
+            else if (height > maxSize) { width *= maxSize / height; height = maxSize; }
             canvas.width = width;
             canvas.height = height;
-
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, width, height);
-
+            canvas.getContext("2d").drawImage(img, 0, 0, width, height);
             const compressed = canvas.toDataURL("image/jpeg", 0.8);
 
             existingPhotos.push(compressed);
-            localStorage.setItem("photo" + index, JSON.stringify(existingPhotos));
+            localStorage.setItem(photoKey, JSON.stringify(existingPhotos));
 
             const imgEl = document.createElement("img");
             imgEl.src = compressed;
             imgEl.className = "photo-thumb";
             imgEl.style.cursor = "pointer";
-            imgEl.onclick = () => openPhotoModal(index, existingPhotos.length - 1);
+            const photoIndex = existingPhotos.length - 1;
+            imgEl.onclick = function() { openPhotoModal(prefix, index, photoIndex); };
             wrap.appendChild(imgEl);
 
-            const deleteBtn = document.getElementById("delete" + index);
+            const deleteBtn = document.getElementById(prefix + "_delete" + index);
             if (deleteBtn) deleteBtn.style.display = "inline-block";
 
-            //  Update button text
-            updatePhotoButton(index);
-
+            updatePhotoButton(prefix, index);
             finishProgress();
+            resolve();
           };
-
           img.src = event.target.result;
         };
-
         reader.readAsDataURL(file);
-      }
-      
-      e.target.value = "";
+      });
     }
+
+    e.target.value = "";
   });
 
-  //  Initialize button text on page load
-  window.addEventListener("load", function() {
-    document.querySelectorAll("input[type='file'][id^='photo']").forEach(input => {
-      const index = input.id.replace("photo", "");
-      updatePhotoButton(index);
-    });
-  });
-</script>
-
-<script>
-  function deletePhoto(index) {
-    const wrap = document.getElementById("thumbWrap" + index);
-    const fileInput = document.getElementById("photo" + index);
-    const deleteBtn = document.getElementById("delete" + index);
+  function deletePhoto(prefix, index) {
+    const photoKey = prefix + "_photo" + index;
+    const wrap = document.getElementById(prefix + "_thumbWrap" + index);
+    const fileInput = document.getElementById(prefix + "_photo" + index);
+    const deleteBtn = document.getElementById(prefix + "_delete" + index);
 
     if (wrap) wrap.innerHTML = "";
     if (fileInput) fileInput.value = "";
-
-    localStorage.removeItem("photo" + index);
-
-    //  HIDE X BUTTON
+    localStorage.removeItem(photoKey);
     if (deleteBtn) deleteBtn.style.display = "none";
-    
-    //  Update button text and re-enable
-    updatePhotoButton(index);
+    updatePhotoButton(prefix, index);
   }
 </script>
 
-<script> // photo preview
+<!-- ================================================================ -->
+<!-- PHOTO MODAL
+// ================================================================ -->
+
+<script>
   let currentPhotoIndex = 0;
   let currentPhotos = [];
-  let currentSectionIndex = null;
+  let currentModalPrefix = null;
+  let currentModalSection = null;
 
-  function openPhotoModal(sectionIndex, photoIndex) {
-    currentSectionIndex = sectionIndex;
-    currentPhotos = JSON.parse(localStorage.getItem("photo" + sectionIndex) || "[]");
+  function openPhotoModal(prefix, sectionIndex, photoIndex) {
+    currentModalPrefix = prefix;
+    currentModalSection = sectionIndex;
+    const photoKey = prefix + "_photo" + sectionIndex;
+    currentPhotos = JSON.parse(localStorage.getItem(photoKey) || "[]");
     currentPhotoIndex = photoIndex;
-    
+
     if (currentPhotos.length === 0) return;
-    
+
     const modal = document.getElementById("photoModal");
-    const img = document.getElementById("modalImage");
-    const counter = document.getElementById("photoCounter");
-    
-    img.src = currentPhotos[currentPhotoIndex];
-    counter.textContent = `${currentPhotoIndex + 1} / ${currentPhotos.length}`;
+    document.getElementById("modalImage").src = currentPhotos[currentPhotoIndex];
+    document.getElementById("photoCounter").textContent = (currentPhotoIndex + 1) + " / " + currentPhotos.length;
     modal.style.display = "block";
-    
-    // Prevent body scroll when modal is open
     document.body.style.overflow = "hidden";
   }
 
   function closePhotoModal() {
-    const modal = document.getElementById("photoModal");
-    modal.style.display = "none";
+    document.getElementById("photoModal").style.display = "none";
     document.body.style.overflow = "auto";
   }
 
   function changePhoto(direction) {
     currentPhotoIndex += direction;
-    
-    // Loop around
-    if (currentPhotoIndex < 0) {
-      currentPhotoIndex = currentPhotos.length - 1;
-    } else if (currentPhotoIndex >= currentPhotos.length) {
-      currentPhotoIndex = 0;
-    }
-    
-    const img = document.getElementById("modalImage");
-    const counter = document.getElementById("photoCounter");
-    
-    img.src = currentPhotos[currentPhotoIndex];
-    counter.textContent = `${currentPhotoIndex + 1} / ${currentPhotos.length}`;
+    if (currentPhotoIndex < 0) currentPhotoIndex = currentPhotos.length - 1;
+    else if (currentPhotoIndex >= currentPhotos.length) currentPhotoIndex = 0;
+    document.getElementById("modalImage").src = currentPhotos[currentPhotoIndex];
+    document.getElementById("photoCounter").textContent = (currentPhotoIndex + 1) + " / " + currentPhotos.length;
   }
 
-  // Close modal when clicking outside the image
   document.addEventListener("click", function(e) {
     const modal = document.getElementById("photoModal");
-    if (e.target === modal) {
-      closePhotoModal();
-    }
+    if (e.target === modal) closePhotoModal();
   });
 
-  // Keyboard navigation
   document.addEventListener("keydown", function(e) {
     const modal = document.getElementById("photoModal");
     if (modal.style.display === "block") {
-      if (e.key === "Escape") {
-        closePhotoModal();
-      } else if (e.key === "ArrowLeft") {
-        changePhoto(-1);
-      } else if (e.key === "ArrowRight") {
-        changePhoto(1);
-      }
+      if (e.key === "Escape") closePhotoModal();
+      else if (e.key === "ArrowLeft") changePhoto(-1);
+      else if (e.key === "ArrowRight") changePhoto(1);
     }
   });
+
+  // Touch/swipe
+  (function() {
+    let touchStartX = 0;
+    const modal = document.getElementById("photoModal");
+    modal.addEventListener("touchstart", function(e) { touchStartX = e.changedTouches[0].screenX; }, false);
+    modal.addEventListener("touchend", function(e) {
+      const diff = touchStartX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 50) changePhoto(diff > 0 ? 1 : -1);
+    }, false);
+  })();
 </script>
 
-<script>
-// Touch/Swipe support for photo modal
-(function() {
-  let touchStartX = 0;
-  let touchEndX = 0;
-  const modal = document.getElementById("photoModal");
-  
-  modal.addEventListener("touchstart", function(e) {
-    touchStartX = e.changedTouches[0].screenX;
-  }, false);
-  
-  modal.addEventListener("touchend", function(e) {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  }, false);
-  
-  function handleSwipe() {
-    const swipeThreshold = 50; // Minimum distance for a swipe
-    const diff = touchStartX - touchEndX;
-    
-    if (Math.abs(diff) > swipeThreshold) {
-      if (diff > 0) {
-        // Swiped left - show next photo
-        changePhoto(1);
-      } else {
-        // Swiped right - show previous photo
-        changePhoto(-1);
-      }
-    }
-  }
-})();
-</script>
-
-</div>
-  
 <!-- ================================================================ -->
-<!-- ========================== Register ============================ -->
-<!-- ================================================================ -->
+<!-- SERVICE WORKER
+// ================================================================ -->
 
 <script>
 if ("serviceWorker" in navigator) {
@@ -1545,5 +1560,6 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
+</div>
 </body>
 </html>
