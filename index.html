@@ -577,6 +577,7 @@
     <option value="">-- Select Type --</option>
     <option value="Office">Office</option>
     <option value="Retail">Retail</option>
+    <option value="Warehouse">Warehouse</option>
   </select>
   <br>
 
@@ -786,7 +787,25 @@ const sectionsByType = {
   // ---------------------------------------------------------------
   "Retail": [
     {
-      title: "1. Building R&M",
+      title: "2. Office Placeholder",
+      items: [
+        "Clear of any debris",
+        "Windows, baseboards, and sills clean",
+        "Blinds / Window Treatments",
+        "Ceiling Tiles",
+        "Lights",
+        "Thermostat",
+        "Other",
+      ],
+    },
+  ],
+
+  // ---------------------------------------------------------------
+  // RETAIL
+  // ---------------------------------------------------------------
+  "Warehouse": [
+    {
+      title: "3. Warehouse Placeholder",
       items: [
         "Exterior Facade / Paint",
         "Glass / Framing / Storefronts",
@@ -802,125 +821,7 @@ const sectionsByType = {
         "Other",
       ],
     },
-    {
-      title: "2. Vacancies",
-      items: [
-        "Clear of any debris",
-        "Windows, baseboards, and sills clean",
-        "Blinds / Window Treatments",
-        "Ceiling Tiles",
-        "Lights",
-        "Thermostat",
-        "Storefront / Signage Band Clean",
-        "Other",
-      ],
-    },
-    {
-      title: "3. Lighting / Electrical",
-      items: [
-        "Parking Lot",
-        "Overhang / Canopy / Awnings",
-        "Security / Wall Packs",
-        "Photocell / Timer Operation",
-        "Decorative / Landscape",
-        "Emergency / Exit",
-        "Infrared Inspection",
-        "Maintenance Rooms / Janitors Closets",
-        "Emergency Generator",
-        "Signage / Pylon / Monument Lighting",
-        "Other",
-      ],
-    },
-    {
-      title: "4. Sidewalks",
-      items: [
-        "Concrete Condition",
-        "Concrete Cleanliness",
-        "Trip Hazards",
-        "Trash / Site Pickup",
-        "Curb Cuts / ADA Ramps",
-        "Bollards Condition",
-      ],
-    },
-    {
-      title: "5. Parking Lot / Asphalt / Coating",
-      items: [
-        "Overall Condition",
-        "Pot Holes / Low Spots / Crackfilling",
-        "Sweeping & Cleanliness",
-        "Striping Condition",
-        "Fire Lane Striping / Signage",
-        "Stormwater / Sewer Drains / Catch Basins",
-        "Sump Pump(s)",
-        "Cart Corrals / Cart Storage Areas",
-        "Other",
-      ],
-    },
-    {
-      title: "6. Landscaping / Snow Removal",
-      items: [
-        "Plantings / Shrubs & Bushes",
-        "Turf / Grass",
-        "Trees",
-        "Irrigation",
-        "Parking Lot & Walkway Snow / Ice Condition",
-        "Snow Storage / Drive Lane Visibility",
-        "Rock Beds",
-        "Retaining Walls",
-        "Mulch Beds",
-        "Other",
-      ],
-    },
-    {
-      title: "7. Roof",
-      items: [
-        "Condition / Professional Assessment",
-        "Repairs",
-        "Debris / Grease from hoods",
-        "Drainage / Gutters",
-        "Heat Tape",
-        "HVAC Unit Curbs / Flashing",
-        "Other",
-      ],
-    },
-    {
-      title: "8. Paint",
-      items: [
-        "Sign Posts",
-        "Light Poles",
-        "Bollards",
-        "Facade",
-        "Overhangs",
-        "Trash Enclosure",
-        "Doors & Frames",
-        "Mechanical Rooms / Janitors Closets",
-        "Pylon / Monument Sign Structure",
-        "Other",
-      ],
-    },
-    {
-      title: "9. Fire / Life / Safety",
-      items: [
-        "Fire Extinguishers Inspection",
-        "Fire Panel Inspection",
-        "Fire Sprinkler Inspection",
-        "RPZ / Backflow Test",
-        "Knox Box",
-        "Other",
-      ],
-    },
-    {
-      title: "10. Signage",
-      items: [
-        "Pylon / Monument Sign Condition",
-        "Tenant Panel Condition",
-        "Building / Blade Signs",
-        "Directional Signage",
-        "ADA Signage",
-        "Other",
-      ],
-    },
-  ],
+  ]
 };
 
 // ================================================================
