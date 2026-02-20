@@ -532,18 +532,6 @@
       .section-progress { display: none !important; }
     }
 
-    /* Type-switch notice */
-    #typeSwitchNotice {
-      max-width: 600px;
-      margin: 0 auto 10px auto;
-      padding: 10px 14px;
-      background: #fff8e1;
-      border: 1px solid #f0c040;
-      border-radius: 6px;
-      font-size: 0.92rem;
-      display: none;
-    }
-
     /* Placeholder when no type selected */
     #noTypeMessage {
       text-align: center;
@@ -552,6 +540,7 @@
       margin-top: 30px;
       display: block;
     }
+
   </style>
 </head>
 <body>
@@ -593,10 +582,6 @@
   <input type="date" id="date" name="date" style="width:140px; font-size: 1rem;" class="save-text">
 </div>
 <br>
-
-<div id="typeSwitchNotice" class="no-print">
-  ⚠️ Switching property type will clear all current inspection data. Make sure you have saved or printed before switching.
-</div>
 
 <!-- Renders the checklist programmatically -->
 <div id="sections-root">
@@ -1093,12 +1078,28 @@ document.getElementById("propertyType").addEventListener("change", function() {
 
   if (newType === currentType) return;
 
-  // Warn if there is existing data for the new type
-  if (currentType && newType && newType !== currentType) {
-    const notice = document.getElementById("typeSwitchNotice");
-    if (notice) {
-      notice.style.display = "block";
-      setTimeout(function() { notice.style.display = "none"; }, 6000);
+  // Check if any data exists for the current type
+  if (currentType) {
+    let hasData = false;
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && (
+        key.startsWith(currentType + "_radio") ||
+        key.startsWith(currentType + "_textarea") ||
+        key.startsWith(currentType + "_photo")
+      )) {
+        hasData = true;
+        break;
+      }
+    }
+
+    if (hasData) {
+      if (!confirm("Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?")) {
+        // Revert the dropdown back to the previous selection
+        this.value = currentType;
+        return;
+      }
     }
   }
 
@@ -1464,5 +1465,4 @@ if ("serviceWorker" in navigator) {
 </div>
 </body>
 </html>
-
 
