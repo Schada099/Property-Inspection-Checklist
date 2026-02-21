@@ -50,11 +50,6 @@
       color: black;
     }
 
-    h2 {
-      margin-top: 20px;
-      margin-bottom: 5px;
-    }
-
     .grid-container-no-color {
       display: grid;
       grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr;
@@ -169,19 +164,6 @@
       .no-print { display: none !important; }
     }
 
-    .form-container {
-      text-align: left;
-      margin-left: 0;
-    }
-
-    @media (min-width:450px) {
-      .form-container {
-        max-width: 450px;
-        margin: 0 auto;
-        text-align: left;
-      }
-    }
-
     .section {
       position: relative;
     }
@@ -238,7 +220,7 @@
     }
 
     .export-instructions {
-      max-width: 450px;
+      max-width: 600px;
       margin: 20px auto 40px auto;
       padding: 14px 16px;
       border-radius: 8px;
@@ -493,7 +475,7 @@
       margin-left: 10px;
     }
 
-    @media (max-width: 450px) {
+    @media (max-width: 600px) {
       .section-progress {
         float: none;
         display: block;
@@ -541,6 +523,53 @@
       display: block;
     }
 
+    @media print {
+      .property-info-card {
+        display: block !important;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin: 0 auto 20px auto;
+        max-width: 600px;
+        background: #f9fbff !important;
+      }
+
+      .property-info-card h3 {
+        text-align: center;
+        margin: 0 0 8px 0;
+        font-size: 1.1rem;
+      }
+
+      .property-info-card input,
+      .property-info-card select {
+        border: none;
+        background: transparent;
+        font-size: 1rem;
+        padding: 0;
+        width: auto !important;
+      }
+
+      .property-info-card select {
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .property-info-card input[type="date"] {
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .property-info-card input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .property-info-card .info-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -557,31 +586,36 @@
   <div id="photoProgressBar"></div>
 </div>
 
-<div class="form-container">
-  <button id="clearAll" type="button" style="margin-left:0px; margin-bottom:10px; font-size:18px" class="action-button clear-button no-print">Clear All</button>
-  <br>
-
-  <label for="propertyType" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Property Type:</label>
-  <select id="propertyType" name="propertyType" style="width:200px; font-size: 1rem; padding: 2px;">
-    <option value="">-- Select Type --</option>
-    <option value="Office">Office</option>
-    <option value="Retail">Retail (incomplete)</option>
-    <option value="Warehouse">Warehouse (incomplete)</option>
-  </select>
-  <br>
-
-  <label for="property" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Property:</label>
-  <input type="text" id="property" name="property" style="width:250px; font-size: 1rem;" class="save-text" maxlength="27">
-  <br>
-
-  <label for="propertyManager" style="display: inline-block; margin-bottom:10px; font-size:18px">Property Manager:</label>
-  <input type="text" id="propertyManager" name="propertyManager" style="width:182px; font-size: 1rem;" class="save-text" maxlength="20">
-  <br>
-
-  <label for="date" style="margin-left:0px; display: inline-block; margin-bottom:10px; font-size:18px">Inspection Date:</label>
-  <input type="date" id="date" name="date" style="width:140px; font-size: 1rem;" class="save-text">
+<div class="export-instructions property-info-card" style="margin-top: 0;">
+  <h3>Property Information</h3>
+  <div class="info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div>
+      <label for="propertyType" style="font-size:1rem; font-weight:bold;">Property Type:</label><br>
+      <select id="propertyType" name="propertyType" style="width:100%; font-size: 1rem; padding: 2px;">
+        <option value="">-- Select Type --</option>
+        <option value="Office">Office</option>
+        <option value="Retail">Retail (incomplete)</option>
+        <option value="Warehouse">Warehouse (incomplete)</option>
+      </select>
+    </div>
+    <div>
+      <label for="property" style="font-size:1rem; font-weight:bold;">Property:</label><br>
+      <input type="text" id="property" name="property" style="width:100%; box-sizing:border-box; font-size: 1rem;" class="save-text" maxlength="27">
+    </div>
+    <div>
+      <label for="propertyManager" style="font-size:1rem; font-weight:bold;">Property Manager:</label><br>
+      <input type="text" id="propertyManager" name="propertyManager" style="width:100%; box-sizing:border-box; font-size: 1rem;" class="save-text" maxlength="20">
+    </div>
+    <div>
+      <label for="date" style="font-size:1rem; font-weight:bold;">Inspection Date:</label><br>
+      <input type="date" id="date" name="date" style="width:100%; box-sizing:border-box; font-size: 1rem;" class="save-text">
+    </div>
+  </div>
 </div>
-<br>
+
+<div style="max-width: 600px; margin: 0 auto 16px auto; text-align: right;">
+  <button id="clearAll" type="button" style="font-size:16px;" class="action-button clear-button no-print">Clear All</button>
+</div>
 
 <!-- Renders the checklist programmatically -->
 <div id="sections-root">
