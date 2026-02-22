@@ -623,8 +623,8 @@
 </div>
 <br>
 
-<!-- Export instructions -->
-<div class="export-instructions no-print">
+<!-- Export instructions — hidden until a property type is chosen -->
+<div class="export-instructions no-print" id="exportInstructions" style="display:none;">
   <h3>Export Instructions</h3>
   <ol>
     <li>Click <strong>Print / Save as PDF</strong> and save to your phone.</li>
@@ -1139,6 +1139,7 @@ document.getElementById("propertyType").addEventListener("change", function() {
 
   localStorage.setItem("propertyType", newType);
   document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
+  document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
   renderSections(newType);
 });
 
@@ -1173,6 +1174,7 @@ window.addEventListener("load", function() {
     document.getElementById("propertyType").value = savedType;
     renderSections(savedType);
     document.getElementById("clearAll").style.display = savedType ? "inline-block" : "none";
+    document.getElementById("exportInstructions").style.display = savedType ? "block" : "none";
   }
 
   // Progress init (small delay for radios to load)
