@@ -614,7 +614,7 @@
 </div>
 
 <div style="max-width: 600px; margin: 0 auto 16px auto; text-align: right;">
-  <button id="clearAll" type="button" style="font-size:16px;" class="action-button clear-button no-print">Clear All</button>
+  <button id="clearAll" type="button" style="font-size:16px; display:none;" class="action-button clear-button no-print">Clear All</button>
 </div>
 
 <!-- Renders the checklist programmatically -->
@@ -1138,6 +1138,7 @@ document.getElementById("propertyType").addEventListener("change", function() {
   }
 
   localStorage.setItem("propertyType", newType);
+  document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
   renderSections(newType);
 });
 
@@ -1171,6 +1172,7 @@ window.addEventListener("load", function() {
   if (savedType && sectionsByType[savedType]) {
     document.getElementById("propertyType").value = savedType;
     renderSections(savedType);
+    document.getElementById("clearAll").style.display = savedType ? "inline-block" : "none";
   }
 
   // Progress init (small delay for radios to load)
@@ -1183,12 +1185,7 @@ window.addEventListener("load", function() {
 document.getElementById("clearAll").addEventListener("click", function() {
   if (!confirm("Are you sure you want to clear all inspection data?")) return;
 
-  // Determine current prefix
   const currentType = localStorage.getItem("propertyType") || "";
-
-  // Reset property type dropdown
-  document.getElementById("propertyType").value = "";
-  localStorage.removeItem("propertyType");
 
   // Clear radios on screen
   document.querySelectorAll(".save-radio").forEach(function(r) { r.checked = false; });
@@ -1199,7 +1196,7 @@ document.getElementById("clearAll").addEventListener("click", function() {
     area.style.height = "";
   });
 
-  // Clear all localStorage keys for this type
+  // Clear all localStorage keys for this type (but NOT propertyType itself)
   const keysToRemove = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -1233,10 +1230,9 @@ document.getElementById("clearAll").addEventListener("click", function() {
     updatePhotoButton(prefix, index);
   });
 
-  renderSections("");
+  renderSections(currentType);
   updateAllProgress();
 });
-
 // ================================================================
 // PRINT VALIDATION
 // ================================================================
