@@ -568,6 +568,102 @@
       }
     }
 
+    /* ── Shared modal styles (used by Incomplete, Clear All, Switch Type, and Missing Fields modals) ── */
+    #incompleteModal,
+    #clearAllModal,
+    #switchTypeModal,
+    #missingFieldsModal {
+      display: none;
+      position: fixed;
+      z-index: 20000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.55);
+      animation: fadeIn 0.2s;
+    }
+
+    #incompleteModalBox,
+    #clearAllModalBox,
+    #switchTypeModalBox,
+    #missingFieldsModalBox {
+      background: #fff;
+      border-radius: 10px;
+      padding: 28px 28px 22px 28px;
+      max-width: 420px;
+      width: 90%;
+      margin: 12vh auto 0 auto;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.25);
+      text-align: center;
+    }
+
+    #incompleteModalBox h2,
+    #clearAllModalBox h2,
+    #switchTypeModalBox h2,
+    #missingFieldsModalBox h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.3rem;
+      color: #c50000;
+    }
+
+    #incompleteModalBox p,
+    #clearAllModalBox p,
+    #switchTypeModalBox p,
+    #missingFieldsModalBox p {
+      margin: 0 0 20px 0;
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    #incompleteModalBox .modal-buttons,
+    #clearAllModalBox .modal-buttons,
+    #switchTypeModalBox .modal-buttons,
+    #missingFieldsModalBox .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    #incompleteModalBox .btn-go-back,
+    #clearAllModalBox .btn-go-back,
+    #switchTypeModalBox .btn-go-back,
+    #missingFieldsModalBox .btn-go-back {
+      background: #0067c5;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #incompleteModalBox .btn-go-back:hover,
+    #clearAllModalBox .btn-go-back:hover,
+    #switchTypeModalBox .btn-go-back:hover,
+    #missingFieldsModalBox .btn-go-back:hover { background: #004c93; }
+
+    #incompleteModalBox .btn-print-anyway,
+    #clearAllModalBox .btn-print-anyway,
+    #switchTypeModalBox .btn-print-anyway {
+      background: #fff;
+      color: #c50000;
+      border: 2px solid #c50000;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #incompleteModalBox .btn-print-anyway:hover,
+    #clearAllModalBox .btn-print-anyway:hover,
+    #switchTypeModalBox .btn-print-anyway:hover { background: #fff0f0; }
+
+    @media print {
+      #incompleteModal,
+      #clearAllModal,
+      #switchTypeModal,
+      #missingFieldsModal { display: none !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -650,6 +746,61 @@
     <button class="photo-modal-nav photo-modal-next" onclick="changePhoto(1)">&#10095;</button>
     <div class="photo-modal-counter">
       <span id="photoCounter"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- MISSING FIELDS MODAL
+// ================================================================ -->
+<div id="missingFieldsModal">
+  <div id="missingFieldsModalBox">
+    <h2>Required Fields Missing</h2>
+    <p id="missingFieldsMsg"></p>
+    <div class="modal-buttons">
+      <button class="btn-go-back" onclick="closeMissingFieldsModal()">OK, Go Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- SWITCH TYPE CONFIRMATION MODAL
+// ================================================================ -->
+<div id="switchTypeModal">
+  <div id="switchTypeModalBox">
+    <h2>Switch Property Type</h2>
+    <p>Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?</p>
+    <div class="modal-buttons">
+      <button class="btn-go-back" onclick="_pendingSwitchType = null; closeSwitchTypeModal()">Cancel</button>
+      <button class="btn-print-anyway" onclick="closeSwitchTypeModal(); executeSwitchType();">Yes, Switch</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- CLEAR ALL CONFIRMATION MODAL
+// ================================================================ -->
+<div id="clearAllModal">
+  <div id="clearAllModalBox">
+    <h2>Clear All Data</h2>
+    <p>Are you sure you want to clear all inspection data? This cannot be undone.</p>
+    <div class="modal-buttons">
+      <button class="btn-go-back" onclick="closeClearAllModal()">Cancel</button>
+      <button class="btn-print-anyway" onclick="closeClearAllModal(); executeClearAll();">Yes, Clear All</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- INCOMPLETE CHECKLIST WARNING MODAL
+// ================================================================ -->
+<div id="incompleteModal">
+  <div id="incompleteModalBox">
+    <h2>Checklist Incomplete</h2>
+    <p id="incompleteModalMsg">Some items have not been rated yet. Are you sure you're done?</p>
+    <div class="modal-buttons">
+      <button class="btn-go-back" onclick="closeIncompleteModal()">Go Back &amp; Finish</button>
+      <button class="btn-print-anyway" onclick="closeIncompleteModal(); window.print();">Print Anyway</button>
     </div>
   </div>
 </div>
@@ -1107,8 +1258,39 @@ function updateAllProgress() {
 }
 
 // ================================================================
+// OVERALL COMPLETION CHECK
+// Returns { completed, total, percent }
+// ================================================================
+function getOverallCompletion() {
+  const type = localStorage.getItem("propertyType");
+  if (!type || !sectionsByType[type]) return { completed: 0, total: 0, percent: 0 };
+
+  const sections = sectionsByType[type];
+  let total = 0;
+  let completed = 0;
+  let globalIndex = 0;
+
+  sections.forEach(function(sec) {
+    sec.items.forEach(function() {
+      total++;
+      const name = type + "_radio" + globalIndex;
+      const radios = document.querySelectorAll('input[name="' + name + '"]');
+      if (Array.from(radios).some(function(r) { return r.checked; })) {
+        completed++;
+      }
+      globalIndex++;
+    });
+  });
+
+  const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+  return { completed: completed, total: total, percent: percent };
+}
+
+// ================================================================
 // PROPERTY TYPE SWITCHER
 // ================================================================
+let _pendingSwitchType = null;
+
 document.getElementById("propertyType").addEventListener("change", function() {
   const newType = this.value;
   const currentType = localStorage.getItem("propertyType");
@@ -1118,7 +1300,6 @@ document.getElementById("propertyType").addEventListener("change", function() {
   // Check if any data exists for the current type
   if (currentType) {
     let hasData = false;
-
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && (
@@ -1132,19 +1313,47 @@ document.getElementById("propertyType").addEventListener("change", function() {
     }
 
     if (hasData) {
-      if (!confirm("Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?")) {
-        // Revert the dropdown back to the previous selection
-        this.value = currentType;
-        return;
-      }
+      // Store the intended new type and revert the dropdown until confirmed
+      _pendingSwitchType = newType;
+      this.value = currentType;
+      openSwitchTypeModal();
+      return;
     }
   }
 
+  // No data — switch immediately
   localStorage.setItem("propertyType", newType);
   document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
   document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
   renderSections(newType);
 });
+
+function openSwitchTypeModal() {
+  document.getElementById("switchTypeModal").style.display = "block";
+  document.body.style.overflow = "hidden";
+}
+
+function closeSwitchTypeModal() {
+  document.getElementById("switchTypeModal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+// Close modal if background overlay is clicked
+document.getElementById("switchTypeModal").addEventListener("click", function(e) {
+  if (e.target === this) { _pendingSwitchType = null; closeSwitchTypeModal(); }
+});
+
+function executeSwitchType() {
+  const newType = _pendingSwitchType;
+  _pendingSwitchType = null;
+  if (newType === null) return;
+
+  document.getElementById("propertyType").value = newType;
+  localStorage.setItem("propertyType", newType);
+  document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
+  document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
+  renderSections(newType);
+}
 
 // ================================================================
 // WINDOW LOAD
@@ -1188,8 +1397,25 @@ window.addEventListener("load", function() {
 // CLEAR ALL
 // ================================================================
 document.getElementById("clearAll").addEventListener("click", function() {
-  if (!confirm("Are you sure you want to clear all inspection data?")) return;
+  openClearAllModal();
+});
 
+function openClearAllModal() {
+  document.getElementById("clearAllModal").style.display = "block";
+  document.body.style.overflow = "hidden";
+}
+
+function closeClearAllModal() {
+  document.getElementById("clearAllModal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+// Close modal if background overlay is clicked
+document.getElementById("clearAllModal").addEventListener("click", function(e) {
+  if (e.target === this) closeClearAllModal();
+});
+
+function executeClearAll() {
   const currentType = localStorage.getItem("propertyType") || "";
 
   // Clear radios on screen
@@ -1237,7 +1463,49 @@ document.getElementById("clearAll").addEventListener("click", function() {
 
   renderSections(currentType);
   updateAllProgress();
+}
+
+// ================================================================
+// MISSING FIELDS MODAL HELPERS
+// ================================================================
+function openMissingFieldsModal(missing) {
+  const msg = document.getElementById("missingFieldsMsg");
+  msg.textContent = "Please complete the following fields before printing: " + missing.join(", ") + ".";
+  document.getElementById("missingFieldsModal").style.display = "block";
+  document.body.style.overflow = "hidden";
+}
+
+function closeMissingFieldsModal() {
+  document.getElementById("missingFieldsModal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+// Close modal if background overlay is clicked
+document.getElementById("missingFieldsModal").addEventListener("click", function(e) {
+  if (e.target === this) closeMissingFieldsModal();
 });
+
+// ================================================================
+// INCOMPLETE MODAL HELPERS
+// ================================================================
+function openIncompleteModal(completed, total) {
+  const remaining = total - completed;
+  const msg = document.getElementById("incompleteModalMsg");
+  msg.textContent = remaining + " of " + total + " items still need a rating. Are you sure you're done?";
+  document.getElementById("incompleteModal").style.display = "block";
+  document.body.style.overflow = "hidden";
+}
+
+function closeIncompleteModal() {
+  document.getElementById("incompleteModal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+// Close modal if background overlay is clicked
+document.getElementById("incompleteModal").addEventListener("click", function(e) {
+  if (e.target === this) closeIncompleteModal();
+});
+
 // ================================================================
 // PRINT VALIDATION
 // ================================================================
@@ -1263,7 +1531,14 @@ function printChecklist() {
     if (!manager.value.trim()) manager.style.border = "2px solid red";
     if (!date.value) date.style.border = "2px solid red";
 
-    alert("Please complete the following fields before printing:\n\n" + missing.join("\n"));
+    openMissingFieldsModal(missing);
+    return;
+  }
+
+  // Check overall checklist completion
+  const completion = getOverallCompletion();
+  if (completion.percent < 100) {
+    openIncompleteModal(completion.completed, completion.total);
     return;
   }
 
@@ -1500,4 +1775,3 @@ if ("serviceWorker" in navigator) {
 </div>
 </body>
 </html>
-
