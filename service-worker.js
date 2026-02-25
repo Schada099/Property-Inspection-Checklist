@@ -1,4 +1,4 @@
-const CACHE_NAME = "inspection-v2";
+const CACHE_NAME = "inspection-v03";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -33,3 +33,4 @@ self.addEventListener("fetch", event => {
       .catch(() => caches.match(event.request))
   );
 });
+
