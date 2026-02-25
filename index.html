@@ -689,8 +689,8 @@
       <select id="propertyType" name="propertyType" style="width:100%; font-size: 1rem; padding: 2px;">
         <option value="">-- Select Type --</option>
         <option value="Office">Office</option>
-        <option value="Retail">Retail (incomplete)</option>
-        <option value="Warehouse">Warehouse (incomplete)</option>
+        <option value="Retail">Retail</option>
+        <option value="Warehouse">Warehouse</option>
       </select>
     </div>
     <div>
@@ -956,7 +956,24 @@ const sectionsByType = {
   // ---------------------------------------------------------------
   "Retail": [
     {
-      title: "2. Retail Placeholder (incomplete)",
+      title: "1. Building R&M",
+      items: [
+        "Exterior Facade / Paint",
+        "Glass / Framing",
+        "Fencing / Walls",
+        "Overhangs / Canopy / Awnings",
+        "Trash Enclosure",
+        "Common Doors / Security",
+        "Mechanical Room / Janitors Closet",
+        "Doors / Locks - Bldg Security",
+        "Stairwells / Hallways",
+        "Conference Rooms",
+        "Atriums",
+        "Other",
+      ],
+    },
+    {
+      title: "2. Vacancies",
       items: [
         "Clear of any debris",
         "Windows, baseboards, and sills clean",
@@ -967,6 +984,96 @@ const sectionsByType = {
         "Other",
       ],
     },
+    {
+      title: "3. Lighting / Electrical",
+      items: [
+        "Parking Lot",
+        "Overhang / Canopy / Awnings",
+        "Security / Wall Packs",
+        "Photocell / Timer Operation",
+        "Decorative / Landscape",
+        "Emergency / Exit",
+        "Infrared Inspection",
+        "Maintenance Rooms / Janitors Closets",
+        "Emergency Generator",
+        "Common Areas / Hallways / Stairwells",
+        "Other",
+      ],
+    },
+    {
+      title: "4. Sidewalks",
+      items: [
+        "Concrete Condition",
+        "Concrete Cleanliness",
+        "Trip Hazards",
+        "Trash / Site Pickup",
+      ],
+    },
+    {
+      title: "5. Parking Lot / Asphalt / Coating",
+      items: [
+        "Overall Condition",
+        "Pot Holes / Low Spots / Crackfilling",
+        "Sweeping & Cleanliness",
+        "Striping Condition",
+        "Parking Ramp / Ramp Condition Assessment",
+        "Stormwater / Sewer Drains / Catch Basins",
+        "Sump Pumps(s)",
+        "Other",
+      ],
+    },
+    {
+      title: "6. Landscaping / Snow Removal",
+      items: [
+        "Plantings / Shrubs & Bushes",
+        "Turf / Grass",
+        "Trees",
+        "Irrigation",
+        "Parking Lot & Walkway Snow / Ice Condition",
+        "Snow Storage / Drive Lane Visibility",
+        "Rock Beds",
+        "Retaining Walls",
+        "Other",
+      ],
+    },
+    {
+      title: "7. Roof",
+      items: [
+        "Condition / Professional Assessment",
+        "Repairs",
+        "Debris / Grease from hoods",
+        "Drainage / Gutters",
+        "Heat Tape",
+        "Other",
+      ],
+    },
+    {
+      title: "8. Paint",
+      items: [
+        "Sign Posts",
+        "Light Poles",
+        "Bollards",
+        "Facade",
+        "Overhangs",
+        "Trash Enclosure",
+        "Doors & Frames",
+        "Mechanical Rooms / Janitors Closets",
+        "Elevators",
+        "Stairwells",
+        "Hallways",
+        "Other",
+      ],
+    },
+    {
+      title: "9. Fire / Life / Safety",
+      items: [
+        "Fire Extinguishers Inspection",
+        "Fire Panel Inspection",
+        "Fire Sprinkler Inspection",
+        "RPZ / Backflow Test",
+        "Other",
+      ],
+    },
   ],
 
   // ---------------------------------------------------------------
@@ -974,19 +1081,121 @@ const sectionsByType = {
   // ---------------------------------------------------------------
   "Warehouse": [
     {
-      title: "3. Warehouse Placeholder (incomplete)",
+      title: "1. Building R&M",
       items: [
         "Exterior Facade / Paint",
-        "Glass / Framing / Storefronts",
+        "Glass / Framing",
         "Fencing / Walls",
         "Overhangs / Canopy / Awnings",
         "Trash Enclosure",
         "Common Doors / Security",
         "Mechanical Room / Janitors Closet",
-        "Tenant Entry Doors / Locks",
-        "Loading Docks / Service Areas",
-        "Signage Structures",
-        "Drive-Thru Lanes / Windows",
+        "Doors / Locks - Bldg Security",
+        "Stairwells / Hallways",
+        "Conference Rooms",
+        "Atriums",
+        "Other",
+      ],
+    },
+    {
+      title: "2. Vacancies",
+      items: [
+        "Clear of any debris",
+        "Windows, baseboards, and sills clean",
+        "Blinds / Window Treatments",
+        "Ceiling Tiles",
+        "Lights",
+        "Thermostat",
+        "Other",
+      ],
+    },
+    {
+      title: "3. Lighting / Electrical",
+      items: [
+        "Parking Lot",
+        "Overhang / Canopy / Awnings",
+        "Security / Wall Packs",
+        "Photocell / Timer Operation",
+        "Decorative / Landscape",
+        "Emergency / Exit",
+        "Infrared Inspection",
+        "Maintenance Rooms / Janitors Closets",
+        "Emergency Generator",
+        "Common Areas / Hallways / Stairwells",
+        "Other",
+      ],
+    },
+    {
+      title: "4. Sidewalks",
+      items: [
+        "Concrete Condition",
+        "Concrete Cleanliness",
+        "Trip Hazards",
+        "Trash / Site Pickup",
+      ],
+    },
+    {
+      title: "5. Parking Lot / Asphalt / Coating",
+      items: [
+        "Overall Condition",
+        "Pot Holes / Low Spots / Crackfilling",
+        "Sweeping & Cleanliness",
+        "Striping Condition",
+        "Parking Ramp / Ramp Condition Assessment",
+        "Stormwater / Sewer Drains / Catch Basins",
+        "Sump Pumps(s)",
+        "Other",
+      ],
+    },
+    {
+      title: "6. Landscaping / Snow Removal",
+      items: [
+        "Plantings / Shrubs & Bushes",
+        "Turf / Grass",
+        "Trees",
+        "Irrigation",
+        "Parking Lot & Walkway Snow / Ice Condition",
+        "Snow Storage / Drive Lane Visibility",
+        "Rock Beds",
+        "Retaining Walls",
+        "Other",
+      ],
+    },
+    {
+      title: "7. Roof",
+      items: [
+        "Condition / Professional Assessment",
+        "Repairs",
+        "Debris / Grease from hoods",
+        "Drainage / Gutters",
+        "Heat Tape",
+        "Other",
+      ],
+    },
+    {
+      title: "8. Paint",
+      items: [
+        "Sign Posts",
+        "Light Poles",
+        "Bollards",
+        "Facade",
+        "Overhangs",
+        "Trash Enclosure",
+        "Doors & Frames",
+        "Mechanical Rooms / Janitors Closets",
+        "Elevators",
+        "Stairwells",
+        "Hallways",
+        "Other",
+      ],
+    },
+    {
+      title: "9. Fire / Life / Safety",
+      items: [
+        "Fire Extinguishers Inspection",
+        "Fire Panel Inspection",
+        "Fire Sprinkler Inspection",
+        "RPZ / Backflow Test",
         "Other",
       ],
     },
@@ -1807,4 +2016,3 @@ if ("serviceWorker" in navigator) {
 </div>
 </body>
 </html>
-
