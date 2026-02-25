@@ -1,8 +1,11 @@
-const CACHE_NAME = "inspection-v1";
+const CACHE_NAME = "inspection-v2";
 const urlsToCache = [
   "/",
   "/index.html",
-  "/manifest.json"
+  "/manifest.json",
+  "/icon-192.png",
+  "/icon-512.png",
+  "/SuntideLogo.png"
 ];
 
 self.addEventListener("install", event => {
@@ -11,10 +14,22 @@ self.addEventListener("install", event => {
   );
 });
 
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
+  );
+});
+
 self.addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request)
+      .then(response => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
