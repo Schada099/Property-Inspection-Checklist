@@ -1762,9 +1762,9 @@ function printChecklist() {
 
   const missing = [];
   if (!typeSelect.value) missing.push("Property Type");
-  if (!property.value.trim()) missing.push("Property");
-  if (!manager.value.trim()) missing.push("Property Manager");
-  if (!date.value) missing.push("Date");
+  if (!property.value.trim()) missing.push("Property Name");
+  if (!manager.value.trim()) missing.push("Your Name");
+  if (!date.value) missing.push("Inspection Date");
 
   if (missing.length > 0) {
     if (!typeSelect.value) typeSelect.style.border = "2px solid red";
@@ -2016,5 +2016,3 @@ if ("serviceWorker" in navigator) {
 </div>
 </body>
 </html>
-
-
