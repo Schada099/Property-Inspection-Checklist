@@ -958,441 +958,660 @@
 </script>
 
 <script>
-// ================================================================
-// MASTER SECTION DEFINITIONS
-// All types share the same master list. Custom uses a subset.
-// ================================================================
-const masterSections = [
-  {
-    title: "1. Building R&M",
-    items: [
-      "Exterior Facade / Paint",
-      "Glass / Framing",
-      "Fencing / Walls",
-      "Overhangs / Canopy / Awnings",
-      "Trash Enclosure",
-      "Common Doors / Security",
-      "Mechanical Room / Janitors Closet",
-      "Doors / Locks - Bldg Security",
-      "Stairwells / Hallways",
-      "Conference Rooms",
-      "Atriums",
-      "Other",
-    ],
-  },
-  {
-    title: "2. Vacancies",
-    items: [
-      "Clear of any debris",
-      "Windows, baseboards, and sills clean",
-      "Blinds / Window Treatments",
-      "Ceiling Tiles",
-      "Lights",
-      "Thermostat",
-      "Other",
-    ],
-  },
-  {
-    title: "3. Lighting / Electrical",
-    items: [
-      "Parking Lot",
-      "Overhang / Canopy / Awnings",
-      "Security / Wall Packs",
-      "Photocell / Timer Operation",
-      "Decorative / Landscape",
-      "Emergency / Exit",
-      "Infrared Inspection",
-      "Maintenance Rooms / Janitors Closets",
-      "Emergency Generator",
-      "Common Areas / Hallways / Stairwells",
-      "Other",
-    ],
-  },
-  {
-    title: "4. Sidewalks",
-    items: [
-      "Concrete Condition",
-      "Concrete Cleanliness",
-      "Trip Hazards",
-      "Trash / Site Pickup",
-    ],
-  },
-  {
-    title: "5. Parking Lot / Asphalt / Coating",
-    items: [
-      "Overall Condition",
-      "Pot Holes / Low Spots / Crackfilling",
-      "Sweeping & Cleanliness",
-      "Striping Condition",
-      "Parking Ramp / Ramp Condition Assessment",
-      "Stormwater / Sewer Drains / Catch Basins",
-      "Sump Pumps(s)",
-      "Other",
-    ],
-  },
-  {
-    title: "6. Landscaping / Snow Removal",
-    items: [
-      "Plantings / Shrubs & Bushes",
-      "Turf / Grass",
-      "Trees",
-      "Irrigation",
-      "Parking Lot & Walkway Snow / Ice Condition",
-      "Snow Storage / Drive Lane Visibility",
-      "Rock Beds",
-      "Retaining Walls",
-      "Other",
-    ],
-  },
-  {
-    title: "7. Roof",
-    items: [
-      "Condition / Professional Assessment",
-      "Repairs",
-      "Debris / Grease from hoods",
-      "Drainage / Gutters",
-      "Heat Tape",
-      "Other",
-    ],
-  },
-  {
-    title: "8. Paint",
-    items: [
-      "Sign Posts",
-      "Light Poles",
-      "Bollards",
-      "Facade",
-      "Overhangs",
-      "Trash Enclosure",
-      "Doors & Frames",
-      "Mechanical Rooms / Janitors Closets",
-      "Elevators",
-      "Stairwells",
-      "Hallways",
-      "Other",
-    ],
-  },
-  {
-    title: "9. Fire / Life / Safety",
-    items: [
-      "Fire Extinguishers Inspection",
-      "Fire Panel Inspection",
-      "Fire Sprinkler Inspection",
-      "RPZ / Backflow Test",
-      "Other",
-    ],
-  },
-];
+  // ================================================================
+  // MASTER SECTION DEFINITIONS
+  // All types share the same master list. Custom uses a subset.
+  // ================================================================
+  const masterSections = [
+    {
+      title: "1. Building R&M",
+      items: [
+        "Exterior Facade / Paint",
+        "Glass / Framing",
+        "Fencing / Walls",
+        "Overhangs / Canopy / Awnings",
+        "Trash Enclosure",
+        "Common Doors / Security",
+        "Mechanical Room / Janitors Closet",
+        "Doors / Locks - Bldg Security",
+        "Stairwells / Hallways",
+        "Conference Rooms",
+        "Atriums",
+        "Other",
+      ],
+    },
+    {
+      title: "2. Vacancies",
+      items: [
+        "Clear of any debris",
+        "Windows, baseboards, and sills clean",
+        "Blinds / Window Treatments",
+        "Ceiling Tiles",
+        "Lights",
+        "Thermostat",
+        "Other",
+      ],
+    },
+    {
+      title: "3. Lighting / Electrical",
+      items: [
+        "Parking Lot",
+        "Overhang / Canopy / Awnings",
+        "Security / Wall Packs",
+        "Photocell / Timer Operation",
+        "Decorative / Landscape",
+        "Emergency / Exit",
+        "Infrared Inspection",
+        "Maintenance Rooms / Janitors Closets",
+        "Emergency Generator",
+        "Common Areas / Hallways / Stairwells",
+        "Other",
+      ],
+    },
+    {
+      title: "4. Sidewalks",
+      items: [
+        "Concrete Condition",
+        "Concrete Cleanliness",
+        "Trip Hazards",
+        "Trash / Site Pickup",
+      ],
+    },
+    {
+      title: "5. Parking Lot / Asphalt / Coating",
+      items: [
+        "Overall Condition",
+        "Pot Holes / Low Spots / Crackfilling",
+        "Sweeping & Cleanliness",
+        "Striping Condition",
+        "Parking Ramp / Ramp Condition Assessment",
+        "Stormwater / Sewer Drains / Catch Basins",
+        "Sump Pumps(s)",
+        "Other",
+      ],
+    },
+    {
+      title: "6. Landscaping / Snow Removal",
+      items: [
+        "Plantings / Shrubs & Bushes",
+        "Turf / Grass",
+        "Trees",
+        "Irrigation",
+        "Parking Lot & Walkway Snow / Ice Condition",
+        "Snow Storage / Drive Lane Visibility",
+        "Rock Beds",
+        "Retaining Walls",
+        "Other",
+      ],
+    },
+    {
+      title: "7. Roof",
+      items: [
+        "Condition / Professional Assessment",
+        "Repairs",
+        "Debris / Grease from hoods",
+        "Drainage / Gutters",
+        "Heat Tape",
+        "Other",
+      ],
+    },
+    {
+      title: "8. Paint",
+      items: [
+        "Sign Posts",
+        "Light Poles",
+        "Bollards",
+        "Facade",
+        "Overhangs",
+        "Trash Enclosure",
+        "Doors & Frames",
+        "Mechanical Rooms / Janitors Closets",
+        "Elevators",
+        "Stairwells",
+        "Hallways",
+        "Other",
+      ],
+    },
+    {
+      title: "9. Fire / Life / Safety",
+      items: [
+        "Fire Extinguishers Inspection",
+        "Fire Panel Inspection",
+        "Fire Sprinkler Inspection",
+        "RPZ / Backflow Test",
+        "Other",
+      ],
+    },
+  ];
 
-// sectionsByType: Office/Retail/Warehouse all use the full master list.
-// "Custom" is built dynamically from user selections.
-const sectionsByType = {
-  "Office":    masterSections,
-  "Retail":    masterSections,
-  "Warehouse": masterSections,
-  "Custom":    null   // populated when user confirms picker
-};
+  // sectionsByType: Office/Retail/Warehouse all use the full master list.
+  // "Custom" is built dynamically from user selections.
+  const sectionsByType = {
+    "Office":    masterSections,
+    "Retail":    masterSections,
+    "Warehouse": masterSections,
+    "Custom":    null   // populated when user confirms picker
+  };
 
-// ================================================================
-// SECTION BUILDER UTILITIES
-// ================================================================
-function el(tag, attrs, children) {
-  attrs = attrs || {};
-  children = children || [];
-  const node = document.createElement(tag);
-  Object.entries(attrs).forEach(function(pair) {
-    const k = pair[0], v = pair[1];
-    if (k === "className") node.className = v;
-    else if (k === "html") node.innerHTML = v;
-    else node.setAttribute(k, v);
-  });
-  (Array.isArray(children) ? children : [children]).forEach(function(c) {
-    if (c == null) return;
-    node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
-  });
-  return node;
-}
-
-function buildRatingHeaderRow() {
-  return el("div", { className: "grid-container-no-color headers-row" }, [
-    el("div", { className: "header" }, ""),
-    el("div", { className: "header" }, "Good"),
-    el("div", { className: "header" }, "Fair"),
-    el("div", { className: "header" }, "Poor"),
-    el("div", { className: "header" }, "N/A"),
-  ]);
-}
-
-function buildItemRow(globalIndex, label, prefix) {
-  const gridClass = globalIndex % 2 === 0 ? "grid-container-no-color" : "grid-container-yes-color";
-  const name = prefix + "_radio" + globalIndex;
-  const photoKey = prefix + "_photo" + globalIndex;
-  const txtId = prefix + "_textarea" + globalIndex;
-
-  return el("div", { className: gridClass }, [
-    el("div", { className: "merge-rows" }, label),
-    el("div", { className: "radio-circle" }, [
-      el("input", { type: "radio", id: prefix + "_good" + globalIndex, name: name, value: "good", className: "save-radio", "data-prefix": prefix }),
-      el("label", { for: prefix + "_good" + globalIndex, "aria-label": "Good" })
-    ]),
-    el("div", { className: "radio-circle" }, [
-      el("input", { type: "radio", id: prefix + "_fair" + globalIndex, name: name, value: "fair", className: "save-radio", "data-prefix": prefix }),
-      el("label", { for: prefix + "_fair" + globalIndex, "aria-label": "Fair" })
-    ]),
-    el("div", { className: "radio-circle" }, [
-      el("input", { type: "radio", id: prefix + "_poor" + globalIndex, name: name, value: "poor", className: "save-radio", "data-prefix": prefix }),
-      el("label", { for: prefix + "_poor" + globalIndex, "aria-label": "Poor" })
-    ]),
-    el("div", { className: "radio-circle" }, [
-      el("input", { type: "radio", id: prefix + "_na" + globalIndex, name: name, value: "na", className: "save-radio", "data-prefix": prefix }),
-      el("label", { for: prefix + "_na" + globalIndex, "aria-label": "Not applicable" })
-    ]),
-    el("div", { className: "text-input" }, [
-      el("textarea", {
-        id: txtId,
-        className: "save-text",
-        placeholder: "Enter details here"
-      })
-    ]),
-    el("div", { className: "text-input" }, [
-      el("input", {
-        type: "file",
-        accept: "image/*",
-        id: prefix + "_photo" + globalIndex,
-        className: "no-print",
-        style: "display:none",
-        multiple: true,
-        "data-photokey": photoKey
-      }),
-      el("button", {
-        type: "button",
-        className: "action-button photo-button no-print",
-        onclick: "document.getElementById('" + prefix + "_photo" + globalIndex + "').click()"
-      }, "Upload Picture"),
-      el("button", {
-        type: "button",
-        id: prefix + "_delete" + globalIndex,
-        className: "photo-delete no-print",
-        onclick: "deletePhoto('" + prefix + "', " + globalIndex + ")"
-      }, "X"),
-      el("div", {
-        id: prefix + "_thumbWrap" + globalIndex,
-        style: "display:flex; gap:6px; flex-wrap:wrap;"
-      })
-    ])
-  ]);
-}
-
-function buildSection(section, startIndex, prefix) {
-  let globalIndex = startIndex;
-  const sectionEl = el("section", { className: "section" });
-
-  const titleContainer = el("h2", { className: "section-title" });
-  titleContainer.appendChild(document.createTextNode(section.title));
-
-  const progressSpan = el("span", {
-    className: "section-progress no-print",
-    "data-start": startIndex,
-    "data-count": section.items.length,
-    "data-prefix": prefix
-  }, [
-    el("span", { className: "progress-text" }, "0%"),
-    el("span", { className: "progress-bar-container" }, [
-      el("span", { className: "progress-bar-fill", style: "width: 0%" })
-    ])
-  ]);
-  titleContainer.appendChild(progressSpan);
-
-  const sticky = el("div", { className: "section-sticky" }, [
-    titleContainer,
-    el("hr", { className: "divider-2" }),
-    buildRatingHeaderRow(),
-    el("hr", { className: "divider-1" }),
-  ]);
-
-  sectionEl.appendChild(sticky);
-
-  section.items.forEach(function(label) {
-    sectionEl.appendChild(buildItemRow(globalIndex, label, prefix));
-    globalIndex++;
-  });
-
-  return { node: sectionEl, nextIndex: globalIndex };
-}
-
-// ================================================================
-// RENDER SECTIONS FOR A GIVEN TYPE
-// ================================================================
-function renderSections(type) {
-  const root = document.getElementById("sections-root");
-  root.innerHTML = "";
-
-  const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
-
-  if (!type || !sections) {
-    const msg = document.createElement("p");
-    msg.id = "noTypeMessage";
-    msg.textContent = "Please select a Property Type above to begin the inspection.";
-    root.appendChild(msg);
-    return;
+  // ================================================================
+  // SECTION BUILDER UTILITIES
+  // ================================================================
+  function el(tag, attrs, children) {
+    attrs = attrs || {};
+    children = children || [];
+    const node = document.createElement(tag);
+    Object.entries(attrs).forEach(function(pair) {
+      const k = pair[0], v = pair[1];
+      if (k === "className") node.className = v;
+      else if (k === "html") node.innerHTML = v;
+      else node.setAttribute(k, v);
+    });
+    (Array.isArray(children) ? children : [children]).forEach(function(c) {
+      if (c == null) return;
+      node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+    });
+    return node;
   }
 
-  const prefix = type;
-  let nextIndex = 0;
-  sections.forEach(function(sec, i) {
-    if (i > 0) root.appendChild(el("br"));
-    const result = buildSection(sec, nextIndex, prefix);
-    root.appendChild(result.node);
-    nextIndex = result.nextIndex;
-  });
+  function buildRatingHeaderRow() {
+    return el("div", { className: "grid-container-no-color headers-row" }, [
+      el("div", { className: "header" }, ""),
+      el("div", { className: "header" }, "Good"),
+      el("div", { className: "header" }, "Fair"),
+      el("div", { className: "header" }, "Poor"),
+      el("div", { className: "header" }, "N/A"),
+    ]);
+  }
 
-  loadSavedDataForType(prefix);
-  loadSavedPhotosForType(prefix);
-  updateAllProgress();
-}
+  function buildItemRow(globalIndex, label, prefix) {
+    const gridClass = globalIndex % 2 === 0 ? "grid-container-no-color" : "grid-container-yes-color";
+    const name = prefix + "_radio" + globalIndex;
+    const photoKey = prefix + "_photo" + globalIndex;
+    const txtId = prefix + "_textarea" + globalIndex;
 
-// ================================================================
-// LOAD SAVED DATA
-// ================================================================
-function loadSavedDataForType(prefix) {
-  document.querySelectorAll(".save-radio[data-prefix='" + prefix + "']").forEach(function(radio) {
-    const savedValue = localStorage.getItem(radio.name);
-    if (savedValue && radio.value === savedValue) {
-      radio.checked = true;
-    }
-  });
+    return el("div", { className: gridClass }, [
+      el("div", { className: "merge-rows" }, label),
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: prefix + "_good" + globalIndex, name: name, value: "good", className: "save-radio", "data-prefix": prefix }),
+        el("label", { for: prefix + "_good" + globalIndex, "aria-label": "Good" })
+      ]),
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: prefix + "_fair" + globalIndex, name: name, value: "fair", className: "save-radio", "data-prefix": prefix }),
+        el("label", { for: prefix + "_fair" + globalIndex, "aria-label": "Fair" })
+      ]),
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: prefix + "_poor" + globalIndex, name: name, value: "poor", className: "save-radio", "data-prefix": prefix }),
+        el("label", { for: prefix + "_poor" + globalIndex, "aria-label": "Poor" })
+      ]),
+      el("div", { className: "radio-circle" }, [
+        el("input", { type: "radio", id: prefix + "_na" + globalIndex, name: name, value: "na", className: "save-radio", "data-prefix": prefix }),
+        el("label", { for: prefix + "_na" + globalIndex, "aria-label": "Not applicable" })
+      ]),
+      el("div", { className: "text-input" }, [
+        el("textarea", {
+          id: txtId,
+          className: "save-text",
+          placeholder: "Enter details here"
+        })
+      ]),
+      el("div", { className: "text-input" }, [
+        el("input", {
+          type: "file",
+          accept: "image/*",
+          id: prefix + "_photo" + globalIndex,
+          className: "no-print",
+          style: "display:none",
+          multiple: true,
+          "data-photokey": photoKey
+        }),
+        el("button", {
+          type: "button",
+          className: "action-button photo-button no-print",
+          onclick: "document.getElementById('" + prefix + "_photo" + globalIndex + "').click()"
+        }, "Upload Picture"),
+        el("button", {
+          type: "button",
+          id: prefix + "_delete" + globalIndex,
+          className: "photo-delete no-print",
+          onclick: "deletePhoto('" + prefix + "', " + globalIndex + ")"
+        }, "X"),
+        el("div", {
+          id: prefix + "_thumbWrap" + globalIndex,
+          style: "display:flex; gap:6px; flex-wrap:wrap;"
+        })
+      ])
+    ]);
+  }
 
-  document.querySelectorAll(".save-text").forEach(function(area) {
-    if (!area.id || !area.id.startsWith(prefix + "_textarea")) return;
-    const savedText = localStorage.getItem(area.id);
-    if (savedText) {
-      area.value = savedText;
-      area.style.height = "auto";
-      area.style.height = area.scrollHeight + "px";
-    }
-  });
-}
+  function buildSection(section, startIndex, prefix) {
+    let globalIndex = startIndex;
+    const sectionEl = el("section", { className: "section" });
 
-function loadSavedPhotosForType(prefix) {
-  document.querySelectorAll("div[id^='" + prefix + "_thumbWrap']").forEach(function(wrap) {
-    const index = parseInt(wrap.id.replace(prefix + "_thumbWrap", ""), 10);
-    const photoKey = prefix + "_photo" + index;
-    const saved = JSON.parse(localStorage.getItem(photoKey) || "[]");
-    const deleteBtn = document.getElementById(prefix + "_delete" + index);
+    const titleContainer = el("h2", { className: "section-title" });
+    titleContainer.appendChild(document.createTextNode(section.title));
 
-    saved.forEach(function(src, photoIndex) {
-      const img = document.createElement("img");
-      img.src = src;
-      img.className = "photo-thumb";
-      img.style.width = "100px";
-      img.style.height = "100px";
-      img.style.objectFit = "cover";
-      img.style.flex = "0 0 100px";
-      img.style.cursor = "pointer";
-      img.onclick = (function(pi) {
-        return function() { openPhotoModal(prefix, index, pi); };
-      })(photoIndex);
-      wrap.appendChild(img);
+    const progressSpan = el("span", {
+      className: "section-progress no-print",
+      "data-start": startIndex,
+      "data-count": section.items.length,
+      "data-prefix": prefix
+    }, [
+      el("span", { className: "progress-text" }, "0%"),
+      el("span", { className: "progress-bar-container" }, [
+        el("span", { className: "progress-bar-fill", style: "width: 0%" })
+      ])
+    ]);
+    titleContainer.appendChild(progressSpan);
+
+    const sticky = el("div", { className: "section-sticky" }, [
+      titleContainer,
+      el("hr", { className: "divider-2" }),
+      buildRatingHeaderRow(),
+      el("hr", { className: "divider-1" }),
+    ]);
+
+    sectionEl.appendChild(sticky);
+
+    section.items.forEach(function(label) {
+      sectionEl.appendChild(buildItemRow(globalIndex, label, prefix));
+      globalIndex++;
     });
 
-    if (saved.length > 0 && deleteBtn) {
-      deleteBtn.style.display = "inline-block";
+    return { node: sectionEl, nextIndex: globalIndex };
+  }
+
+  // ================================================================
+  // RENDER SECTIONS FOR A GIVEN TYPE
+  // ================================================================
+  function renderSections(type) {
+    const root = document.getElementById("sections-root");
+    root.innerHTML = "";
+
+    const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
+
+    if (!type || !sections) {
+      const msg = document.createElement("p");
+      msg.id = "noTypeMessage";
+      msg.textContent = "Please select a Property Type above to begin the inspection.";
+      root.appendChild(msg);
+      return;
     }
 
-    updatePhotoButton(prefix, index);
-  });
-}
+    const prefix = type;
+    let nextIndex = 0;
+    sections.forEach(function(sec, i) {
+      if (i > 0) root.appendChild(el("br"));
+      const result = buildSection(sec, nextIndex, prefix);
+      root.appendChild(result.node);
+      nextIndex = result.nextIndex;
+    });
 
-// ================================================================
-// SAVE LISTENERS
-// ================================================================
-document.addEventListener("change", function(e) {
-  if (e.target.classList.contains("save-radio")) {
-    localStorage.setItem(e.target.name, e.target.value);
+    loadSavedDataForType(prefix);
+    loadSavedPhotosForType(prefix);
     updateAllProgress();
   }
-});
 
-document.addEventListener("input", function(e) {
-  if (e.target.classList.contains("save-text") && e.target.id) {
-    localStorage.setItem(e.target.id, e.target.value);
+  // ================================================================
+  // LOAD SAVED DATA
+  // ================================================================
+  function loadSavedDataForType(prefix) {
+    document.querySelectorAll(".save-radio[data-prefix='" + prefix + "']").forEach(function(radio) {
+      const savedValue = localStorage.getItem(radio.name);
+      if (savedValue && radio.value === savedValue) {
+        radio.checked = true;
+      }
+    });
+
+    document.querySelectorAll(".save-text").forEach(function(area) {
+      if (!area.id || !area.id.startsWith(prefix + "_textarea")) return;
+      const savedText = localStorage.getItem(area.id);
+      if (savedText) {
+        area.value = savedText;
+        area.style.height = "auto";
+        area.style.height = area.scrollHeight + "px";
+      }
+    });
   }
-});
 
-// ================================================================
-// PROGRESS TRACKING
-// ================================================================
-function updateSectionProgress(progressElement) {
-  const startIndex = parseInt(progressElement.getAttribute("data-start"));
-  const itemCount = parseInt(progressElement.getAttribute("data-count"));
-  const prefix = progressElement.getAttribute("data-prefix");
+  function loadSavedPhotosForType(prefix) {
+    document.querySelectorAll("div[id^='" + prefix + "_thumbWrap']").forEach(function(wrap) {
+      const index = parseInt(wrap.id.replace(prefix + "_thumbWrap", ""), 10);
+      const photoKey = prefix + "_photo" + index;
+      const saved = JSON.parse(localStorage.getItem(photoKey) || "[]");
+      const deleteBtn = document.getElementById(prefix + "_delete" + index);
 
-  let completed = 0;
-  for (let i = startIndex; i < startIndex + itemCount; i++) {
-    const name = prefix + "_radio" + i;
-    const radios = document.querySelectorAll('input[name="' + name + '"]');
-    if (Array.from(radios).some(function(r) { return r.checked; })) {
-      completed++;
+      saved.forEach(function(src, photoIndex) {
+        const img = document.createElement("img");
+        img.src = src;
+        img.className = "photo-thumb";
+        img.style.width = "100px";
+        img.style.height = "100px";
+        img.style.objectFit = "cover";
+        img.style.flex = "0 0 100px";
+        img.style.cursor = "pointer";
+        img.onclick = (function(pi) {
+          return function() { openPhotoModal(prefix, index, pi); };
+        })(photoIndex);
+        wrap.appendChild(img);
+      });
+
+      if (saved.length > 0 && deleteBtn) {
+        deleteBtn.style.display = "inline-block";
+      }
+
+      updatePhotoButton(prefix, index);
+    });
+  }
+
+  // ================================================================
+  // SAVE LISTENERS
+  // ================================================================
+  document.addEventListener("change", function(e) {
+    if (e.target.classList.contains("save-radio")) {
+      localStorage.setItem(e.target.name, e.target.value);
+      updateAllProgress();
     }
-  }
-
-  const percentage = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
-  const progressText = progressElement.querySelector(".progress-text");
-  const progressFill = progressElement.querySelector(".progress-bar-fill");
-  if (progressText) progressText.textContent = percentage + "%";
-  if (progressFill) progressFill.style.width = percentage + "%";
-}
-
-function updateAllProgress() {
-  document.querySelectorAll(".section-progress").forEach(function(el) {
-    updateSectionProgress(el);
   });
-}
 
-function getOverallCompletion() {
-  const type = localStorage.getItem("propertyType");
-  const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
-  if (!type || !sections) return { completed: 0, total: 0, percent: 0 };
+  document.addEventListener("input", function(e) {
+    if (e.target.classList.contains("save-text") && e.target.id) {
+      localStorage.setItem(e.target.id, e.target.value);
+    }
+  });
 
-  let total = 0;
-  let completed = 0;
-  let globalIndex = 0;
+  // ================================================================
+  // PROGRESS TRACKING
+  // ================================================================
+  function updateSectionProgress(progressElement) {
+    const startIndex = parseInt(progressElement.getAttribute("data-start"));
+    const itemCount = parseInt(progressElement.getAttribute("data-count"));
+    const prefix = progressElement.getAttribute("data-prefix");
 
-  sections.forEach(function(sec) {
-    sec.items.forEach(function() {
-      total++;
-      const name = type + "_radio" + globalIndex;
+    let completed = 0;
+    for (let i = startIndex; i < startIndex + itemCount; i++) {
+      const name = prefix + "_radio" + i;
       const radios = document.querySelectorAll('input[name="' + name + '"]');
       if (Array.from(radios).some(function(r) { return r.checked; })) {
         completed++;
       }
-      globalIndex++;
+    }
+
+    const percentage = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
+    const progressText = progressElement.querySelector(".progress-text");
+    const progressFill = progressElement.querySelector(".progress-bar-fill");
+    if (progressText) progressText.textContent = percentage + "%";
+    if (progressFill) progressFill.style.width = percentage + "%";
+  }
+
+  function updateAllProgress() {
+    document.querySelectorAll(".section-progress").forEach(function(el) {
+      updateSectionProgress(el);
     });
+  }
+
+  function getOverallCompletion() {
+    const type = localStorage.getItem("propertyType");
+    const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
+    if (!type || !sections) return { completed: 0, total: 0, percent: 0 };
+
+    let total = 0;
+    let completed = 0;
+    let globalIndex = 0;
+
+    sections.forEach(function(sec) {
+      sec.items.forEach(function() {
+        total++;
+        const name = type + "_radio" + globalIndex;
+        const radios = document.querySelectorAll('input[name="' + name + '"]');
+        if (Array.from(radios).some(function(r) { return r.checked; })) {
+          completed++;
+        }
+        globalIndex++;
+      });
+    });
+
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+    return { completed: completed, total: total, percent: percent };
+  }
+
+  // ================================================================
+  // PROPERTY TYPE SWITCHER
+  // ================================================================
+  let _pendingSwitchType = null;
+
+  document.getElementById("propertyType").addEventListener("change", function() {
+    const newType = this.value;
+    const currentType = localStorage.getItem("propertyType");
+
+    if (newType === currentType) return;
+
+    if (currentType) {
+      let hasData = false;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (
+          key.startsWith(currentType + "_radio") ||
+          key.startsWith(currentType + "_textarea") ||
+          key.startsWith(currentType + "_photo")
+        )) {
+          hasData = true;
+          break;
+        }
+      }
+
+      if (hasData) {
+        _pendingSwitchType = newType;
+        this.value = currentType;
+        openSwitchTypeModal();
+        return;
+      }
+    }
+
+    applyTypeSelection(newType);
   });
 
-  const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-  return { completed: completed, total: total, percent: percent };
-}
+  function applyTypeSelection(newType) {
+    localStorage.setItem("propertyType", newType);
 
-// ================================================================
-// PROPERTY TYPE SWITCHER
-// ================================================================
-let _pendingSwitchType = null;
+    // Show/hide Edit Sections button
+    document.getElementById("editCustomSectionsBtn").style.display =
+      newType === "Custom" ? "inline-block" : "none";
 
-document.getElementById("propertyType").addEventListener("change", function() {
-  const newType = this.value;
-  const currentType = localStorage.getItem("propertyType");
+    document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
+    document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
 
-  if (newType === currentType) return;
+    if (newType === "Custom") {
+      const savedIndices = getSavedCustomIndices();
+      if (savedIndices !== null) {
+        // Restore previously saved custom sections
+        sectionsByType["Custom"] = savedIndices.map(function(i) { return masterSections[i]; });
+        renderSections("Custom");
+      } else {
+        // No saved selection — show picker
+        renderSections(null); // clear the checklist area
+        openCustomPickerModal(false);
+      }
+    } else {
+      renderSections(newType);
+    }
+  }
 
-  if (currentType) {
+  function openSwitchTypeModal() {
+    document.getElementById("switchTypeModal").style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeSwitchTypeModal() {
+    document.getElementById("switchTypeModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+
+  document.getElementById("switchTypeModal").addEventListener("click", function(e) {
+    if (e.target === this) { _pendingSwitchType = null; closeSwitchTypeModal(); }
+  });
+
+  function executeSwitchType() {
+    const newType = _pendingSwitchType;
+    _pendingSwitchType = null;
+    if (newType === null) return;
+
+    document.getElementById("propertyType").value = newType;
+    applyTypeSelection(newType);
+  }
+
+  // ================================================================
+  // CUSTOM PICKER MODAL
+  // ================================================================
+
+  function getSavedCustomIndices() {
+    const saved = localStorage.getItem("Custom_sections");
+    if (!saved) return null;
+    try {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch(e) {}
+    return null;
+  }
+
+  function openCustomPickerModal(isEditing) {
+    const list = document.getElementById("customPickerList");
+    list.innerHTML = "";
+    document.getElementById("pickerError").textContent = "";
+
+    // Determine currently selected indices (for "Edit" mode restore)
+    const savedIndices = getSavedCustomIndices();
+    const activeIndices = savedIndices || masterSections.map(function(_, i) { return i; }); // default: all checked
+
+    masterSections.forEach(function(sec, i) {
+      const isChecked = activeIndices.indexOf(i) !== -1;
+      const li = document.createElement("li");
+      li.className = isChecked ? "selected" : "";
+
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.value = i;
+      cb.checked = isChecked;
+      cb.id = "picker_cb_" + i;
+
+      cb.addEventListener("change", function() {
+        li.className = cb.checked ? "selected" : "";
+        updateToggleAllLabel();
+      });
+
+      // Clicking the whole row toggles the checkbox
+      li.addEventListener("click", function(e) {
+        if (e.target !== cb) {
+          cb.checked = !cb.checked;
+          li.className = cb.checked ? "selected" : "";
+          cb.dispatchEvent(new Event("change"));
+        }
+      });
+
+      const labelEl = document.createElement("span");
+      labelEl.className = "picker-label";
+      labelEl.textContent = sec.title;
+
+      li.appendChild(cb);
+      li.appendChild(labelEl);
+      list.appendChild(li);
+    });
+
+    updateToggleAllLabel();
+
+    document.getElementById("customPickerModal").style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeCustomPickerModal() {
+    document.getElementById("customPickerModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+
+  // Called by the × button — reverts the type dropdown if no custom checklist exists yet
+  function cancelCustomPicker() {
+    const hasSavedSections = getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null;
+    if (!hasSavedSections) {
+      // User hadn't confirmed a selection yet — revert dropdown to blank
+      if (localStorage.getItem("propertyType") === "Custom") {
+        localStorage.removeItem("propertyType");
+      }
+      document.getElementById("propertyType").value = "";
+      document.getElementById("clearAll").style.display = "none";
+      document.getElementById("exportInstructions").style.display = "none";
+      document.getElementById("editCustomSectionsBtn").style.display = "none";
+      renderSections(null);
+    }
+    closeCustomPickerModal();
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      const pickerModal = document.getElementById("customPickerModal");
+      if (pickerModal && pickerModal.style.display === "block") {
+        cancelCustomPicker();
+      }
+    }
+  });
+
+  function updateToggleAllLabel() {
+    const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
+    const allChecked = Array.from(checkboxes).every(function(cb) { return cb.checked; });
+    document.getElementById("pickerToggleAll").textContent = allChecked ? "Deselect All" : "Select All";
+  }
+
+  function toggleAllSections() {
+    const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
+    const allChecked = Array.from(checkboxes).every(function(cb) { return cb.checked; });
+    checkboxes.forEach(function(cb) {
+      cb.checked = !allChecked;
+      const li = cb.closest("li");
+      if (li) li.className = cb.checked ? "selected" : "";
+    });
+    updateToggleAllLabel();
+  }
+
+  function confirmCustomSections() {
+    const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
+    const selectedIndices = Array.from(checkboxes)
+      .filter(function(cb) { return cb.checked; })
+      .map(function(cb) { return parseInt(cb.value, 10); });
+
+    if (selectedIndices.length === 0) {
+      document.getElementById("pickerError").textContent = "Please select at least one section.";
+      return;
+    }
+
+    // Save selection and rebuild Custom sections
+    localStorage.setItem("Custom_sections", JSON.stringify(selectedIndices));
+    sectionsByType["Custom"] = selectedIndices.map(function(i) { return masterSections[i]; });
+
+    closeCustomPickerModal();
+    renderSections("Custom");
+  }
+
+  // Dismiss picker modal by clicking the overlay (only allowed when a selection already exists)
+  document.getElementById("customPickerModal").addEventListener("click", function(e) {
+    if (e.target === this) {
+      // Only allow dismissing if there's already a saved & rendered checklist
+      if (getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null) {
+        closeCustomPickerModal();
+      }
+    }
+  });
+
+  // ================================================================
+  // EDIT CUSTOM SECTIONS BUTTON
+  // Warns user that editing may lose data for removed sections
+  // ================================================================
+  document.getElementById("editCustomSectionsBtn").addEventListener("click", function() {
+    // Check if there is any existing Custom data
     let hasData = false;
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && (
-        key.startsWith(currentType + "_radio") ||
-        key.startsWith(currentType + "_textarea") ||
-        key.startsWith(currentType + "_photo")
+        key.startsWith("Custom_radio") ||
+        key.startsWith("Custom_textarea") ||
+        key.startsWith("Custom_photo")
       )) {
         hasData = true;
         break;
@@ -1400,483 +1619,273 @@ document.getElementById("propertyType").addEventListener("change", function() {
     }
 
     if (hasData) {
-      _pendingSwitchType = newType;
-      this.value = currentType;
-      openSwitchTypeModal();
+      // Reuse the switch-type modal with a custom message — simpler than a new modal
+      document.querySelector("#switchTypeModalBox p").textContent =
+        "Changing your section selection may clear data for any removed sections. Continue?";
+      _pendingEditCustom = true;
+      document.getElementById("switchTypeModal").style.display = "block";
+      document.body.style.overflow = "hidden";
+    } else {
+      openCustomPickerModal(true);
+    }
+  });
+
+  // We need to distinguish between a type-switch and an edit-custom in executeSwitchType
+  let _pendingEditCustom = false;
+
+  // Override executeSwitchType to handle the edit-custom path
+  const _origExecuteSwitchType = executeSwitchType;
+  window.executeSwitchType = function() {
+    if (_pendingEditCustom) {
+      _pendingEditCustom = false;
+      // Reset the modal message back for future type-switch uses
+      document.querySelector("#switchTypeModalBox p").textContent =
+        "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
+      openCustomPickerModal(true);
       return;
     }
-  }
+    _origExecuteSwitchType();
+  };
 
-  applyTypeSelection(newType);
-});
-
-function applyTypeSelection(newType) {
-  localStorage.setItem("propertyType", newType);
-
-  // Show/hide Edit Sections button
-  document.getElementById("editCustomSectionsBtn").style.display =
-    newType === "Custom" ? "inline-block" : "none";
-
-  document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
-  document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
-
-  if (newType === "Custom") {
-    const savedIndices = getSavedCustomIndices();
-    if (savedIndices !== null) {
-      // Restore previously saved custom sections
-      sectionsByType["Custom"] = savedIndices.map(function(i) { return masterSections[i]; });
-      renderSections("Custom");
-    } else {
-      // No saved selection — show picker
-      renderSections(null); // clear the checklist area
-      openCustomPickerModal(false);
+  // Also reset message if user cancels from the edit-custom path
+  document.getElementById("switchTypeModal").addEventListener("click", function() {
+    // (already handled above — but reset _pendingEditCustom flag on cancel too)
+  });
+  const cancelBtn = document.querySelector("#switchTypeModalBox .btn-go-back");
+  cancelBtn.addEventListener("click", function() {
+    if (_pendingEditCustom) {
+      _pendingEditCustom = false;
+      document.querySelector("#switchTypeModalBox p").textContent =
+        "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
     }
-  } else {
-    renderSections(newType);
-  }
-}
+    _pendingSwitchType = null;
+    closeSwitchTypeModal();
+  });
 
-function openSwitchTypeModal() {
-  document.getElementById("switchTypeModal").style.display = "block";
-  document.body.style.overflow = "hidden";
-}
+  // ================================================================
+  // WINDOW LOAD
+  // ================================================================
+  window.addEventListener("load", function() {
+    const dateInput = document.getElementById("date");
+    if (dateInput && !dateInput.value) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      dateInput.value = year + "-" + month + "-" + day;
+    }
 
-function closeSwitchTypeModal() {
-  document.getElementById("switchTypeModal").style.display = "none";
-  document.body.style.overflow = "auto";
-}
-
-document.getElementById("switchTypeModal").addEventListener("click", function(e) {
-  if (e.target === this) { _pendingSwitchType = null; closeSwitchTypeModal(); }
-});
-
-function executeSwitchType() {
-  const newType = _pendingSwitchType;
-  _pendingSwitchType = null;
-  if (newType === null) return;
-
-  document.getElementById("propertyType").value = newType;
-  applyTypeSelection(newType);
-}
-
-// ================================================================
-// CUSTOM PICKER MODAL
-// ================================================================
-
-function getSavedCustomIndices() {
-  const saved = localStorage.getItem("Custom_sections");
-  if (!saved) return null;
-  try {
-    const parsed = JSON.parse(saved);
-    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-  } catch(e) {}
-  return null;
-}
-
-function openCustomPickerModal(isEditing) {
-  const list = document.getElementById("customPickerList");
-  list.innerHTML = "";
-  document.getElementById("pickerError").textContent = "";
-
-  // Determine currently selected indices (for "Edit" mode restore)
-  const savedIndices = getSavedCustomIndices();
-  const activeIndices = savedIndices || masterSections.map(function(_, i) { return i; }); // default: all checked
-
-  masterSections.forEach(function(sec, i) {
-    const isChecked = activeIndices.indexOf(i) !== -1;
-    const li = document.createElement("li");
-    li.className = isChecked ? "selected" : "";
-
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.value = i;
-    cb.checked = isChecked;
-    cb.id = "picker_cb_" + i;
-
-    cb.addEventListener("change", function() {
-      li.className = cb.checked ? "selected" : "";
-      updateToggleAllLabel();
+    ["property", "propertyManager", "date"].forEach(function(id) {
+      const inputEl = document.getElementById(id);
+      if (!inputEl) return;
+      const saved = localStorage.getItem(id);
+      if (saved) inputEl.value = saved;
+      inputEl.addEventListener("input", function() {
+        localStorage.setItem(id, this.value);
+      });
     });
 
-    // Clicking the whole row toggles the checkbox
-    li.addEventListener("click", function(e) {
-      if (e.target !== cb) {
-        cb.checked = !cb.checked;
-        li.className = cb.checked ? "selected" : "";
-        cb.dispatchEvent(new Event("change"));
-      }
-    });
+    const savedType = localStorage.getItem("propertyType");
+    if (savedType) {
+      document.getElementById("propertyType").value = savedType;
 
-    const labelEl = document.createElement("span");
-    labelEl.className = "picker-label";
-    labelEl.textContent = sec.title;
-
-    li.appendChild(cb);
-    li.appendChild(labelEl);
-    list.appendChild(li);
-  });
-
-  updateToggleAllLabel();
-
-  document.getElementById("customPickerModal").style.display = "block";
-  document.body.style.overflow = "hidden";
-}
-
-function closeCustomPickerModal() {
-  document.getElementById("customPickerModal").style.display = "none";
-  document.body.style.overflow = "auto";
-}
-
-// Called by the × button — reverts the type dropdown if no custom checklist exists yet
-function cancelCustomPicker() {
-  const hasSavedSections = getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null;
-  if (!hasSavedSections) {
-    // User hadn't confirmed a selection yet — revert dropdown to blank
-    if (localStorage.getItem("propertyType") === "Custom") {
-      localStorage.removeItem("propertyType");
-    }
-    document.getElementById("propertyType").value = "";
-    document.getElementById("clearAll").style.display = "none";
-    document.getElementById("exportInstructions").style.display = "none";
-    document.getElementById("editCustomSectionsBtn").style.display = "none";
-    renderSections(null);
-  }
-  closeCustomPickerModal();
-}
-
-function updateToggleAllLabel() {
-  const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
-  const allChecked = Array.from(checkboxes).every(function(cb) { return cb.checked; });
-  document.getElementById("pickerToggleAll").textContent = allChecked ? "Deselect All" : "Select All";
-}
-
-function toggleAllSections() {
-  const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
-  const allChecked = Array.from(checkboxes).every(function(cb) { return cb.checked; });
-  checkboxes.forEach(function(cb) {
-    cb.checked = !allChecked;
-    const li = cb.closest("li");
-    if (li) li.className = cb.checked ? "selected" : "";
-  });
-  updateToggleAllLabel();
-}
-
-function confirmCustomSections() {
-  const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
-  const selectedIndices = Array.from(checkboxes)
-    .filter(function(cb) { return cb.checked; })
-    .map(function(cb) { return parseInt(cb.value, 10); });
-
-  if (selectedIndices.length === 0) {
-    document.getElementById("pickerError").textContent = "Please select at least one section.";
-    return;
-  }
-
-  // Save selection and rebuild Custom sections
-  localStorage.setItem("Custom_sections", JSON.stringify(selectedIndices));
-  sectionsByType["Custom"] = selectedIndices.map(function(i) { return masterSections[i]; });
-
-  closeCustomPickerModal();
-  renderSections("Custom");
-}
-
-// Dismiss picker modal by clicking the overlay (only allowed when a selection already exists)
-document.getElementById("customPickerModal").addEventListener("click", function(e) {
-  if (e.target === this) {
-    // Only allow dismissing if there's already a saved & rendered checklist
-    if (getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null) {
-      closeCustomPickerModal();
-    }
-  }
-});
-
-// ================================================================
-// EDIT CUSTOM SECTIONS BUTTON
-// Warns user that editing may lose data for removed sections
-// ================================================================
-document.getElementById("editCustomSectionsBtn").addEventListener("click", function() {
-  // Check if there is any existing Custom data
-  let hasData = false;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && (
-      key.startsWith("Custom_radio") ||
-      key.startsWith("Custom_textarea") ||
-      key.startsWith("Custom_photo")
-    )) {
-      hasData = true;
-      break;
-    }
-  }
-
-  if (hasData) {
-    // Reuse the switch-type modal with a custom message — simpler than a new modal
-    document.querySelector("#switchTypeModalBox p").textContent =
-      "Changing your section selection may clear data for any removed sections. Continue?";
-    _pendingEditCustom = true;
-    document.getElementById("switchTypeModal").style.display = "block";
-    document.body.style.overflow = "hidden";
-  } else {
-    openCustomPickerModal(true);
-  }
-});
-
-// We need to distinguish between a type-switch and an edit-custom in executeSwitchType
-let _pendingEditCustom = false;
-
-// Override executeSwitchType to handle the edit-custom path
-const _origExecuteSwitchType = executeSwitchType;
-window.executeSwitchType = function() {
-  if (_pendingEditCustom) {
-    _pendingEditCustom = false;
-    // Reset the modal message back for future type-switch uses
-    document.querySelector("#switchTypeModalBox p").textContent =
-      "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
-    openCustomPickerModal(true);
-    return;
-  }
-  _origExecuteSwitchType();
-};
-
-// Also reset message if user cancels from the edit-custom path
-document.getElementById("switchTypeModal").addEventListener("click", function() {
-  // (already handled above — but reset _pendingEditCustom flag on cancel too)
-});
-const cancelBtn = document.querySelector("#switchTypeModalBox .btn-go-back");
-cancelBtn.addEventListener("click", function() {
-  if (_pendingEditCustom) {
-    _pendingEditCustom = false;
-    document.querySelector("#switchTypeModalBox p").textContent =
-      "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
-  }
-  _pendingSwitchType = null;
-  closeSwitchTypeModal();
-});
-
-// ================================================================
-// WINDOW LOAD
-// ================================================================
-window.addEventListener("load", function() {
-  const dateInput = document.getElementById("date");
-  if (dateInput && !dateInput.value) {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    dateInput.value = year + "-" + month + "-" + day;
-  }
-
-  ["property", "propertyManager", "date"].forEach(function(id) {
-    const inputEl = document.getElementById(id);
-    if (!inputEl) return;
-    const saved = localStorage.getItem(id);
-    if (saved) inputEl.value = saved;
-    inputEl.addEventListener("input", function() {
-      localStorage.setItem(id, this.value);
-    });
-  });
-
-  const savedType = localStorage.getItem("propertyType");
-  if (savedType) {
-    document.getElementById("propertyType").value = savedType;
-
-    if (savedType === "Custom") {
-      const savedIndices = getSavedCustomIndices();
-      if (savedIndices !== null) {
-        sectionsByType["Custom"] = savedIndices.map(function(i) { return masterSections[i]; });
-        renderSections("Custom");
-        document.getElementById("editCustomSectionsBtn").style.display = "inline-block";
-      }
-      // If no saved indices, leave the "select type" message — user must re-pick
-    } else {
-      renderSections(savedType);
-    }
-
-    document.getElementById("clearAll").style.display = savedType ? "inline-block" : "none";
-    document.getElementById("exportInstructions").style.display = savedType ? "block" : "none";
-  }
-
-  setTimeout(updateAllProgress, 150);
-});
-
-// ================================================================
-// CLEAR ALL
-// ================================================================
-document.getElementById("clearAll").addEventListener("click", function() {
-  openClearAllModal();
-});
-
-function openClearAllModal() {
-  document.getElementById("clearAllModal").style.display = "block";
-  document.body.style.overflow = "hidden";
-}
-
-function closeClearAllModal() {
-  document.getElementById("clearAllModal").style.display = "none";
-  document.body.style.overflow = "auto";
-}
-
-document.getElementById("clearAllModal").addEventListener("click", function(e) {
-  if (e.target === this) closeClearAllModal();
-});
-
-function executeClearAll() {
-  const currentType = localStorage.getItem("propertyType") || "";
-
-  document.querySelectorAll(".save-radio").forEach(function(r) { r.checked = false; });
-  document.querySelectorAll(".save-text").forEach(function(area) {
-    area.value = "";
-    area.style.height = "";
-  });
-
-  const keysToRemove = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (
-      key.startsWith(currentType + "_") ||
-      key === "property" ||
-      key === "propertyManager" ||
-      key === "date"
-    ) {
-      keysToRemove.push(key);
-    }
-  }
-  keysToRemove.forEach(function(k) { localStorage.removeItem(k); });
-
-  document.querySelectorAll("div[id*='_thumbWrap']").forEach(function(wrap) {
-    wrap.innerHTML = "";
-  });
-  document.querySelectorAll("button[id*='_delete']").forEach(function(btn) {
-    btn.style.display = "none";
-  });
-  document.querySelectorAll("input[type='file'][id*='_photo']").forEach(function(input) {
-    input.value = "";
-    const parts = input.id.split("_photo");
-    const prefix = parts[0];
-    const index = parseInt(parts[1], 10);
-    updatePhotoButton(prefix, index);
-  });
-
-  // For Custom, also clear the saved section selection
-  if (currentType === "Custom") {
-    localStorage.removeItem("Custom_sections");
-    sectionsByType["Custom"] = null;
-    document.getElementById("editCustomSectionsBtn").style.display = "none";
-    document.getElementById("clearAll").style.display = "none";
-    document.getElementById("exportInstructions").style.display = "none";
-    document.getElementById("propertyType").value = "";
-    localStorage.removeItem("propertyType");
-    renderSections(null);
-  } else {
-    renderSections(currentType);
-    updateAllProgress();
-  }
-}
-
-// ================================================================
-// MISSING FIELDS MODAL HELPERS
-// ================================================================
-function openMissingFieldsModal(missing) {
-  const msg = document.getElementById("missingFieldsMsg");
-  msg.textContent = "Please complete the following fields before printing: " + missing.join(", ") + ".";
-  document.getElementById("missingFieldsModal").style.display = "block";
-  document.body.style.overflow = "hidden";
-}
-
-function closeMissingFieldsModal() {
-  document.getElementById("missingFieldsModal").style.display = "none";
-  document.body.style.overflow = "auto";
-  document.querySelector(".property-info-card").scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-document.getElementById("missingFieldsModal").addEventListener("click", function(e) {
-  if (e.target === this) closeMissingFieldsModal();
-});
-
-// ================================================================
-// INCOMPLETE MODAL HELPERS
-// ================================================================
-function openIncompleteModal(completed, total) {
-  const remaining = total - completed;
-  const msg = document.getElementById("incompleteModalMsg");
-  msg.textContent = remaining + " of " + total + " items still need a rating. Are you sure you're done?";
-  document.getElementById("incompleteModal").style.display = "block";
-  document.body.style.overflow = "hidden";
-}
-
-function closeIncompleteModal() {
-  document.getElementById("incompleteModal").style.display = "none";
-  document.body.style.overflow = "auto";
-}
-
-function closeIncompleteModalAndScroll() {
-  closeIncompleteModal();
-  scrollToFirstIncomplete();
-}
-
-function scrollToFirstIncomplete() {
-  const type = localStorage.getItem("propertyType");
-  const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
-  if (!type || !sections) return;
-
-  let globalIndex = 0;
-  for (let s = 0; s < sections.length; s++) {
-    for (let i = 0; i < sections[s].items.length; i++) {
-      const name = type + "_radio" + globalIndex;
-      const radios = document.querySelectorAll('input[name="' + name + '"]');
-      if (!Array.from(radios).some(function(r) { return r.checked; })) {
-        const firstRadio = document.getElementById(type + "_good" + globalIndex);
-        if (firstRadio) {
-          firstRadio.closest(".grid-container-no-color, .grid-container-yes-color")
-            .scrollIntoView({ behavior: "smooth", block: "center" });
+      if (savedType === "Custom") {
+        const savedIndices = getSavedCustomIndices();
+        if (savedIndices !== null) {
+          sectionsByType["Custom"] = savedIndices.map(function(i) { return masterSections[i]; });
+          renderSections("Custom");
+          document.getElementById("editCustomSectionsBtn").style.display = "inline-block";
         }
-        return;
+        // If no saved indices, leave the "select type" message — user must re-pick
+      } else {
+        renderSections(savedType);
       }
-      globalIndex++;
+
+      document.getElementById("clearAll").style.display = savedType ? "inline-block" : "none";
+      document.getElementById("exportInstructions").style.display = savedType ? "block" : "none";
     }
-  }
-}
 
-document.getElementById("incompleteModal").addEventListener("click", function(e) {
-  if (e.target === this) closeIncompleteModal();
-});
-
-// ================================================================
-// PRINT VALIDATION
-// ================================================================
-function printChecklist() {
-  const property = document.getElementById("property");
-  const manager = document.getElementById("propertyManager");
-  const date = document.getElementById("date");
-  const typeSelect = document.getElementById("propertyType");
-
-  [property, manager, date, typeSelect].forEach(function(el) {
-    el.style.border = "";
+    setTimeout(updateAllProgress, 150);
   });
 
-  const missing = [];
-  if (!typeSelect.value) missing.push("Property Type");
-  if (!property.value.trim()) missing.push("Property Name");
-  if (!manager.value.trim()) missing.push("Your Name");
-  if (!date.value) missing.push("Inspection Date");
+  // ================================================================
+  // CLEAR ALL
+  // ================================================================
+  document.getElementById("clearAll").addEventListener("click", function() {
+    openClearAllModal();
+  });
 
-  if (missing.length > 0) {
-    if (!typeSelect.value) typeSelect.style.border = "2px solid red";
-    if (!property.value.trim()) property.style.border = "2px solid red";
-    if (!manager.value.trim()) manager.style.border = "2px solid red";
-    if (!date.value) date.style.border = "2px solid red";
-    openMissingFieldsModal(missing);
-    return;
+  function openClearAllModal() {
+    document.getElementById("clearAllModal").style.display = "block";
+    document.body.style.overflow = "hidden";
   }
 
-  const completion = getOverallCompletion();
-  if (completion.percent < 100) {
-    openIncompleteModal(completion.completed, completion.total);
-    return;
+  function closeClearAllModal() {
+    document.getElementById("clearAllModal").style.display = "none";
+    document.body.style.overflow = "auto";
   }
 
-  window.print();
-}
+  document.getElementById("clearAllModal").addEventListener("click", function(e) {
+    if (e.target === this) closeClearAllModal();
+  });
+
+  function executeClearAll() {
+    const currentType = localStorage.getItem("propertyType") || "";
+
+    document.querySelectorAll(".save-radio").forEach(function(r) { r.checked = false; });
+    document.querySelectorAll(".save-text").forEach(function(area) {
+      area.value = "";
+      area.style.height = "";
+    });
+
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (
+        key.startsWith(currentType + "_") ||
+        key === "property" ||
+        key === "propertyManager" ||
+        key === "date"
+      ) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(function(k) { localStorage.removeItem(k); });
+
+    document.querySelectorAll("div[id*='_thumbWrap']").forEach(function(wrap) {
+      wrap.innerHTML = "";
+    });
+    document.querySelectorAll("button[id*='_delete']").forEach(function(btn) {
+      btn.style.display = "none";
+    });
+    document.querySelectorAll("input[type='file'][id*='_photo']").forEach(function(input) {
+      input.value = "";
+      const parts = input.id.split("_photo");
+      const prefix = parts[0];
+      const index = parseInt(parts[1], 10);
+      updatePhotoButton(prefix, index);
+    });
+
+    // For Custom, also clear the saved section selection
+    if (currentType === "Custom") {
+      localStorage.removeItem("Custom_sections");
+      sectionsByType["Custom"] = null;
+      document.getElementById("editCustomSectionsBtn").style.display = "none";
+      document.getElementById("clearAll").style.display = "none";
+      document.getElementById("exportInstructions").style.display = "none";
+      document.getElementById("propertyType").value = "";
+      localStorage.removeItem("propertyType");
+      renderSections(null);
+    } else {
+      renderSections(currentType);
+      updateAllProgress();
+    }
+  }
+
+  // ================================================================
+  // MISSING FIELDS MODAL HELPERS
+  // ================================================================
+  function openMissingFieldsModal(missing) {
+    const msg = document.getElementById("missingFieldsMsg");
+    msg.textContent = "Please complete the following fields before printing: " + missing.join(", ") + ".";
+    document.getElementById("missingFieldsModal").style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMissingFieldsModal() {
+    document.getElementById("missingFieldsModal").style.display = "none";
+    document.body.style.overflow = "auto";
+    document.querySelector(".property-info-card").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.getElementById("missingFieldsModal").addEventListener("click", function(e) {
+    if (e.target === this) closeMissingFieldsModal();
+  });
+
+  // ================================================================
+  // INCOMPLETE MODAL HELPERS
+  // ================================================================
+  function openIncompleteModal(completed, total) {
+    const remaining = total - completed;
+    const msg = document.getElementById("incompleteModalMsg");
+    msg.textContent = remaining + " of " + total + " items still need a rating. Are you sure you're done?";
+    document.getElementById("incompleteModal").style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeIncompleteModal() {
+    document.getElementById("incompleteModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+
+  function closeIncompleteModalAndScroll() {
+    closeIncompleteModal();
+    scrollToFirstIncomplete();
+  }
+
+  function scrollToFirstIncomplete() {
+    const type = localStorage.getItem("propertyType");
+    const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
+    if (!type || !sections) return;
+
+    let globalIndex = 0;
+    for (let s = 0; s < sections.length; s++) {
+      for (let i = 0; i < sections[s].items.length; i++) {
+        const name = type + "_radio" + globalIndex;
+        const radios = document.querySelectorAll('input[name="' + name + '"]');
+        if (!Array.from(radios).some(function(r) { return r.checked; })) {
+          const firstRadio = document.getElementById(type + "_good" + globalIndex);
+          if (firstRadio) {
+            firstRadio.closest(".grid-container-no-color, .grid-container-yes-color")
+              .scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+          return;
+        }
+        globalIndex++;
+      }
+    }
+  }
+
+  document.getElementById("incompleteModal").addEventListener("click", function(e) {
+    if (e.target === this) closeIncompleteModal();
+  });
+
+  // ================================================================
+  // PRINT VALIDATION
+  // ================================================================
+  function printChecklist() {
+    const property = document.getElementById("property");
+    const manager = document.getElementById("propertyManager");
+    const date = document.getElementById("date");
+    const typeSelect = document.getElementById("propertyType");
+
+    [property, manager, date, typeSelect].forEach(function(el) {
+      el.style.border = "";
+    });
+
+    const missing = [];
+    if (!typeSelect.value) missing.push("Property Type");
+    if (!property.value.trim()) missing.push("Property Name");
+    if (!manager.value.trim()) missing.push("Your Name");
+    if (!date.value) missing.push("Inspection Date");
+
+    if (missing.length > 0) {
+      if (!typeSelect.value) typeSelect.style.border = "2px solid red";
+      if (!property.value.trim()) property.style.border = "2px solid red";
+      if (!manager.value.trim()) manager.style.border = "2px solid red";
+      if (!date.value) date.style.border = "2px solid red";
+      openMissingFieldsModal(missing);
+      return;
+    }
+
+    const completion = getOverallCompletion();
+    if (completion.percent < 100) {
+      openIncompleteModal(completion.completed, completion.total);
+      return;
+    }
+
+    window.print();
+  }
 </script>
 
 <!-- ================================================================ -->
