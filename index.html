@@ -4,19 +4,11 @@
   <title>Property Inspection Checklist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ================================================================ -->
-<!-- ========================== Librarys ============================ -->
-<!-- ================================================================ -->
-
 <script src="https://unpkg.com/heic2any/dist/heic2any.min.js"></script>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0067c5">
 <link rel="apple-touch-icon" href="icon-192.png">
-
-<!-- ================================================================ -->
-<!-- ============================== CSS ============================= -->
-<!-- ================================================================ -->
 
   <style>
     body {
@@ -311,18 +303,13 @@
         border: none !important;
       }
 
-      /* 1 photo = full width */
       @supports selector(:has(*)) {
         [id*="_thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
           max-width: 100% !important;
         }
-
-        /* 2 photos = half width */
         [id*="_thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
           max-width: 80% !important;
         }
-
-        /* 3 photos = thirds */
         [id*="_thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
           max-width:40% !important;
         }
@@ -513,7 +500,6 @@
       .section-progress { display: none !important; }
     }
 
-    /* Placeholder when no type selected */
     #noTypeMessage {
       text-align: center;
       color: #888;
@@ -569,11 +555,12 @@
       }
     }
 
-    /* ── Shared modal styles (used by Incomplete, Clear All, Switch Type, and Missing Fields modals) ── */
+    /* ── Shared modal styles ── */
     #incompleteModal,
     #clearAllModal,
     #switchTypeModal,
-    #missingFieldsModal {
+    #missingFieldsModal,
+    #customPickerModal {
       display: none;
       position: fixed;
       z-index: 20000;
@@ -662,7 +649,138 @@
       #incompleteModal,
       #clearAllModal,
       #switchTypeModal,
-      #missingFieldsModal { display: none !important; }
+      #missingFieldsModal,
+      #customPickerModal { display: none !important; }
+    }
+
+    /* ── Custom Picker Modal ── */
+    #customPickerModalBox {
+      background: #fff;
+      border-radius: 10px;
+      padding: 28px 28px 22px 28px;
+      max-width: 500px;
+      width: 92%;
+      margin: 6vh auto 0 auto;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.25);
+      max-height: 88vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    #customPickerModalBox h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.3rem;
+      color: #0067c5;
+      text-align: center;
+    }
+
+    #customPickerModalBox .picker-subtitle {
+      text-align: center;
+      color: #555;
+      font-size: 0.95rem;
+      margin: 0 0 18px 0;
+    }
+
+    .custom-picker-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px 0;
+    }
+
+    .custom-picker-list li {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      background: #f5f8ff;
+      border: 1.5px solid #d0dfff;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+
+    .custom-picker-list li:hover {
+      background: #e5eeff;
+      border-color: #aac4f0;
+    }
+
+    .custom-picker-list li.selected {
+      background: #d0dfff;
+      border-color: #0067c5;
+    }
+
+    .custom-picker-list li input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-right: 12px;
+      accent-color: #0067c5;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .custom-picker-list li .picker-label {
+      font-size: 0.97rem;
+      color: #222;
+      font-weight: 500;
+    }
+
+    .picker-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .picker-select-all {
+      font-size: 0.85rem;
+      color: #0067c5;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .picker-select-all:hover { color: #004c93; }
+
+    .picker-error {
+      color: #c50000;
+      font-size: 0.9rem;
+      text-align: center;
+      min-height: 1.2em;
+      margin-bottom: 6px;
+    }
+
+    .picker-confirm-btn {
+      width: 100%;
+      font-size: 1.05rem;
+      padding: 12px;
+      background-color: #0067c5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .picker-confirm-btn:hover { background-color: #004c93; }
+
+    /* Edit Sections button shown above checklist when Custom is active */
+    #editCustomSectionsBtn {
+      display: none;
+      font-size: 14px;
+      padding: 7px 14px;
+      border-radius: 5px;
+      background-color: #0067c5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+    #editCustomSectionsBtn:hover { background-color: #004c93; }
+
+    @media print {
+      #editCustomSectionsBtn { display: none !important; }
     }
 
   </style>
@@ -691,6 +809,7 @@
         <option value="Office">Office</option>
         <option value="Retail">Retail</option>
         <option value="Warehouse">Warehouse</option>
+        <option value="Custom">Custom (WIP)</option>
       </select>
     </div>
     <div>
@@ -709,16 +828,15 @@
 </div>
 
 <div style="max-width: 600px; margin: 0 auto 16px auto; text-align: right;">
+  <button id="editCustomSectionsBtn" type="button" class="no-print">✏️ Edit Sections</button>
   <button id="clearAll" type="button" style="font-size:16px; display:none;" class="action-button clear-button no-print">Clear All</button>
 </div>
 
-<!-- Renders the checklist programmatically -->
 <div id="sections-root">
   <p id="noTypeMessage">Please select a Property Type above to begin the inspection.</p>
 </div>
 <br>
 
-<!-- Export instructions — hidden until a property type is chosen -->
 <div class="export-instructions no-print" id="exportInstructions" style="display:none;">
   <h3>Export Instructions</h3>
   <ol>
@@ -735,7 +853,7 @@
 
 <hr class="divider-1 no-print">
 <div class="made-by no-print">
-  Made by Adam - v1.5 - 2026
+  Made by Adam - v1.6 - 2026
 </div>
 
 <!-- Photo Preview Modal -->
@@ -751,9 +869,7 @@
   </div>
 </div>
 
-<!-- ================================================================ -->
-<!-- MISSING FIELDS MODAL
-// ================================================================ -->
+<!-- MISSING FIELDS MODAL -->
 <div id="missingFieldsModal">
   <div id="missingFieldsModalBox">
     <h2>⚠️ Required Fields Missing</h2>
@@ -764,9 +880,7 @@
   </div>
 </div>
 
-<!-- ================================================================ -->
-<!-- SWITCH TYPE CONFIRMATION MODAL
-// ================================================================ -->
+<!-- SWITCH TYPE CONFIRMATION MODAL -->
 <div id="switchTypeModal">
   <div id="switchTypeModalBox">
     <h2>⚠️ Switch Property Type</h2>
@@ -778,9 +892,7 @@
   </div>
 </div>
 
-<!-- ================================================================ -->
-<!-- CLEAR ALL CONFIRMATION MODAL
-// ================================================================ -->
+<!-- CLEAR ALL CONFIRMATION MODAL -->
 <div id="clearAllModal">
   <div id="clearAllModalBox">
     <h2>⚠️ Clear All Data</h2>
@@ -792,9 +904,7 @@
   </div>
 </div>
 
-<!-- ================================================================ -->
-<!-- INCOMPLETE CHECKLIST WARNING MODAL
-// ================================================================ -->
+<!-- INCOMPLETE CHECKLIST WARNING MODAL -->
 <div id="incompleteModal">
   <div id="incompleteModalBox">
     <h2>⚠️ Checklist Incomplete</h2>
@@ -806,12 +916,25 @@
   </div>
 </div>
 
+<!-- CUSTOM SECTION PICKER MODAL -->
+<div id="customPickerModal">
+  <div id="customPickerModalBox">
+    <h2>🔧 Custom Checklist</h2>
+    <p class="picker-subtitle">Select the sections that apply to this property.</p>
+    <div style="text-align:right; margin-bottom: 8px;">
+      <button class="picker-select-all" id="pickerToggleAll" onclick="toggleAllSections()">Select All</button>
+    </div>
+    <ul class="custom-picker-list" id="customPickerList"></ul>
+    <p class="picker-error" id="pickerError"></p>
+    <button class="picker-confirm-btn" onclick="confirmCustomSections()">Build My Checklist ✓</button>
+  </div>
+</div>
+
 <!-- ================================================================ -->
-<!-- ============================ Scripts =========================== -->
+<!-- SCRIPTS -->
 <!-- ================================================================ -->
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /* Auto adjusts textarea box sizes */
+<script>
   document.addEventListener("input", function (e) {
     if (e.target.tagName.toLowerCase() === "textarea") {
       e.target.style.height = "auto";
@@ -822,384 +945,504 @@
 
 <script>
 // ================================================================
-// SECTION DEFINITIONS
+// MASTER SECTION DEFINITIONS
+// All types share the same master list. Custom uses a subset.
 // ================================================================
+const masterSections = [
+  {
+    title: "1. Building R&M",
+    items: [
+      "Exterior Facade / Paint",
+      "Glass / Framing",
+      "Fencing / Walls",
+      "Overhangs / Canopy / Awnings",
+      "Trash Enclosure",
+      "Common Doors / Security",
+      "Mechanical Room / Janitors Closet",
+      "Doors / Locks - Bldg Security",
+      "Stairwells / Hallways",
+      "Conference Rooms",
+      "Atriums",
+      "Other",
+    ],
+  },
+  {
+    title: "2. Vacancies",
+    items: [
+      "Clear of any debris",
+      "Windows, baseboards, and sills clean",
+      "Blinds / Window Treatments",
+      "Ceiling Tiles",
+      "Lights",
+      "Thermostat",
+      "Other",
+    ],
+  },
+  {
+    title: "3. Lighting / Electrical",
+    items: [
+      "Parking Lot",
+      "Overhang / Canopy / Awnings",
+      "Security / Wall Packs",
+      "Photocell / Timer Operation",
+      "Decorative / Landscape",
+      "Emergency / Exit",
+      "Infrared Inspection",
+      "Maintenance Rooms / Janitors Closets",
+      "Emergency Generator",
+      "Common Areas / Hallways / Stairwells",
+      "Other",
+    ],
+  },
+  {
+    title: "4. Sidewalks",
+    items: [
+      "Concrete Condition",
+      "Concrete Cleanliness",
+      "Trip Hazards",
+      "Trash / Site Pickup",
+    ],
+  },
+  {
+    title: "5. Parking Lot / Asphalt / Coating",
+    items: [
+      "Overall Condition",
+      "Pot Holes / Low Spots / Crackfilling",
+      "Sweeping & Cleanliness",
+      "Striping Condition",
+      "Parking Ramp / Ramp Condition Assessment",
+      "Stormwater / Sewer Drains / Catch Basins",
+      "Sump Pumps(s)",
+      "Other",
+    ],
+  },
+  {
+    title: "6. Landscaping / Snow Removal",
+    items: [
+      "Plantings / Shrubs & Bushes",
+      "Turf / Grass",
+      "Trees",
+      "Irrigation",
+      "Parking Lot & Walkway Snow / Ice Condition",
+      "Snow Storage / Drive Lane Visibility",
+      "Rock Beds",
+      "Retaining Walls",
+      "Other",
+    ],
+  },
+  {
+    title: "7. Roof",
+    items: [
+      "Condition / Professional Assessment",
+      "Repairs",
+      "Debris / Grease from hoods",
+      "Drainage / Gutters",
+      "Heat Tape",
+      "Other",
+    ],
+  },
+  {
+    title: "8. Paint",
+    items: [
+      "Sign Posts",
+      "Light Poles",
+      "Bollards",
+      "Facade",
+      "Overhangs",
+      "Trash Enclosure",
+      "Doors & Frames",
+      "Mechanical Rooms / Janitors Closets",
+      "Elevators",
+      "Stairwells",
+      "Hallways",
+      "Other",
+    ],
+  },
+  {
+    title: "9. Fire / Life / Safety",
+    items: [
+      "Fire Extinguishers Inspection",
+      "Fire Panel Inspection",
+      "Fire Sprinkler Inspection",
+      "RPZ / Backflow Test",
+      "Other",
+    ],
+  },
+];
+
+const OfficeSections = [
+  {
+    title: "1. Building R&M",
+    items: [
+      "Exterior Facade / Paint",
+      "Glass / Framing",
+      "Fencing / Walls",
+      "Overhangs / Canopy / Awnings",
+      "Trash Enclosure",
+      "Common Doors / Security",
+      "Mechanical Room / Janitors Closet",
+      "Doors / Locks - Bldg Security",
+      "Stairwells / Hallways",
+      "Conference Rooms",
+      "Atriums",
+      "Other",
+    ],
+  },
+  {
+    title: "2. Vacancies",
+    items: [
+      "Clear of any debris",
+      "Windows, baseboards, and sills clean",
+      "Blinds / Window Treatments",
+      "Ceiling Tiles",
+      "Lights",
+      "Thermostat",
+      "Other",
+    ],
+  },
+  {
+    title: "3. Lighting / Electrical",
+    items: [
+      "Parking Lot",
+      "Overhang / Canopy / Awnings",
+      "Security / Wall Packs",
+      "Photocell / Timer Operation",
+      "Decorative / Landscape",
+      "Emergency / Exit",
+      "Infrared Inspection",
+      "Maintenance Rooms / Janitors Closets",
+      "Emergency Generator",
+      "Common Areas / Hallways / Stairwells",
+      "Other",
+    ],
+  },
+  {
+    title: "4. Sidewalks",
+    items: [
+      "Concrete Condition",
+      "Concrete Cleanliness",
+      "Trip Hazards",
+      "Trash / Site Pickup",
+    ],
+  },
+  {
+    title: "5. Parking Lot / Asphalt / Coating",
+    items: [
+      "Overall Condition",
+      "Pot Holes / Low Spots / Crackfilling",
+      "Sweeping & Cleanliness",
+      "Striping Condition",
+      "Parking Ramp / Ramp Condition Assessment",
+      "Stormwater / Sewer Drains / Catch Basins",
+      "Sump Pumps(s)",
+      "Other",
+    ],
+  },
+  {
+    title: "6. Landscaping / Snow Removal",
+    items: [
+      "Plantings / Shrubs & Bushes",
+      "Turf / Grass",
+      "Trees",
+      "Irrigation",
+      "Parking Lot & Walkway Snow / Ice Condition",
+      "Snow Storage / Drive Lane Visibility",
+      "Rock Beds",
+      "Retaining Walls",
+      "Other",
+    ],
+  },
+  {
+    title: "7. Roof",
+    items: [
+      "Condition / Professional Assessment",
+      "Repairs",
+      "Debris / Grease from hoods",
+      "Drainage / Gutters",
+      "Heat Tape",
+      "Other",
+    ],
+  },
+  {
+    title: "8. Paint",
+    items: [
+      "Sign Posts",
+      "Light Poles",
+      "Bollards",
+      "Facade",
+      "Overhangs",
+      "Trash Enclosure",
+      "Doors & Frames",
+      "Mechanical Rooms / Janitors Closets",
+      "Elevators",
+      "Stairwells",
+      "Hallways",
+      "Other",
+    ],
+  },
+  {
+    title: "9. Fire / Life / Safety",
+    items: [
+      "Fire Extinguishers Inspection",
+      "Fire Panel Inspection",
+      "Fire Sprinkler Inspection",
+      "RPZ / Backflow Test",
+      "Other",
+    ],
+  },
+];
+
+const RetailSections = [
+  {
+    title: "1. Building R&M",
+    items: [
+      "Exterior Facade / Paint",
+      "Glass / Framing",
+      "Fencing / Walls",
+      "Overhangs / Canopy / Awnings",
+      "Trash Enclosure",
+      "Common Doors / Security",
+      "Mechanical Room / Janitors Closet",
+      "Doors / Locks - Bldg Security",
+      "Stairwells / Hallways",
+      "Conference Rooms",
+      "Atriums",
+      "Other",
+    ],
+  },
+  {
+    title: "2. Vacancies",
+    items: [
+      "Clear of any debris",
+      "Windows, baseboards, and sills clean",
+      "Blinds / Window Treatments",
+      "Ceiling Tiles",
+      "Lights",
+      "Thermostat",
+      "Other",
+    ],
+  },
+  {
+    title: "3. Lighting / Electrical",
+    items: [
+      "Parking Lot",
+      "Overhang / Canopy / Awnings",
+      "Security / Wall Packs",
+      "Photocell / Timer Operation",
+      "Decorative / Landscape",
+      "Emergency / Exit",
+      "Infrared Inspection",
+      "Maintenance Rooms / Janitors Closets",
+      "Emergency Generator",
+      "Common Areas / Hallways / Stairwells",
+      "Other",
+    ],
+  },
+  {
+    title: "4. Sidewalks",
+    items: [
+      "Concrete Condition",
+      "Concrete Cleanliness",
+      "Trip Hazards",
+      "Trash / Site Pickup",
+    ],
+  },
+  {
+    title: "5. Parking Lot / Asphalt / Coating",
+    items: [
+      "Overall Condition",
+      "Pot Holes / Low Spots / Crackfilling",
+      "Sweeping & Cleanliness",
+      "Striping Condition",
+      "Parking Ramp / Ramp Condition Assessment",
+      "Stormwater / Sewer Drains / Catch Basins",
+      "Sump Pumps(s)",
+      "Other",
+    ],
+  },
+  {
+    title: "6. Landscaping / Snow Removal",
+    items: [
+      "Plantings / Shrubs & Bushes",
+      "Turf / Grass",
+      "Trees",
+      "Irrigation",
+      "Parking Lot & Walkway Snow / Ice Condition",
+      "Snow Storage / Drive Lane Visibility",
+      "Rock Beds",
+      "Retaining Walls",
+      "Other",
+    ],
+  },
+  {
+    title: "7. Roof",
+    items: [
+      "Condition / Professional Assessment",
+      "Repairs",
+      "Debris / Grease from hoods",
+      "Drainage / Gutters",
+      "Heat Tape",
+      "Other",
+    ],
+  },
+  {
+    title: "8. Paint",
+    items: [
+      "Sign Posts",
+      "Light Poles",
+      "Bollards",
+      "Facade",
+      "Overhangs",
+      "Trash Enclosure",
+      "Doors & Frames",
+      "Mechanical Rooms / Janitors Closets",
+      "Elevators",
+      "Stairwells",
+      "Hallways",
+      "Other",
+    ],
+  },
+  {
+    title: "9. Fire / Life / Safety",
+    items: [
+      "Fire Extinguishers Inspection",
+      "Fire Panel Inspection",
+      "Fire Sprinkler Inspection",
+      "RPZ / Backflow Test",
+      "Other",
+    ],
+  },
+];
+
+const WarehouseSections = [
+  {
+    title: "1. Building R&M",
+    items: [
+      "Exterior Facade / Paint",
+      "Glass / Framing",
+      "Fencing / Walls",
+      "Overhangs / Canopy / Awnings",
+      "Trash Enclosure",
+      "Common Doors / Security",
+      "Mechanical Room / Janitors Closet",
+      "Doors / Locks - Bldg Security",
+      "Stairwells / Hallways",
+      "Conference Rooms",
+      "Atriums",
+      "Other",
+    ],
+  },
+  {
+    title: "2. Vacancies",
+    items: [
+      "Clear of any debris",
+      "Windows, baseboards, and sills clean",
+      "Blinds / Window Treatments",
+      "Ceiling Tiles",
+      "Lights",
+      "Thermostat",
+      "Other",
+    ],
+  },
+  {
+    title: "3. Lighting / Electrical",
+    items: [
+      "Parking Lot",
+      "Overhang / Canopy / Awnings",
+      "Security / Wall Packs",
+      "Photocell / Timer Operation",
+      "Decorative / Landscape",
+      "Emergency / Exit",
+      "Infrared Inspection",
+      "Maintenance Rooms / Janitors Closets",
+      "Emergency Generator",
+      "Common Areas / Hallways / Stairwells",
+      "Other",
+    ],
+  },
+  {
+    title: "4. Sidewalks",
+    items: [
+      "Concrete Condition",
+      "Concrete Cleanliness",
+      "Trip Hazards",
+      "Trash / Site Pickup",
+    ],
+  },
+  {
+    title: "5. Parking Lot / Asphalt / Coating",
+    items: [
+      "Overall Condition",
+      "Pot Holes / Low Spots / Crackfilling",
+      "Sweeping & Cleanliness",
+      "Striping Condition",
+      "Parking Ramp / Ramp Condition Assessment",
+      "Stormwater / Sewer Drains / Catch Basins",
+      "Sump Pumps(s)",
+      "Other",
+    ],
+  },
+  {
+    title: "6. Landscaping / Snow Removal",
+    items: [
+      "Plantings / Shrubs & Bushes",
+      "Turf / Grass",
+      "Trees",
+      "Irrigation",
+      "Parking Lot & Walkway Snow / Ice Condition",
+      "Snow Storage / Drive Lane Visibility",
+      "Rock Beds",
+      "Retaining Walls",
+      "Other",
+    ],
+  },
+  {
+    title: "7. Roof",
+    items: [
+      "Condition / Professional Assessment",
+      "Repairs",
+      "Debris / Grease from hoods",
+      "Drainage / Gutters",
+      "Heat Tape",
+      "Other",
+    ],
+  },
+  {
+    title: "8. Paint",
+    items: [
+      "Sign Posts",
+      "Light Poles",
+      "Bollards",
+      "Facade",
+      "Overhangs",
+      "Trash Enclosure",
+      "Doors & Frames",
+      "Mechanical Rooms / Janitors Closets",
+      "Elevators",
+      "Stairwells",
+      "Hallways",
+      "Other",
+    ],
+  },
+  {
+    title: "9. Fire / Life / Safety",
+    items: [
+      "Fire Extinguishers Inspection",
+      "Fire Panel Inspection",
+      "Fire Sprinkler Inspection",
+      "RPZ / Backflow Test",
+      "Other",
+    ],
+  },
+];
+
+// sectionsByType: Office/Retail/Warehouse all use the full master list.
+// "Custom" is built dynamically from user selections.
 const sectionsByType = {
-
-  // ---------------------------------------------------------------
-  // OFFICE
-  // ---------------------------------------------------------------
-  "Office": [
-    {
-      title: "1. Building R&M",
-      items: [
-        "Exterior Facade / Paint",
-        "Glass / Framing",
-        "Fencing / Walls",
-        "Overhangs / Canopy / Awnings",
-        "Trash Enclosure",
-        "Common Doors / Security",
-        "Mechanical Room / Janitors Closet",
-        "Doors / Locks - Bldg Security",
-        "Stairwells / Hallways",
-        "Conference Rooms",
-        "Atriums",
-        "Other",
-      ],
-    },
-    {
-      title: "2. Vacancies",
-      items: [
-        "Clear of any debris",
-        "Windows, baseboards, and sills clean",
-        "Blinds / Window Treatments",
-        "Ceiling Tiles",
-        "Lights",
-        "Thermostat",
-        "Other",
-      ],
-    },
-    {
-      title: "3. Lighting / Electrical",
-      items: [
-        "Parking Lot",
-        "Overhang / Canopy / Awnings",
-        "Security / Wall Packs",
-        "Photocell / Timer Operation",
-        "Decorative / Landscape",
-        "Emergency / Exit",
-        "Infrared Inspection",
-        "Maintenance Rooms / Janitors Closets",
-        "Emergency Generator",
-        "Common Areas / Hallways / Stairwells",
-        "Other",
-      ],
-    },
-    {
-      title: "4. Sidewalks",
-      items: [
-        "Concrete Condition",
-        "Concrete Cleanliness",
-        "Trip Hazards",
-        "Trash / Site Pickup",
-      ],
-    },
-    {
-      title: "5. Parking Lot / Asphalt / Coating",
-      items: [
-        "Overall Condition",
-        "Pot Holes / Low Spots / Crackfilling",
-        "Sweeping & Cleanliness",
-        "Striping Condition",
-        "Parking Ramp / Ramp Condition Assessment",
-        "Stormwater / Sewer Drains / Catch Basins",
-        "Sump Pumps(s)",
-        "Other",
-      ],
-    },
-    {
-      title: "6. Landscaping / Snow Removal",
-      items: [
-        "Plantings / Shrubs & Bushes",
-        "Turf / Grass",
-        "Trees",
-        "Irrigation",
-        "Parking Lot & Walkway Snow / Ice Condition",
-        "Snow Storage / Drive Lane Visibility",
-        "Rock Beds",
-        "Retaining Walls",
-        "Other",
-      ],
-    },
-    {
-      title: "7. Roof",
-      items: [
-        "Condition / Professional Assessment",
-        "Repairs",
-        "Debris / Grease from hoods",
-        "Drainage / Gutters",
-        "Heat Tape",
-        "Other",
-      ],
-    },
-    {
-      title: "8. Paint",
-      items: [
-        "Sign Posts",
-        "Light Poles",
-        "Bollards",
-        "Facade",
-        "Overhangs",
-        "Trash Enclosure",
-        "Doors & Frames",
-        "Mechanical Rooms / Janitors Closets",
-        "Elevators",
-        "Stairwells",
-        "Hallways",
-        "Other",
-      ],
-    },
-    {
-      title: "9. Fire / Life / Safety",
-      items: [
-        "Fire Extinguishers Inspection",
-        "Fire Panel Inspection",
-        "Fire Sprinkler Inspection",
-        "RPZ / Backflow Test",
-        "Other",
-      ],
-    },
-  ],
-
-  // ---------------------------------------------------------------
-  // RETAIL
-  // ---------------------------------------------------------------
-  "Retail": [
-    {
-      title: "1. Building R&M",
-      items: [
-        "Exterior Facade / Paint",
-        "Glass / Framing",
-        "Fencing / Walls",
-        "Overhangs / Canopy / Awnings",
-        "Trash Enclosure",
-        "Common Doors / Security",
-        "Mechanical Room / Janitors Closet",
-        "Doors / Locks - Bldg Security",
-        "Stairwells / Hallways",
-        "Conference Rooms",
-        "Atriums",
-        "Other",
-      ],
-    },
-    {
-      title: "2. Vacancies",
-      items: [
-        "Clear of any debris",
-        "Windows, baseboards, and sills clean",
-        "Blinds / Window Treatments",
-        "Ceiling Tiles",
-        "Lights",
-        "Thermostat",
-        "Other",
-      ],
-    },
-    {
-      title: "3. Lighting / Electrical",
-      items: [
-        "Parking Lot",
-        "Overhang / Canopy / Awnings",
-        "Security / Wall Packs",
-        "Photocell / Timer Operation",
-        "Decorative / Landscape",
-        "Emergency / Exit",
-        "Infrared Inspection",
-        "Maintenance Rooms / Janitors Closets",
-        "Emergency Generator",
-        "Common Areas / Hallways / Stairwells",
-        "Other",
-      ],
-    },
-    {
-      title: "4. Sidewalks",
-      items: [
-        "Concrete Condition",
-        "Concrete Cleanliness",
-        "Trip Hazards",
-        "Trash / Site Pickup",
-      ],
-    },
-    {
-      title: "5. Parking Lot / Asphalt / Coating",
-      items: [
-        "Overall Condition",
-        "Pot Holes / Low Spots / Crackfilling",
-        "Sweeping & Cleanliness",
-        "Striping Condition",
-        "Parking Ramp / Ramp Condition Assessment",
-        "Stormwater / Sewer Drains / Catch Basins",
-        "Sump Pumps(s)",
-        "Other",
-      ],
-    },
-    {
-      title: "6. Landscaping / Snow Removal",
-      items: [
-        "Plantings / Shrubs & Bushes",
-        "Turf / Grass",
-        "Trees",
-        "Irrigation",
-        "Parking Lot & Walkway Snow / Ice Condition",
-        "Snow Storage / Drive Lane Visibility",
-        "Rock Beds",
-        "Retaining Walls",
-        "Other",
-      ],
-    },
-    {
-      title: "7. Roof",
-      items: [
-        "Condition / Professional Assessment",
-        "Repairs",
-        "Debris / Grease from hoods",
-        "Drainage / Gutters",
-        "Heat Tape",
-        "Other",
-      ],
-    },
-    {
-      title: "8. Paint",
-      items: [
-        "Sign Posts",
-        "Light Poles",
-        "Bollards",
-        "Facade",
-        "Overhangs",
-        "Trash Enclosure",
-        "Doors & Frames",
-        "Mechanical Rooms / Janitors Closets",
-        "Elevators",
-        "Stairwells",
-        "Hallways",
-        "Other",
-      ],
-    },
-    {
-      title: "9. Fire / Life / Safety",
-      items: [
-        "Fire Extinguishers Inspection",
-        "Fire Panel Inspection",
-        "Fire Sprinkler Inspection",
-        "RPZ / Backflow Test",
-        "Other",
-      ],
-    },
-  ],
-
-  // ---------------------------------------------------------------
-  // RETAIL
-  // ---------------------------------------------------------------
-  "Warehouse": [
-    {
-      title: "1. Building R&M",
-      items: [
-        "Exterior Facade / Paint",
-        "Glass / Framing",
-        "Fencing / Walls",
-        "Overhangs / Canopy / Awnings",
-        "Trash Enclosure",
-        "Common Doors / Security",
-        "Mechanical Room / Janitors Closet",
-        "Doors / Locks - Bldg Security",
-        "Stairwells / Hallways",
-        "Conference Rooms",
-        "Atriums",
-        "Other",
-      ],
-    },
-    {
-      title: "2. Vacancies",
-      items: [
-        "Clear of any debris",
-        "Windows, baseboards, and sills clean",
-        "Blinds / Window Treatments",
-        "Ceiling Tiles",
-        "Lights",
-        "Thermostat",
-        "Other",
-      ],
-    },
-    {
-      title: "3. Lighting / Electrical",
-      items: [
-        "Parking Lot",
-        "Overhang / Canopy / Awnings",
-        "Security / Wall Packs",
-        "Photocell / Timer Operation",
-        "Decorative / Landscape",
-        "Emergency / Exit",
-        "Infrared Inspection",
-        "Maintenance Rooms / Janitors Closets",
-        "Emergency Generator",
-        "Common Areas / Hallways / Stairwells",
-        "Other",
-      ],
-    },
-    {
-      title: "4. Sidewalks",
-      items: [
-        "Concrete Condition",
-        "Concrete Cleanliness",
-        "Trip Hazards",
-        "Trash / Site Pickup",
-      ],
-    },
-    {
-      title: "5. Parking Lot / Asphalt / Coating",
-      items: [
-        "Overall Condition",
-        "Pot Holes / Low Spots / Crackfilling",
-        "Sweeping & Cleanliness",
-        "Striping Condition",
-        "Parking Ramp / Ramp Condition Assessment",
-        "Stormwater / Sewer Drains / Catch Basins",
-        "Sump Pumps(s)",
-        "Other",
-      ],
-    },
-    {
-      title: "6. Landscaping / Snow Removal",
-      items: [
-        "Plantings / Shrubs & Bushes",
-        "Turf / Grass",
-        "Trees",
-        "Irrigation",
-        "Parking Lot & Walkway Snow / Ice Condition",
-        "Snow Storage / Drive Lane Visibility",
-        "Rock Beds",
-        "Retaining Walls",
-        "Other",
-      ],
-    },
-    {
-      title: "7. Roof",
-      items: [
-        "Condition / Professional Assessment",
-        "Repairs",
-        "Debris / Grease from hoods",
-        "Drainage / Gutters",
-        "Heat Tape",
-        "Other",
-      ],
-    },
-    {
-      title: "8. Paint",
-      items: [
-        "Sign Posts",
-        "Light Poles",
-        "Bollards",
-        "Facade",
-        "Overhangs",
-        "Trash Enclosure",
-        "Doors & Frames",
-        "Mechanical Rooms / Janitors Closets",
-        "Elevators",
-        "Stairwells",
-        "Hallways",
-        "Other",
-      ],
-    },
-    {
-      title: "9. Fire / Life / Safety",
-      items: [
-        "Fire Extinguishers Inspection",
-        "Fire Panel Inspection",
-        "Fire Sprinkler Inspection",
-        "RPZ / Backflow Test",
-        "Other",
-      ],
-    },
-  ]
+  "Office":    OfficeSections,
+  "Retail":    RetailSections,
+  "Warehouse": WarehouseSections,
+  "Custom":    null   // populated when user confirms picker
 };
 
 // ================================================================
@@ -1240,7 +1483,6 @@ function buildItemRow(globalIndex, label, prefix) {
 
   return el("div", { className: gridClass }, [
     el("div", { className: "merge-rows" }, label),
-
     el("div", { className: "radio-circle" }, [
       el("input", { type: "radio", id: prefix + "_good" + globalIndex, name: name, value: "good", className: "save-radio", "data-prefix": prefix }),
       el("label", { for: prefix + "_good" + globalIndex, "aria-label": "Good" })
@@ -1257,7 +1499,6 @@ function buildItemRow(globalIndex, label, prefix) {
       el("input", { type: "radio", id: prefix + "_na" + globalIndex, name: name, value: "na", className: "save-radio", "data-prefix": prefix }),
       el("label", { for: prefix + "_na" + globalIndex, "aria-label": "Not applicable" })
     ]),
-
     el("div", { className: "text-input" }, [
       el("textarea", {
         id: txtId,
@@ -1265,8 +1506,6 @@ function buildItemRow(globalIndex, label, prefix) {
         placeholder: "Enter details here"
       })
     ]),
-
-    // Photo Upload
     el("div", { className: "text-input" }, [
       el("input", {
         type: "file",
@@ -1340,7 +1579,9 @@ function renderSections(type) {
   const root = document.getElementById("sections-root");
   root.innerHTML = "";
 
-  if (!type || !sectionsByType[type]) {
+  const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
+
+  if (!type || !sections) {
     const msg = document.createElement("p");
     msg.id = "noTypeMessage";
     msg.textContent = "Please select a Property Type above to begin the inspection.";
@@ -1348,9 +1589,7 @@ function renderSections(type) {
     return;
   }
 
-  const prefix = type; // "Office" or "Retail"
-  const sections = sectionsByType[type];
-
+  const prefix = type;
   let nextIndex = 0;
   sections.forEach(function(sec, i) {
     if (i > 0) root.appendChild(el("br"));
@@ -1359,7 +1598,6 @@ function renderSections(type) {
     nextIndex = result.nextIndex;
   });
 
-  // After rendering, load saved data for this type and update progress
   loadSavedDataForType(prefix);
   loadSavedPhotosForType(prefix);
   updateAllProgress();
@@ -1369,7 +1607,6 @@ function renderSections(type) {
 // LOAD SAVED DATA
 // ================================================================
 function loadSavedDataForType(prefix) {
-  // Load radios
   document.querySelectorAll(".save-radio[data-prefix='" + prefix + "']").forEach(function(radio) {
     const savedValue = localStorage.getItem(radio.name);
     if (savedValue && radio.value === savedValue) {
@@ -1377,7 +1614,6 @@ function loadSavedDataForType(prefix) {
     }
   });
 
-  // Load textareas
   document.querySelectorAll(".save-text").forEach(function(area) {
     if (!area.id || !area.id.startsWith(prefix + "_textarea")) return;
     const savedText = localStorage.getItem(area.id);
@@ -1397,15 +1633,14 @@ function loadSavedPhotosForType(prefix) {
     const deleteBtn = document.getElementById(prefix + "_delete" + index);
 
     saved.forEach(function(src, photoIndex) {
-    const img = document.createElement("img");
-    img.src = src;
-    img.className = "photo-thumb";
-
-    img.style.width = "100px";
-    img.style.height = "100px";
-    img.style.objectFit = "cover";
-    img.style.flex = "0 0 100px";
-    img.style.cursor = "pointer";
+      const img = document.createElement("img");
+      img.src = src;
+      img.className = "photo-thumb";
+      img.style.width = "100px";
+      img.style.height = "100px";
+      img.style.objectFit = "cover";
+      img.style.flex = "0 0 100px";
+      img.style.cursor = "pointer";
       img.onclick = (function(pi) {
         return function() { openPhotoModal(prefix, index, pi); };
       })(photoIndex);
@@ -1416,13 +1651,12 @@ function loadSavedPhotosForType(prefix) {
       deleteBtn.style.display = "inline-block";
     }
 
-    // Update photo button label
     updatePhotoButton(prefix, index);
   });
 }
 
 // ================================================================
-// SAVE LISTENERS (delegated - attached once, work for any type)
+// SAVE LISTENERS
 // ================================================================
 document.addEventListener("change", function(e) {
   if (e.target.classList.contains("save-radio")) {
@@ -1467,15 +1701,11 @@ function updateAllProgress() {
   });
 }
 
-// ================================================================
-// OVERALL COMPLETION CHECK
-// Returns { completed, total, percent }
-// ================================================================
 function getOverallCompletion() {
   const type = localStorage.getItem("propertyType");
-  if (!type || !sectionsByType[type]) return { completed: 0, total: 0, percent: 0 };
+  const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
+  if (!type || !sections) return { completed: 0, total: 0, percent: 0 };
 
-  const sections = sectionsByType[type];
   let total = 0;
   let completed = 0;
   let globalIndex = 0;
@@ -1507,7 +1737,6 @@ document.getElementById("propertyType").addEventListener("change", function() {
 
   if (newType === currentType) return;
 
-  // Check if any data exists for the current type
   if (currentType) {
     let hasData = false;
     for (let i = 0; i < localStorage.length; i++) {
@@ -1523,7 +1752,6 @@ document.getElementById("propertyType").addEventListener("change", function() {
     }
 
     if (hasData) {
-      // Store the intended new type and revert the dropdown until confirmed
       _pendingSwitchType = newType;
       this.value = currentType;
       openSwitchTypeModal();
@@ -1531,12 +1759,34 @@ document.getElementById("propertyType").addEventListener("change", function() {
     }
   }
 
-  // No data — switch immediately
+  applyTypeSelection(newType);
+});
+
+function applyTypeSelection(newType) {
   localStorage.setItem("propertyType", newType);
+
+  // Show/hide Edit Sections button
+  document.getElementById("editCustomSectionsBtn").style.display =
+    newType === "Custom" ? "inline-block" : "none";
+
   document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
   document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
-  renderSections(newType);
-});
+
+  if (newType === "Custom") {
+    const savedIndices = getSavedCustomIndices();
+    if (savedIndices !== null) {
+      // Restore previously saved custom sections
+      sectionsByType["Custom"] = savedIndices.map(function(i) { return masterSections[i]; });
+      renderSections("Custom");
+    } else {
+      // No saved selection — show picker
+      renderSections(null); // clear the checklist area
+      openCustomPickerModal(false);
+    }
+  } else {
+    renderSections(newType);
+  }
+}
 
 function openSwitchTypeModal() {
   document.getElementById("switchTypeModal").style.display = "block";
@@ -1548,7 +1798,6 @@ function closeSwitchTypeModal() {
   document.body.style.overflow = "auto";
 }
 
-// Close modal if background overlay is clicked
 document.getElementById("switchTypeModal").addEventListener("click", function(e) {
   if (e.target === this) { _pendingSwitchType = null; closeSwitchTypeModal(); }
 });
@@ -1559,17 +1808,190 @@ function executeSwitchType() {
   if (newType === null) return;
 
   document.getElementById("propertyType").value = newType;
-  localStorage.setItem("propertyType", newType);
-  document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
-  document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
-  renderSections(newType);
+  applyTypeSelection(newType);
 }
+
+// ================================================================
+// CUSTOM PICKER MODAL
+// ================================================================
+
+function getSavedCustomIndices() {
+  const saved = localStorage.getItem("Custom_sections");
+  if (!saved) return null;
+  try {
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+  } catch(e) {}
+  return null;
+}
+
+function openCustomPickerModal(isEditing) {
+  const list = document.getElementById("customPickerList");
+  list.innerHTML = "";
+  document.getElementById("pickerError").textContent = "";
+
+  // Determine currently selected indices (for "Edit" mode restore)
+  const savedIndices = getSavedCustomIndices();
+  const activeIndices = savedIndices || masterSections.map(function(_, i) { return i; }); // default: all checked
+
+  masterSections.forEach(function(sec, i) {
+    const isChecked = activeIndices.indexOf(i) !== -1;
+    const li = document.createElement("li");
+    li.className = isChecked ? "selected" : "";
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.value = i;
+    cb.checked = isChecked;
+    cb.id = "picker_cb_" + i;
+
+    cb.addEventListener("change", function() {
+      li.className = cb.checked ? "selected" : "";
+      updateToggleAllLabel();
+    });
+
+    // Clicking the whole row toggles the checkbox
+    li.addEventListener("click", function(e) {
+      if (e.target !== cb) {
+        cb.checked = !cb.checked;
+        li.className = cb.checked ? "selected" : "";
+        cb.dispatchEvent(new Event("change"));
+      }
+    });
+
+    const labelEl = document.createElement("span");
+    labelEl.className = "picker-label";
+    labelEl.textContent = sec.title;
+
+    li.appendChild(cb);
+    li.appendChild(labelEl);
+    list.appendChild(li);
+  });
+
+  updateToggleAllLabel();
+
+  document.getElementById("customPickerModal").style.display = "block";
+  document.body.style.overflow = "hidden";
+}
+
+function closeCustomPickerModal() {
+  document.getElementById("customPickerModal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+function updateToggleAllLabel() {
+  const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
+  const allChecked = Array.from(checkboxes).every(function(cb) { return cb.checked; });
+  document.getElementById("pickerToggleAll").textContent = allChecked ? "Deselect All" : "Select All";
+}
+
+function toggleAllSections() {
+  const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
+  const allChecked = Array.from(checkboxes).every(function(cb) { return cb.checked; });
+  checkboxes.forEach(function(cb) {
+    cb.checked = !allChecked;
+    const li = cb.closest("li");
+    if (li) li.className = cb.checked ? "selected" : "";
+  });
+  updateToggleAllLabel();
+}
+
+function confirmCustomSections() {
+  const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
+  const selectedIndices = Array.from(checkboxes)
+    .filter(function(cb) { return cb.checked; })
+    .map(function(cb) { return parseInt(cb.value, 10); });
+
+  if (selectedIndices.length === 0) {
+    document.getElementById("pickerError").textContent = "Please select at least one section.";
+    return;
+  }
+
+  // Save selection and rebuild Custom sections
+  localStorage.setItem("Custom_sections", JSON.stringify(selectedIndices));
+  sectionsByType["Custom"] = selectedIndices.map(function(i) { return masterSections[i]; });
+
+  closeCustomPickerModal();
+  renderSections("Custom");
+}
+
+// Dismiss picker modal by clicking the overlay (only allowed when a selection already exists)
+document.getElementById("customPickerModal").addEventListener("click", function(e) {
+  if (e.target === this) {
+    // Only allow dismissing if there's already a saved & rendered checklist
+    if (getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null) {
+      closeCustomPickerModal();
+    }
+  }
+});
+
+// ================================================================
+// EDIT CUSTOM SECTIONS BUTTON
+// Warns user that editing may lose data for removed sections
+// ================================================================
+document.getElementById("editCustomSectionsBtn").addEventListener("click", function() {
+  // Check if there is any existing Custom data
+  let hasData = false;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && (
+      key.startsWith("Custom_radio") ||
+      key.startsWith("Custom_textarea") ||
+      key.startsWith("Custom_photo")
+    )) {
+      hasData = true;
+      break;
+    }
+  }
+
+  if (hasData) {
+    // Reuse the switch-type modal with a custom message — simpler than a new modal
+    document.querySelector("#switchTypeModalBox p").textContent =
+      "Changing your section selection may clear data for any removed sections. Continue?";
+    _pendingEditCustom = true;
+    document.getElementById("switchTypeModal").style.display = "block";
+    document.body.style.overflow = "hidden";
+  } else {
+    openCustomPickerModal(true);
+  }
+});
+
+// We need to distinguish between a type-switch and an edit-custom in executeSwitchType
+let _pendingEditCustom = false;
+
+// Override executeSwitchType to handle the edit-custom path
+const _origExecuteSwitchType = executeSwitchType;
+window.executeSwitchType = function() {
+  if (_pendingEditCustom) {
+    _pendingEditCustom = false;
+    // Reset the modal message back for future type-switch uses
+    document.querySelector("#switchTypeModalBox p").textContent =
+      "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
+    openCustomPickerModal(true);
+    return;
+  }
+  _origExecuteSwitchType();
+};
+
+// Also reset message if user cancels from the edit-custom path
+document.getElementById("switchTypeModal").addEventListener("click", function() {
+  // (already handled above — but reset _pendingEditCustom flag on cancel too)
+});
+const cancelBtn = document.querySelector("#switchTypeModalBox .btn-go-back");
+cancelBtn.addEventListener("click", function() {
+  if (_pendingEditCustom) {
+    _pendingEditCustom = false;
+    document.querySelector("#switchTypeModalBox p").textContent =
+      "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
+  }
+  _pendingSwitchType = null;
+  closeSwitchTypeModal();
+});
 
 // ================================================================
 // WINDOW LOAD
 // ================================================================
 window.addEventListener("load", function() {
-  // Default today's date
   const dateInput = document.getElementById("date");
   if (dateInput && !dateInput.value) {
     const now = new Date();
@@ -1579,27 +2001,36 @@ window.addEventListener("load", function() {
     dateInput.value = year + "-" + month + "-" + day;
   }
 
-  // Load saved header fields
   ["property", "propertyManager", "date"].forEach(function(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
+    const inputEl = document.getElementById(id);
+    if (!inputEl) return;
     const saved = localStorage.getItem(id);
-    if (saved) el.value = saved;
-    el.addEventListener("input", function() {
+    if (saved) inputEl.value = saved;
+    inputEl.addEventListener("input", function() {
       localStorage.setItem(id, this.value);
     });
   });
 
-  // Restore property type and render
   const savedType = localStorage.getItem("propertyType");
-  if (savedType && sectionsByType[savedType]) {
+  if (savedType) {
     document.getElementById("propertyType").value = savedType;
-    renderSections(savedType);
+
+    if (savedType === "Custom") {
+      const savedIndices = getSavedCustomIndices();
+      if (savedIndices !== null) {
+        sectionsByType["Custom"] = savedIndices.map(function(i) { return masterSections[i]; });
+        renderSections("Custom");
+        document.getElementById("editCustomSectionsBtn").style.display = "inline-block";
+      }
+      // If no saved indices, leave the "select type" message — user must re-pick
+    } else {
+      renderSections(savedType);
+    }
+
     document.getElementById("clearAll").style.display = savedType ? "inline-block" : "none";
     document.getElementById("exportInstructions").style.display = savedType ? "block" : "none";
   }
 
-  // Progress init (small delay for radios to load)
   setTimeout(updateAllProgress, 150);
 });
 
@@ -1620,7 +2051,6 @@ function closeClearAllModal() {
   document.body.style.overflow = "auto";
 }
 
-// Close modal if background overlay is clicked
 document.getElementById("clearAllModal").addEventListener("click", function(e) {
   if (e.target === this) closeClearAllModal();
 });
@@ -1628,16 +2058,12 @@ document.getElementById("clearAllModal").addEventListener("click", function(e) {
 function executeClearAll() {
   const currentType = localStorage.getItem("propertyType") || "";
 
-  // Clear radios on screen
   document.querySelectorAll(".save-radio").forEach(function(r) { r.checked = false; });
-
-  // Clear textareas on screen
   document.querySelectorAll(".save-text").forEach(function(area) {
     area.value = "";
     area.style.height = "";
   });
 
-  // Clear all localStorage keys for this type (but NOT propertyType itself)
   const keysToRemove = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -1652,17 +2078,12 @@ function executeClearAll() {
   }
   keysToRemove.forEach(function(k) { localStorage.removeItem(k); });
 
-  // Clear all photo thumbnails on screen
   document.querySelectorAll("div[id*='_thumbWrap']").forEach(function(wrap) {
     wrap.innerHTML = "";
   });
-
-  // Hide all delete buttons
   document.querySelectorAll("button[id*='_delete']").forEach(function(btn) {
     btn.style.display = "none";
   });
-
-  // Reset file inputs
   document.querySelectorAll("input[type='file'][id*='_photo']").forEach(function(input) {
     input.value = "";
     const parts = input.id.split("_photo");
@@ -1671,8 +2092,20 @@ function executeClearAll() {
     updatePhotoButton(prefix, index);
   });
 
-  renderSections(currentType);
-  updateAllProgress();
+  // For Custom, also clear the saved section selection
+  if (currentType === "Custom") {
+    localStorage.removeItem("Custom_sections");
+    sectionsByType["Custom"] = null;
+    document.getElementById("editCustomSectionsBtn").style.display = "none";
+    document.getElementById("clearAll").style.display = "none";
+    document.getElementById("exportInstructions").style.display = "none";
+    document.getElementById("propertyType").value = "";
+    localStorage.removeItem("propertyType");
+    renderSections(null);
+  } else {
+    renderSections(currentType);
+    updateAllProgress();
+  }
 }
 
 // ================================================================
@@ -1691,7 +2124,6 @@ function closeMissingFieldsModal() {
   document.querySelector(".property-info-card").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-// Close modal if background overlay is clicked
 document.getElementById("missingFieldsModal").addEventListener("click", function(e) {
   if (e.target === this) closeMissingFieldsModal();
 });
@@ -1719,17 +2151,15 @@ function closeIncompleteModalAndScroll() {
 
 function scrollToFirstIncomplete() {
   const type = localStorage.getItem("propertyType");
-  if (!type || !sectionsByType[type]) return;
+  const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
+  if (!type || !sections) return;
 
   let globalIndex = 0;
-  const sections = sectionsByType[type];
-
   for (let s = 0; s < sections.length; s++) {
     for (let i = 0; i < sections[s].items.length; i++) {
       const name = type + "_radio" + globalIndex;
       const radios = document.querySelectorAll('input[name="' + name + '"]');
       if (!Array.from(radios).some(function(r) { return r.checked; })) {
-        // Found the first unchecked item — scroll its row into view
         const firstRadio = document.getElementById(type + "_good" + globalIndex);
         if (firstRadio) {
           firstRadio.closest(".grid-container-no-color, .grid-container-yes-color")
@@ -1742,7 +2172,6 @@ function scrollToFirstIncomplete() {
   }
 }
 
-// Close modal if background overlay is clicked
 document.getElementById("incompleteModal").addEventListener("click", function(e) {
   if (e.target === this) closeIncompleteModal();
 });
@@ -1771,12 +2200,10 @@ function printChecklist() {
     if (!property.value.trim()) property.style.border = "2px solid red";
     if (!manager.value.trim()) manager.style.border = "2px solid red";
     if (!date.value) date.style.border = "2px solid red";
-
     openMissingFieldsModal(missing);
     return;
   }
 
-  // Check overall checklist completion
   const completion = getOverallCompletion();
   if (completion.percent < 100) {
     openIncompleteModal(completion.completed, completion.total);
@@ -1788,9 +2215,8 @@ function printChecklist() {
 </script>
 
 <!-- ================================================================ -->
-<!-- PHOTO HANDLING
-// ================================================================ -->
-
+<!-- PHOTO HANDLING -->
+<!-- ================================================================ -->
 <script>
   const progressWrap = document.getElementById("photoProgressWrapper");
   const progressBar = document.getElementById("photoProgressBar");
@@ -1818,7 +2244,6 @@ function printChecklist() {
   function updatePhotoButton(prefix, index) {
     const photoKey = prefix + "_photo" + index;
     const saved = JSON.parse(localStorage.getItem(photoKey) || "[]");
-    // button's onclick contains the file input id
     const fileInputId = prefix + "_photo" + index;
     const button = document.querySelector("button[onclick*=\"'" + fileInputId + "'\"].photo-button");
 
@@ -1843,13 +2268,11 @@ function printChecklist() {
     }
   }
 
-  // Delegated file change handler
   document.addEventListener("change", async function(e) {
     if (e.target.type !== "file" || !e.target.id.includes("_photo")) return;
 
     startProgress();
 
-    // Parse prefix and index from id like "Office_photo3"
     const idParts = e.target.id.split("_photo");
     const prefix = idParts[0];
     const index = parseInt(idParts[1], 10);
@@ -1869,7 +2292,6 @@ function printChecklist() {
     const files = Array.from(e.target.files).slice(0, remainingSlots);
 
     for (let file of files) {
-      // HEIC conversion
       if (
         file.type === "image/heic" ||
         file.type === "image/heif" ||
@@ -1939,9 +2361,8 @@ function printChecklist() {
 </script>
 
 <!-- ================================================================ -->
-<!-- PHOTO MODAL
-// ================================================================ -->
-
+<!-- PHOTO MODAL -->
+<!-- ================================================================ -->
 <script>
   let currentPhotoIndex = 0;
   let currentPhotos = [];
@@ -1991,7 +2412,6 @@ function printChecklist() {
     }
   });
 
-  // Touch/swipe
   (function() {
     let touchStartX = 0;
     const modal = document.getElementById("photoModal");
@@ -2004,9 +2424,8 @@ function printChecklist() {
 </script>
 
 <!-- ================================================================ -->
-<!-- SERVICE WORKER
-// ================================================================ -->
-
+<!-- SERVICE WORKER -->
+<!-- ================================================================ -->
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
