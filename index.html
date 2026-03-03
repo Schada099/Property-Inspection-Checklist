@@ -144,6 +144,40 @@
       word-break: break-word;
     }
 
+    /* ── Editable "Other" label input ── */
+    .other-label-input {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 1rem;
+      font-family: Arial, sans-serif;
+      border: none;
+      border-bottom: 1.5px dashed #0067c5;
+      background: transparent;
+      color: #111;
+      padding: 2px 2px;
+      outline: none;
+      min-width: 0;
+    }
+
+    .other-label-input::placeholder {
+      color: #999;
+      font-style: italic;
+    }
+
+    .other-label-input:focus {
+      border-bottom-color: #004c93;
+      background: rgba(0, 103, 197, 0.05);
+      border-radius: 3px 3px 0 0;
+    }
+
+    @media print {
+      .other-label-input {
+        border-bottom: none;
+        background: transparent;
+        padding: 0;
+      }
+    }
+
     @media print {
       body {
         -webkit-print-color-adjust: exact;
@@ -853,7 +887,7 @@
 
 <hr class="divider-1 no-print">
 <div class="made-by no-print">
-  Made by Adam - v1.6 - 2026
+  Made by Adam - v1.7 - 2026
 </div>
 
 <!-- Photo Preview Modal -->
@@ -960,7 +994,6 @@
 <script>
   // ================================================================
   // MASTER SECTION DEFINITIONS
-  // All types share the same master list. Custom uses a subset.
   // ================================================================
   const masterSections = [
     {
@@ -1084,13 +1117,11 @@
     },
   ];
 
-  // sectionsByType: Office/Retail/Warehouse all use the full master list.
-  // "Custom" is built dynamically from user selections.
   const sectionsByType = {
     "Office":    masterSections,
     "Retail":    masterSections,
     "Warehouse": masterSections,
-    "Custom":    null   // populated when user confirms picker
+    "Custom":    null
   };
 
   // ================================================================
@@ -1128,9 +1159,27 @@
     const name = prefix + "_radio" + globalIndex;
     const photoKey = prefix + "_photo" + globalIndex;
     const txtId = prefix + "_textarea" + globalIndex;
+    const labelKey = prefix + "_label" + globalIndex;
+
+    // Build the label cell — editable input if "Other", plain text otherwise
+    let labelCell;
+    if (label === "Other") {
+      const savedLabel = localStorage.getItem(labelKey) || "";
+      const labelInput = document.createElement("input");
+      labelInput.type = "text";
+      labelInput.id = labelKey;
+      labelInput.className = "other-label-input save-label";
+      labelInput.placeholder = "Other...";
+      labelInput.maxLength = 60;
+      labelInput.setAttribute("data-labelkey", labelKey);
+      labelInput.value = savedLabel;
+      labelCell = el("div", { className: "merge-rows" }, [labelInput]);
+    } else {
+      labelCell = el("div", { className: "merge-rows" }, label);
+    }
 
     return el("div", { className: gridClass }, [
-      el("div", { className: "merge-rows" }, label),
+      labelCell,
       el("div", { className: "radio-circle" }, [
         el("input", { type: "radio", id: prefix + "_good" + globalIndex, name: name, value: "good", className: "save-radio", "data-prefix": prefix }),
         el("label", { for: prefix + "_good" + globalIndex, "aria-label": "Good" })
@@ -1221,7 +1270,7 @@
   }
 
   // ================================================================
-  // RENDER SECTIONS FOR A GIVEN TYPE
+  // RENDER SECTIONS
   // ================================================================
   function renderSections(type) {
     const root = document.getElementById("sections-root");
@@ -1255,6 +1304,7 @@
   // LOAD SAVED DATA
   // ================================================================
   function loadSavedDataForType(prefix) {
+    // Restore radio selections
     document.querySelectorAll(".save-radio[data-prefix='" + prefix + "']").forEach(function(radio) {
       const savedValue = localStorage.getItem(radio.name);
       if (savedValue && radio.value === savedValue) {
@@ -1262,6 +1312,7 @@
       }
     });
 
+    // Restore textarea content
     document.querySelectorAll(".save-text").forEach(function(area) {
       if (!area.id || !area.id.startsWith(prefix + "_textarea")) return;
       const savedText = localStorage.getItem(area.id);
@@ -1269,6 +1320,15 @@
         area.value = savedText;
         area.style.height = "auto";
         area.style.height = area.scrollHeight + "px";
+      }
+    });
+
+    // Restore custom "Other" label text
+    document.querySelectorAll(".save-label").forEach(function(input) {
+      if (!input.id || !input.id.startsWith(prefix + "_label")) return;
+      const savedLabel = localStorage.getItem(input.id);
+      if (savedLabel) {
+        input.value = savedLabel;
       }
     });
   }
@@ -1315,6 +1375,9 @@
 
   document.addEventListener("input", function(e) {
     if (e.target.classList.contains("save-text") && e.target.id) {
+      localStorage.setItem(e.target.id, e.target.value);
+    }
+    if (e.target.classList.contains("save-label") && e.target.id) {
       localStorage.setItem(e.target.id, e.target.value);
     }
   });
@@ -1392,7 +1455,8 @@
         if (key && (
           key.startsWith(currentType + "_radio") ||
           key.startsWith(currentType + "_textarea") ||
-          key.startsWith(currentType + "_photo")
+          key.startsWith(currentType + "_photo") ||
+          key.startsWith(currentType + "_label")
         )) {
           hasData = true;
           break;
@@ -1413,7 +1477,6 @@
   function applyTypeSelection(newType) {
     localStorage.setItem("propertyType", newType);
 
-    // Show/hide Edit Sections button
     document.getElementById("editCustomSectionsBtn").style.display =
       newType === "Custom" ? "inline-block" : "none";
 
@@ -1423,12 +1486,10 @@
     if (newType === "Custom") {
       const savedIndices = getSavedCustomIndices();
       if (savedIndices !== null) {
-        // Restore previously saved custom sections
         sectionsByType["Custom"] = savedIndices.map(function(i) { return masterSections[i]; });
         renderSections("Custom");
       } else {
-        // No saved selection — show picker
-        renderSections(null); // clear the checklist area
+        renderSections(null);
         openCustomPickerModal(false);
       }
     } else {
@@ -1462,7 +1523,6 @@
   // ================================================================
   // CUSTOM PICKER MODAL
   // ================================================================
-
   function getSavedCustomIndices() {
     const saved = localStorage.getItem("Custom_sections");
     if (!saved) return null;
@@ -1478,9 +1538,8 @@
     list.innerHTML = "";
     document.getElementById("pickerError").textContent = "";
 
-    // Determine currently selected indices (for "Edit" mode restore)
     const savedIndices = getSavedCustomIndices();
-    const activeIndices = savedIndices || masterSections.map(function(_, i) { return i; }); // default: all checked
+    const activeIndices = savedIndices || masterSections.map(function(_, i) { return i; });
 
     masterSections.forEach(function(sec, i) {
       const isChecked = activeIndices.indexOf(i) !== -1;
@@ -1498,7 +1557,6 @@
         updateToggleAllLabel();
       });
 
-      // Clicking the whole row toggles the checkbox
       li.addEventListener("click", function(e) {
         if (e.target !== cb) {
           cb.checked = !cb.checked;
@@ -1527,11 +1585,9 @@
     document.body.style.overflow = "auto";
   }
 
-  // Called by the × button — reverts the type dropdown if no custom checklist exists yet
   function cancelCustomPicker() {
     const hasSavedSections = getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null;
     if (!hasSavedSections) {
-      // User hadn't confirmed a selection yet — revert dropdown to blank
       if (localStorage.getItem("propertyType") === "Custom") {
         localStorage.removeItem("propertyType");
       }
@@ -1581,7 +1637,6 @@
       return;
     }
 
-    // Save selection and rebuild Custom sections
     localStorage.setItem("Custom_sections", JSON.stringify(selectedIndices));
     sectionsByType["Custom"] = selectedIndices.map(function(i) { return masterSections[i]; });
 
@@ -1589,10 +1644,8 @@
     renderSections("Custom");
   }
 
-  // Dismiss picker modal by clicking the overlay (only allowed when a selection already exists)
   document.getElementById("customPickerModal").addEventListener("click", function(e) {
     if (e.target === this) {
-      // Only allow dismissing if there's already a saved & rendered checklist
       if (getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null) {
         closeCustomPickerModal();
       }
@@ -1601,17 +1654,16 @@
 
   // ================================================================
   // EDIT CUSTOM SECTIONS BUTTON
-  // Warns user that editing may lose data for removed sections
   // ================================================================
   document.getElementById("editCustomSectionsBtn").addEventListener("click", function() {
-    // Check if there is any existing Custom data
     let hasData = false;
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && (
         key.startsWith("Custom_radio") ||
         key.startsWith("Custom_textarea") ||
-        key.startsWith("Custom_photo")
+        key.startsWith("Custom_photo") ||
+        key.startsWith("Custom_label")
       )) {
         hasData = true;
         break;
@@ -1619,7 +1671,6 @@
     }
 
     if (hasData) {
-      // Reuse the switch-type modal with a custom message — simpler than a new modal
       document.querySelector("#switchTypeModalBox p").textContent =
         "Changing your section selection may clear data for any removed sections. Continue?";
       _pendingEditCustom = true;
@@ -1630,15 +1681,12 @@
     }
   });
 
-  // We need to distinguish between a type-switch and an edit-custom in executeSwitchType
   let _pendingEditCustom = false;
 
-  // Override executeSwitchType to handle the edit-custom path
   const _origExecuteSwitchType = executeSwitchType;
   window.executeSwitchType = function() {
     if (_pendingEditCustom) {
       _pendingEditCustom = false;
-      // Reset the modal message back for future type-switch uses
       document.querySelector("#switchTypeModalBox p").textContent =
         "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
       openCustomPickerModal(true);
@@ -1647,10 +1695,6 @@
     _origExecuteSwitchType();
   };
 
-  // Also reset message if user cancels from the edit-custom path
-  document.getElementById("switchTypeModal").addEventListener("click", function() {
-    // (already handled above — but reset _pendingEditCustom flag on cancel too)
-  });
   const cancelBtn = document.querySelector("#switchTypeModalBox .btn-go-back");
   cancelBtn.addEventListener("click", function() {
     if (_pendingEditCustom) {
@@ -1696,7 +1740,6 @@
           renderSections("Custom");
           document.getElementById("editCustomSectionsBtn").style.display = "inline-block";
         }
-        // If no saved indices, leave the "select type" message — user must re-pick
       } else {
         renderSections(savedType);
       }
@@ -1737,6 +1780,9 @@
       area.value = "";
       area.style.height = "";
     });
+    document.querySelectorAll(".save-label").forEach(function(input) {
+      input.value = "";
+    });
 
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -1766,7 +1812,6 @@
       updatePhotoButton(prefix, index);
     });
 
-    // For Custom, also clear the saved section selection
     if (currentType === "Custom") {
       localStorage.removeItem("Custom_sections");
       sectionsByType["Custom"] = null;
@@ -1783,7 +1828,7 @@
   }
 
   // ================================================================
-  // MISSING FIELDS MODAL HELPERS
+  // MISSING FIELDS MODAL
   // ================================================================
   function openMissingFieldsModal(missing) {
     const msg = document.getElementById("missingFieldsMsg");
@@ -1803,7 +1848,7 @@
   });
 
   // ================================================================
-  // INCOMPLETE MODAL HELPERS
+  // INCOMPLETE MODAL
   // ================================================================
   function openIncompleteModal(completed, total) {
     const remaining = total - completed;
@@ -2101,9 +2146,9 @@
 <!-- SERVICE WORKER -->
 <!-- ================================================================ -->
 <script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+  }
 </script>
 
 </div>
