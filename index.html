@@ -4,6 +4,7 @@
   <title>Property Inspection Checklist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- heic2any is still loaded for desktop browsers that need it, but we skip it on iOS -->
 <script src="https://unpkg.com/heic2any/dist/heic2any.min.js"></script>
 
 <link rel="manifest" href="manifest.json">
@@ -144,7 +145,7 @@
       word-break: break-word;
     }
 
-    /* ── Editable "Other" label input ── */
+    /* ── Editable "Other" label textarea ── */
     .other-label-input {
       width: 100%;
       box-sizing: border-box;
@@ -157,6 +158,10 @@
       padding: 2px 2px;
       outline: none;
       min-width: 0;
+      resize: none;
+      overflow: hidden;
+      min-height: 1.4em;
+      line-height: 1.4;
     }
 
     .other-label-input::placeholder {
@@ -345,7 +350,7 @@
           max-width: 80% !important;
         }
         [id*="_thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
-          max-width:40% !important;
+          max-width: 40% !important;
         }
       }
     }
@@ -799,7 +804,7 @@
     }
     .picker-confirm-btn:hover { background-color: #004c93; }
 
-    /* Edit Sections button shown above checklist when Custom is active */
+    
     #editCustomSectionsBtn {
       display: none;
       font-size: 14px;
@@ -887,7 +892,7 @@
 
 <hr class="divider-1 no-print">
 <div class="made-by no-print">
-  Made by Adam - v1.7 - 2026
+  Made by Adam - v1.9 - 2026
 </div>
 
 <!-- Photo Preview Modal -->
@@ -1156,23 +1161,33 @@
 
   function buildItemRow(globalIndex, label, prefix) {
     const gridClass = globalIndex % 2 === 0 ? "grid-container-no-color" : "grid-container-yes-color";
-    const name = prefix + "_radio" + globalIndex;
-    const photoKey = prefix + "_photo" + globalIndex;
-    const txtId = prefix + "_textarea" + globalIndex;
-    const labelKey = prefix + "_label" + globalIndex;
+    const name      = prefix + "_radio"    + globalIndex;
+    const photoKey  = prefix + "_photo"    + globalIndex;
+    const txtId     = prefix + "_textarea" + globalIndex;
+    const labelKey  = prefix + "_label"    + globalIndex;
 
-    // Build the label cell — editable input if "Other", plain text otherwise
+    // Label cell: editable textarea if "Other", plain text otherwise
     let labelCell;
     if (label === "Other") {
       const savedLabel = localStorage.getItem(labelKey) || "";
-      const labelInput = document.createElement("input");
-      labelInput.type = "text";
-      labelInput.id = labelKey;
+      const labelInput = document.createElement("textarea");
+      labelInput.id        = labelKey;
       labelInput.className = "other-label-input save-label";
-      labelInput.placeholder = "Other...";
-      labelInput.maxLength = 60;
+      labelInput.placeholder = "Describe item...";
+      labelInput.maxLength = 120;
       labelInput.setAttribute("data-labelkey", labelKey);
       labelInput.value = savedLabel;
+      labelInput.rows  = 1;
+      // Auto-expand as user types
+      labelInput.addEventListener("input", function() {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+      });
+      // Set correct initial height after first render
+      requestAnimationFrame(function() {
+        labelInput.style.height = "auto";
+        labelInput.style.height = labelInput.scrollHeight + "px";
+      });
       labelCell = el("div", { className: "merge-rows" }, [labelInput]);
     } else {
       labelCell = el("div", { className: "merge-rows" }, label);
@@ -1307,12 +1322,10 @@
     // Restore radio selections
     document.querySelectorAll(".save-radio[data-prefix='" + prefix + "']").forEach(function(radio) {
       const savedValue = localStorage.getItem(radio.name);
-      if (savedValue && radio.value === savedValue) {
-        radio.checked = true;
-      }
+      if (savedValue && radio.value === savedValue) radio.checked = true;
     });
 
-    // Restore textarea content
+    // Restore textarea notes
     document.querySelectorAll(".save-text").forEach(function(area) {
       if (!area.id || !area.id.startsWith(prefix + "_textarea")) return;
       const savedText = localStorage.getItem(area.id);
@@ -1323,12 +1336,14 @@
       }
     });
 
-    // Restore custom "Other" label text
+    // Restore custom "Other" label text and height
     document.querySelectorAll(".save-label").forEach(function(input) {
       if (!input.id || !input.id.startsWith(prefix + "_label")) return;
       const savedLabel = localStorage.getItem(input.id);
       if (savedLabel) {
         input.value = savedLabel;
+        input.style.height = "auto";
+        input.style.height = input.scrollHeight + "px";
       }
     });
   }
@@ -1336,8 +1351,8 @@
   function loadSavedPhotosForType(prefix) {
     document.querySelectorAll("div[id^='" + prefix + "_thumbWrap']").forEach(function(wrap) {
       const index = parseInt(wrap.id.replace(prefix + "_thumbWrap", ""), 10);
-      const photoKey = prefix + "_photo" + index;
-      const saved = JSON.parse(localStorage.getItem(photoKey) || "[]");
+      const photoKey  = prefix + "_photo" + index;
+      const saved     = JSON.parse(localStorage.getItem(photoKey) || "[]");
       const deleteBtn = document.getElementById(prefix + "_delete" + index);
 
       saved.forEach(function(src, photoIndex) {
@@ -1355,10 +1370,7 @@
         wrap.appendChild(img);
       });
 
-      if (saved.length > 0 && deleteBtn) {
-        deleteBtn.style.display = "inline-block";
-      }
-
+      if (saved.length > 0 && deleteBtn) deleteBtn.style.display = "inline-block";
       updatePhotoButton(prefix, index);
     });
   }
@@ -1387,23 +1399,21 @@
   // ================================================================
   function updateSectionProgress(progressElement) {
     const startIndex = parseInt(progressElement.getAttribute("data-start"));
-    const itemCount = parseInt(progressElement.getAttribute("data-count"));
-    const prefix = progressElement.getAttribute("data-prefix");
+    const itemCount  = parseInt(progressElement.getAttribute("data-count"));
+    const prefix     = progressElement.getAttribute("data-prefix");
 
     let completed = 0;
     for (let i = startIndex; i < startIndex + itemCount; i++) {
-      const name = prefix + "_radio" + i;
+      const name   = prefix + "_radio" + i;
       const radios = document.querySelectorAll('input[name="' + name + '"]');
-      if (Array.from(radios).some(function(r) { return r.checked; })) {
-        completed++;
-      }
+      if (Array.from(radios).some(function(r) { return r.checked; })) completed++;
     }
 
-    const percentage = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
+    const percentage  = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
     const progressText = progressElement.querySelector(".progress-text");
     const progressFill = progressElement.querySelector(".progress-bar-fill");
     if (progressText) progressText.textContent = percentage + "%";
-    if (progressFill) progressFill.style.width = percentage + "%";
+    if (progressFill) progressFill.style.width  = percentage + "%";
   }
 
   function updateAllProgress() {
@@ -1413,22 +1423,18 @@
   }
 
   function getOverallCompletion() {
-    const type = localStorage.getItem("propertyType");
+    const type     = localStorage.getItem("propertyType");
     const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
     if (!type || !sections) return { completed: 0, total: 0, percent: 0 };
 
-    let total = 0;
-    let completed = 0;
-    let globalIndex = 0;
+    let total = 0, completed = 0, globalIndex = 0;
 
     sections.forEach(function(sec) {
       sec.items.forEach(function() {
         total++;
-        const name = type + "_radio" + globalIndex;
+        const name   = type + "_radio" + globalIndex;
         const radios = document.querySelectorAll('input[name="' + name + '"]');
-        if (Array.from(radios).some(function(r) { return r.checked; })) {
-          completed++;
-        }
+        if (Array.from(radios).some(function(r) { return r.checked; })) completed++;
         globalIndex++;
       });
     });
@@ -1443,7 +1449,7 @@
   let _pendingSwitchType = null;
 
   document.getElementById("propertyType").addEventListener("change", function() {
-    const newType = this.value;
+    const newType     = this.value;
     const currentType = localStorage.getItem("propertyType");
 
     if (newType === currentType) return;
@@ -1453,16 +1459,12 @@
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && (
-          key.startsWith(currentType + "_radio") ||
+          key.startsWith(currentType + "_radio")    ||
           key.startsWith(currentType + "_textarea") ||
-          key.startsWith(currentType + "_photo") ||
+          key.startsWith(currentType + "_photo")    ||
           key.startsWith(currentType + "_label")
-        )) {
-          hasData = true;
-          break;
-        }
+        )) { hasData = true; break; }
       }
-
       if (hasData) {
         _pendingSwitchType = newType;
         this.value = currentType;
@@ -1479,9 +1481,8 @@
 
     document.getElementById("editCustomSectionsBtn").style.display =
       newType === "Custom" ? "inline-block" : "none";
-
-    document.getElementById("clearAll").style.display = newType ? "inline-block" : "none";
-    document.getElementById("exportInstructions").style.display = newType ? "block" : "none";
+    document.getElementById("clearAll").style.display          = newType ? "inline-block" : "none";
+    document.getElementById("exportInstructions").style.display = newType ? "block"       : "none";
 
     if (newType === "Custom") {
       const savedIndices = getSavedCustomIndices();
@@ -1515,7 +1516,6 @@
     const newType = _pendingSwitchType;
     _pendingSwitchType = null;
     if (newType === null) return;
-
     document.getElementById("propertyType").value = newType;
     applyTypeSelection(newType);
   }
@@ -1538,7 +1538,7 @@
     list.innerHTML = "";
     document.getElementById("pickerError").textContent = "";
 
-    const savedIndices = getSavedCustomIndices();
+    const savedIndices  = getSavedCustomIndices();
     const activeIndices = savedIndices || masterSections.map(function(_, i) { return i; });
 
     masterSections.forEach(function(sec, i) {
@@ -1547,10 +1547,7 @@
       li.className = isChecked ? "selected" : "";
 
       const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.value = i;
-      cb.checked = isChecked;
-      cb.id = "picker_cb_" + i;
+      cb.type = "checkbox"; cb.value = i; cb.checked = isChecked; cb.id = "picker_cb_" + i;
 
       cb.addEventListener("change", function() {
         li.className = cb.checked ? "selected" : "";
@@ -1575,7 +1572,6 @@
     });
 
     updateToggleAllLabel();
-
     document.getElementById("customPickerModal").style.display = "block";
     document.body.style.overflow = "hidden";
   }
@@ -1588,9 +1584,7 @@
   function cancelCustomPicker() {
     const hasSavedSections = getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null;
     if (!hasSavedSections) {
-      if (localStorage.getItem("propertyType") === "Custom") {
-        localStorage.removeItem("propertyType");
-      }
+      if (localStorage.getItem("propertyType") === "Custom") localStorage.removeItem("propertyType");
       document.getElementById("propertyType").value = "";
       document.getElementById("clearAll").style.display = "none";
       document.getElementById("exportInstructions").style.display = "none";
@@ -1603,9 +1597,7 @@
   document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
       const pickerModal = document.getElementById("customPickerModal");
-      if (pickerModal && pickerModal.style.display === "block") {
-        cancelCustomPicker();
-      }
+      if (pickerModal && pickerModal.style.display === "block") cancelCustomPicker();
     }
   });
 
@@ -1630,7 +1622,7 @@
     const checkboxes = document.querySelectorAll("#customPickerList input[type='checkbox']");
     const selectedIndices = Array.from(checkboxes)
       .filter(function(cb) { return cb.checked; })
-      .map(function(cb) { return parseInt(cb.value, 10); });
+      .map(function(cb)    { return parseInt(cb.value, 10); });
 
     if (selectedIndices.length === 0) {
       document.getElementById("pickerError").textContent = "Please select at least one section.";
@@ -1639,16 +1631,13 @@
 
     localStorage.setItem("Custom_sections", JSON.stringify(selectedIndices));
     sectionsByType["Custom"] = selectedIndices.map(function(i) { return masterSections[i]; });
-
     closeCustomPickerModal();
     renderSections("Custom");
   }
 
   document.getElementById("customPickerModal").addEventListener("click", function(e) {
-    if (e.target === this) {
-      if (getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null) {
-        closeCustomPickerModal();
-      }
+    if (e.target === this && getSavedCustomIndices() !== null && sectionsByType["Custom"] !== null) {
+      closeCustomPickerModal();
     }
   });
 
@@ -1660,14 +1649,11 @@
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && (
-        key.startsWith("Custom_radio") ||
+        key.startsWith("Custom_radio")    ||
         key.startsWith("Custom_textarea") ||
-        key.startsWith("Custom_photo") ||
+        key.startsWith("Custom_photo")    ||
         key.startsWith("Custom_label")
-      )) {
-        hasData = true;
-        break;
-      }
+      )) { hasData = true; break; }
     }
 
     if (hasData) {
@@ -1712,10 +1698,10 @@
   window.addEventListener("load", function() {
     const dateInput = document.getElementById("date");
     if (dateInput && !dateInput.value) {
-      const now = new Date();
-      const year = now.getFullYear();
+      const now   = new Date();
+      const year  = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, "0");
-      const day = String(now.getDate()).padStart(2, "0");
+      const day   = String(now.getDate()).padStart(2, "0");
       dateInput.value = year + "-" + month + "-" + day;
     }
 
@@ -1724,9 +1710,7 @@
       if (!inputEl) return;
       const saved = localStorage.getItem(id);
       if (saved) inputEl.value = saved;
-      inputEl.addEventListener("input", function() {
-        localStorage.setItem(id, this.value);
-      });
+      inputEl.addEventListener("input", function() { localStorage.setItem(id, this.value); });
     });
 
     const savedType = localStorage.getItem("propertyType");
@@ -1744,8 +1728,8 @@
         renderSections(savedType);
       }
 
-      document.getElementById("clearAll").style.display = savedType ? "inline-block" : "none";
-      document.getElementById("exportInstructions").style.display = savedType ? "block" : "none";
+      document.getElementById("clearAll").style.display           = savedType ? "inline-block" : "none";
+      document.getElementById("exportInstructions").style.display  = savedType ? "block"       : "none";
     }
 
     setTimeout(updateAllProgress, 150);
@@ -1754,9 +1738,7 @@
   // ================================================================
   // CLEAR ALL
   // ================================================================
-  document.getElementById("clearAll").addEventListener("click", function() {
-    openClearAllModal();
-  });
+  document.getElementById("clearAll").addEventListener("click", function() { openClearAllModal(); });
 
   function openClearAllModal() {
     document.getElementById("clearAllModal").style.display = "block";
@@ -1776,39 +1758,25 @@
     const currentType = localStorage.getItem("propertyType") || "";
 
     document.querySelectorAll(".save-radio").forEach(function(r) { r.checked = false; });
-    document.querySelectorAll(".save-text").forEach(function(area) {
-      area.value = "";
-      area.style.height = "";
-    });
-    document.querySelectorAll(".save-label").forEach(function(input) {
-      input.value = "";
-    });
+    document.querySelectorAll(".save-text").forEach(function(area) { area.value = ""; area.style.height = ""; });
+    document.querySelectorAll(".save-label").forEach(function(input) { input.value = ""; input.style.height = ""; });
 
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (
-        key.startsWith(currentType + "_") ||
-        key === "property" ||
-        key === "propertyManager" ||
-        key === "date"
-      ) {
+      if (key.startsWith(currentType + "_") || key === "property" || key === "propertyManager" || key === "date") {
         keysToRemove.push(key);
       }
     }
     keysToRemove.forEach(function(k) { localStorage.removeItem(k); });
 
-    document.querySelectorAll("div[id*='_thumbWrap']").forEach(function(wrap) {
-      wrap.innerHTML = "";
-    });
-    document.querySelectorAll("button[id*='_delete']").forEach(function(btn) {
-      btn.style.display = "none";
-    });
+    document.querySelectorAll("div[id*='_thumbWrap']").forEach(function(wrap) { wrap.innerHTML = ""; });
+    document.querySelectorAll("button[id*='_delete']").forEach(function(btn) { btn.style.display = "none"; });
     document.querySelectorAll("input[type='file'][id*='_photo']").forEach(function(input) {
       input.value = "";
-      const parts = input.id.split("_photo");
+      const parts  = input.id.split("_photo");
       const prefix = parts[0];
-      const index = parseInt(parts[1], 10);
+      const index  = parseInt(parts[1], 10);
       updatePhotoButton(prefix, index);
     });
 
@@ -1816,8 +1784,8 @@
       localStorage.removeItem("Custom_sections");
       sectionsByType["Custom"] = null;
       document.getElementById("editCustomSectionsBtn").style.display = "none";
-      document.getElementById("clearAll").style.display = "none";
-      document.getElementById("exportInstructions").style.display = "none";
+      document.getElementById("clearAll").style.display              = "none";
+      document.getElementById("exportInstructions").style.display     = "none";
       document.getElementById("propertyType").value = "";
       localStorage.removeItem("propertyType");
       renderSections(null);
@@ -1831,8 +1799,8 @@
   // MISSING FIELDS MODAL
   // ================================================================
   function openMissingFieldsModal(missing) {
-    const msg = document.getElementById("missingFieldsMsg");
-    msg.textContent = "Please complete the following fields before printing: " + missing.join(", ") + ".";
+    document.getElementById("missingFieldsMsg").textContent =
+      "Please complete the following fields before printing: " + missing.join(", ") + ".";
     document.getElementById("missingFieldsModal").style.display = "block";
     document.body.style.overflow = "hidden";
   }
@@ -1852,8 +1820,8 @@
   // ================================================================
   function openIncompleteModal(completed, total) {
     const remaining = total - completed;
-    const msg = document.getElementById("incompleteModalMsg");
-    msg.textContent = remaining + " of " + total + " items still need a rating. Are you sure you're done?";
+    document.getElementById("incompleteModalMsg").textContent =
+      remaining + " of " + total + " items still need a rating. Are you sure you're done?";
     document.getElementById("incompleteModal").style.display = "block";
     document.body.style.overflow = "hidden";
   }
@@ -1869,14 +1837,14 @@
   }
 
   function scrollToFirstIncomplete() {
-    const type = localStorage.getItem("propertyType");
+    const type     = localStorage.getItem("propertyType");
     const sections = (type === "Custom") ? sectionsByType["Custom"] : sectionsByType[type];
     if (!type || !sections) return;
 
     let globalIndex = 0;
     for (let s = 0; s < sections.length; s++) {
       for (let i = 0; i < sections[s].items.length; i++) {
-        const name = type + "_radio" + globalIndex;
+        const name   = type + "_radio" + globalIndex;
         const radios = document.querySelectorAll('input[name="' + name + '"]');
         if (!Array.from(radios).some(function(r) { return r.checked; })) {
           const firstRadio = document.getElementById(type + "_good" + globalIndex);
@@ -1899,26 +1867,24 @@
   // PRINT VALIDATION
   // ================================================================
   function printChecklist() {
-    const property = document.getElementById("property");
-    const manager = document.getElementById("propertyManager");
-    const date = document.getElementById("date");
+    const property   = document.getElementById("property");
+    const manager    = document.getElementById("propertyManager");
+    const date       = document.getElementById("date");
     const typeSelect = document.getElementById("propertyType");
 
-    [property, manager, date, typeSelect].forEach(function(el) {
-      el.style.border = "";
-    });
+    [property, manager, date, typeSelect].forEach(function(el) { el.style.border = ""; });
 
     const missing = [];
-    if (!typeSelect.value) missing.push("Property Type");
-    if (!property.value.trim()) missing.push("Property Name");
-    if (!manager.value.trim()) missing.push("Your Name");
-    if (!date.value) missing.push("Inspection Date");
+    if (!typeSelect.value)        missing.push("Property Type");
+    if (!property.value.trim())   missing.push("Property Name");
+    if (!manager.value.trim())    missing.push("Your Name");
+    if (!date.value)              missing.push("Inspection Date");
 
     if (missing.length > 0) {
-      if (!typeSelect.value) typeSelect.style.border = "2px solid red";
-      if (!property.value.trim()) property.style.border = "2px solid red";
-      if (!manager.value.trim()) manager.style.border = "2px solid red";
-      if (!date.value) date.style.border = "2px solid red";
+      if (!typeSelect.value)      typeSelect.style.border = "2px solid red";
+      if (!property.value.trim()) property.style.border  = "2px solid red";
+      if (!manager.value.trim())  manager.style.border   = "2px solid red";
+      if (!date.value)            date.style.border      = "2px solid red";
       openMissingFieldsModal(missing);
       return;
     }
@@ -1938,7 +1904,14 @@
 <!-- ================================================================ -->
 <script>
   const progressWrap = document.getElementById("photoProgressWrapper");
-  const progressBar = document.getElementById("photoProgressBar");
+  const progressBar  = document.getElementById("photoProgressBar");
+
+  // ── Detect iOS (iPhone / iPad) ──────────────────────────────────
+  // On iOS, Safari can decode HEIC natively via canvas, so we skip
+  // heic2any entirely. Using heic2any inside Mobile Safari causes it
+  // to hang or silently drop photos.
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   function startProgress() {
     progressWrap.style.display = "block";
@@ -1961,43 +1934,101 @@
   }
 
   function updatePhotoButton(prefix, index) {
-    const photoKey = prefix + "_photo" + index;
-    const saved = JSON.parse(localStorage.getItem(photoKey) || "[]");
+    const photoKey    = prefix + "_photo" + index;
+    const saved       = JSON.parse(localStorage.getItem(photoKey) || "[]");
     const fileInputId = prefix + "_photo" + index;
-    const button = document.querySelector("button[onclick*=\"'" + fileInputId + "'\"].photo-button");
+    const button      = document.querySelector("button[onclick*=\"'" + fileInputId + "'\"].photo-button");
 
     if (button) {
       const count = saved.length;
       if (count === 0) {
         button.textContent = "Upload Picture (0/3)";
-        button.disabled = false;
-        button.style.opacity = "1";
-        button.style.cursor = "pointer";
+        button.disabled = false; button.style.opacity = "1"; button.style.cursor = "pointer";
       } else if (count < 3) {
         button.textContent = "Upload Picture (" + count + "/3)";
-        button.disabled = false;
-        button.style.opacity = "1";
-        button.style.cursor = "pointer";
+        button.disabled = false; button.style.opacity = "1"; button.style.cursor = "pointer";
       } else {
         button.textContent = "Max Photos (3/3)";
-        button.disabled = true;
-        button.style.opacity = "0.6";
-        button.style.cursor = "not-allowed";
+        button.disabled = true; button.style.opacity = "0.6"; button.style.cursor = "not-allowed";
       }
     }
   }
 
+  // ── Process a single File object into a compressed base64 JPEG ──
+  // Returns a Promise that resolves to a base64 data URL string,
+  // or resolves to null if the file cannot be processed.
+  function processImageFile(file) {
+    return new Promise(function(resolve) {
+
+      // ── HEIC/HEIF handling ──────────────────────────────────────
+      const isHeic = file.type === "image/heic" ||
+                     file.type === "image/heif"  ||
+                     file.name.toLowerCase().endsWith(".heic") ||
+                     file.name.toLowerCase().endsWith(".heif");
+
+      if (isHeic && !isIOS) {
+        // Desktop browser: use heic2any to convert first, then compress
+        heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 })
+          .then(function(convertedBlob) {
+            compressBlob(new File([convertedBlob], "converted.jpg", { type: "image/jpeg" }), resolve);
+          })
+          .catch(function() {
+            // heic2any failed on desktop — try passing it straight to
+            // the canvas anyway (unlikely to work but worth a shot)
+            compressBlob(file, resolve);
+          });
+        return;
+      }
+
+      // ── All other formats (JPEG, PNG, HEIF on iOS, etc.) ────────
+      // iOS Safari can decode HEIC natively via FileReader + canvas,
+      // so we skip heic2any entirely and let the browser handle it.
+      compressBlob(file, resolve);
+    });
+  }
+
+  // ── Draw a File/Blob onto a canvas and return a compressed JPEG ──
+  function compressBlob(file, resolve) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas  = document.createElement("canvas");
+        const maxSize = 1000;
+        let width = img.width, height = img.height;
+        if (width > height && width > maxSize) {
+          height *= maxSize / width;
+          width   = maxSize;
+        } else if (height > maxSize) {
+          width  *= maxSize / height;
+          height  = maxSize;
+        }
+        canvas.width  = Math.round(width);
+        canvas.height = Math.round(height);
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.8));
+      };
+      img.onerror = function() {
+        // Canvas could not decode the image — skip it gracefully
+        resolve(null);
+      };
+      img.src = event.target.result;
+    };
+    reader.onerror = function() { resolve(null); };
+    reader.readAsDataURL(file);
+  }
+
+  // ── File input change handler ────────────────────────────────────
   document.addEventListener("change", async function(e) {
     if (e.target.type !== "file" || !e.target.id.includes("_photo")) return;
 
     startProgress();
 
     const idParts = e.target.id.split("_photo");
-    const prefix = idParts[0];
-    const index = parseInt(idParts[1], 10);
+    const prefix  = idParts[0];
+    const index   = parseInt(idParts[1], 10);
     const photoKey = prefix + "_photo" + index;
-
-    const wrap = document.getElementById(prefix + "_thumbWrap" + index);
+    const wrap     = document.getElementById(prefix + "_thumbWrap" + index);
     let existingPhotos = JSON.parse(localStorage.getItem(photoKey) || "[]");
 
     if (existingPhotos.length >= 3) {
@@ -2011,68 +2042,55 @@
     const files = Array.from(e.target.files).slice(0, remainingSlots);
 
     for (let file of files) {
-      if (
-        file.type === "image/heic" ||
-        file.type === "image/heif" ||
-        file.name.toLowerCase().endsWith(".heic") ||
-        file.name.toLowerCase().endsWith(".heif")
-      ) {
-        try {
-          const convertedBlob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 });
-          file = new File([convertedBlob], "converted.jpg", { type: "image/jpeg" });
-        } catch { continue; }
+      const compressed = await processImageFile(file);
+
+      if (!compressed) {
+        // Processing failed for this file — skip silently
+        continue;
       }
 
-      await new Promise(function(resolve) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          const img = new Image();
-          img.onload = function() {
-            const canvas = document.createElement("canvas");
-            const maxSize = 1000;
-            let width = img.width, height = img.height;
-            if (width > height && width > maxSize) { height *= maxSize / width; width = maxSize; }
-            else if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-            canvas.width = width;
-            canvas.height = height;
-            canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-            const compressed = canvas.toDataURL("image/jpeg", 0.8);
+      existingPhotos.push(compressed);
+      try {
+        localStorage.setItem(photoKey, JSON.stringify(existingPhotos));
+      } catch (storageErr) {
+        // localStorage quota exceeded
+        existingPhotos.pop();
+        alert("Storage full — could not save this photo. Try deleting some existing photos first.");
+        break;
+      }
 
-            existingPhotos.push(compressed);
-            localStorage.setItem(photoKey, JSON.stringify(existingPhotos));
+      const imgEl = document.createElement("img");
+      imgEl.src       = compressed;
+      imgEl.className = "photo-thumb";
+      imgEl.style.width      = "100px";
+      imgEl.style.height     = "100px";
+      imgEl.style.objectFit  = "cover";
+      imgEl.style.flex       = "0 0 100px";
+      imgEl.style.cursor     = "pointer";
+      const photoIndex = existingPhotos.length - 1;
+      imgEl.onclick = (function(pi) {
+        return function() { openPhotoModal(prefix, index, pi); };
+      })(photoIndex);
+      wrap.appendChild(imgEl);
 
-            const imgEl = document.createElement("img");
-            imgEl.src = compressed;
-            imgEl.className = "photo-thumb";
-            imgEl.style.cursor = "pointer";
-            const photoIndex = existingPhotos.length - 1;
-            imgEl.onclick = function() { openPhotoModal(prefix, index, photoIndex); };
-            wrap.appendChild(imgEl);
+      const deleteBtn = document.getElementById(prefix + "_delete" + index);
+      if (deleteBtn) deleteBtn.style.display = "inline-block";
 
-            const deleteBtn = document.getElementById(prefix + "_delete" + index);
-            if (deleteBtn) deleteBtn.style.display = "inline-block";
-
-            updatePhotoButton(prefix, index);
-            finishProgress();
-            resolve();
-          };
-          img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
+      updatePhotoButton(prefix, index);
     }
 
+    finishProgress();
     e.target.value = "";
   });
 
   function deletePhoto(prefix, index) {
-    const photoKey = prefix + "_photo" + index;
-    const wrap = document.getElementById(prefix + "_thumbWrap" + index);
+    const photoKey  = prefix + "_photo" + index;
+    const wrap      = document.getElementById(prefix + "_thumbWrap" + index);
     const fileInput = document.getElementById(prefix + "_photo" + index);
     const deleteBtn = document.getElementById(prefix + "_delete" + index);
 
-    if (wrap) wrap.innerHTML = "";
-    if (fileInput) fileInput.value = "";
+    if (wrap)      wrap.innerHTML   = "";
+    if (fileInput) fileInput.value  = "";
     localStorage.removeItem(photoKey);
     if (deleteBtn) deleteBtn.style.display = "none";
     updatePhotoButton(prefix, index);
@@ -2083,22 +2101,22 @@
 <!-- PHOTO MODAL -->
 <!-- ================================================================ -->
 <script>
-  let currentPhotoIndex = 0;
-  let currentPhotos = [];
-  let currentModalPrefix = null;
+  let currentPhotoIndex  = 0;
+  let currentPhotos      = [];
+  let currentModalPrefix  = null;
   let currentModalSection = null;
 
   function openPhotoModal(prefix, sectionIndex, photoIndex) {
-    currentModalPrefix = prefix;
+    currentModalPrefix  = prefix;
     currentModalSection = sectionIndex;
     const photoKey = prefix + "_photo" + sectionIndex;
-    currentPhotos = JSON.parse(localStorage.getItem(photoKey) || "[]");
+    currentPhotos  = JSON.parse(localStorage.getItem(photoKey) || "[]");
     currentPhotoIndex = photoIndex;
 
     if (currentPhotos.length === 0) return;
 
     const modal = document.getElementById("photoModal");
-    document.getElementById("modalImage").src = currentPhotos[currentPhotoIndex];
+    document.getElementById("modalImage").src    = currentPhotos[currentPhotoIndex];
     document.getElementById("photoCounter").textContent = (currentPhotoIndex + 1) + " / " + currentPhotos.length;
     modal.style.display = "block";
     document.body.style.overflow = "hidden";
@@ -2111,9 +2129,9 @@
 
   function changePhoto(direction) {
     currentPhotoIndex += direction;
-    if (currentPhotoIndex < 0) currentPhotoIndex = currentPhotos.length - 1;
+    if (currentPhotoIndex < 0)                          currentPhotoIndex = currentPhotos.length - 1;
     else if (currentPhotoIndex >= currentPhotos.length) currentPhotoIndex = 0;
-    document.getElementById("modalImage").src = currentPhotos[currentPhotoIndex];
+    document.getElementById("modalImage").src           = currentPhotos[currentPhotoIndex];
     document.getElementById("photoCounter").textContent = (currentPhotoIndex + 1) + " / " + currentPhotos.length;
   }
 
@@ -2125,8 +2143,8 @@
   document.addEventListener("keydown", function(e) {
     const modal = document.getElementById("photoModal");
     if (modal.style.display === "block") {
-      if (e.key === "Escape") closePhotoModal();
-      else if (e.key === "ArrowLeft") changePhoto(-1);
+      if (e.key === "Escape")       closePhotoModal();
+      else if (e.key === "ArrowLeft")  changePhoto(-1);
       else if (e.key === "ArrowRight") changePhoto(1);
     }
   });
@@ -2135,7 +2153,7 @@
     let touchStartX = 0;
     const modal = document.getElementById("photoModal");
     modal.addEventListener("touchstart", function(e) { touchStartX = e.changedTouches[0].screenX; }, false);
-    modal.addEventListener("touchend", function(e) {
+    modal.addEventListener("touchend",   function(e) {
       const diff = touchStartX - e.changedTouches[0].screenX;
       if (Math.abs(diff) > 50) changePhoto(diff > 0 ? 1 : -1);
     }, false);
