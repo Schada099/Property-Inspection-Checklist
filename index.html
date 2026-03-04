@@ -1933,14 +1933,14 @@
     }, 300);
   }
 
-  function updatePhotoButton(prefix, index) {
+  function updatePhotoButton(prefix, index, countOverride) {
     const photoKey    = prefix + "_photo" + index;
     const saved       = JSON.parse(localStorage.getItem(photoKey) || "[]");
     const fileInputId = prefix + "_photo" + index;
     const button      = document.querySelector("button[onclick*=\"'" + fileInputId + "'\"].photo-button");
+    const count       = (countOverride !== undefined) ? countOverride : saved.length;
 
     if (button) {
-      const count = saved.length;
       if (count === 0) {
         button.textContent = "Upload Picture (0/3)";
         button.disabled = false; button.style.opacity = "1"; button.style.cursor = "pointer";
@@ -2053,10 +2053,6 @@
       try {
         localStorage.setItem(photoKey, JSON.stringify(existingPhotos));
       } catch (storageErr) {
-        // localStorage quota exceeded
-        existingPhotos.pop();
-        alert("Storage full — could not save this photo. Try deleting some existing photos first.");
-        break;
       }
 
       const imgEl = document.createElement("img");
@@ -2076,7 +2072,8 @@
       const deleteBtn = document.getElementById(prefix + "_delete" + index);
       if (deleteBtn) deleteBtn.style.display = "inline-block";
 
-      updatePhotoButton(prefix, index);
+      updatePhotoButton(prefix, index, existingPhotos.length);
+
     }
 
     finishProgress();
@@ -2093,7 +2090,8 @@
     if (fileInput) fileInput.value  = "";
     localStorage.removeItem(photoKey);
     if (deleteBtn) deleteBtn.style.display = "none";
-    updatePhotoButton(prefix, index);
+    updatePhotoButton(prefix, index, existingPhotos.length);
+
   }
 </script>
 
