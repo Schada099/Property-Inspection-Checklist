@@ -1173,7 +1173,7 @@
       const labelInput = document.createElement("textarea");
       labelInput.id        = labelKey;
       labelInput.className = "other-label-input save-label";
-      labelInput.placeholder = "Describe item...";
+      labelInput.placeholder = "(tap to label)";
       labelInput.maxLength = 120;
       labelInput.setAttribute("data-labelkey", labelKey);
       labelInput.value = savedLabel;
@@ -2090,7 +2090,7 @@
     if (fileInput) fileInput.value  = "";
     localStorage.removeItem(photoKey);
     if (deleteBtn) deleteBtn.style.display = "none";
-    updatePhotoButton(prefix, index, existingPhotos.length);
+    updatePhotoButton(prefix, index, 0);
 
   }
 </script>
