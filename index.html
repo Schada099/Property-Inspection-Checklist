@@ -4,7 +4,6 @@
   <title>Property Inspection Checklist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- heic2any is still loaded for desktop browsers that need it, but we skip it on iOS -->
 <script src="https://unpkg.com/heic2any/dist/heic2any.min.js"></script>
 
 <link rel="manifest" href="manifest.json">
@@ -43,121 +42,168 @@
       color: black;
     }
 
-    .grid-container-no-color {
-      display: grid;
-      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr;
-      column-gap: 5px;
-      row-gap: 5px;
-      width: 100%;
+    /* ── CARD LAYOUT ── */
+    .item-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+      margin: 0 auto 10px auto;
       max-width: 600px;
-      margin: 0px auto;
-      align-items: center;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      break-inside: avoid;
-      page-break-inside: avoid
-    }
-
-    .grid-container-yes-color {
-      display: grid;
-      grid-template-columns: minmax(100px, 2fr) 1fr 1fr 1fr 1fr;
-      column-gap: 5px;
-      row-gap: 5px;
-      width: 100%;
-      max-width: 600px;
-      margin: 0px auto;
-      align-items: center;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      background-color: #d0dfff;
-      break-inside: avoid;
-      page-break-inside: avoid
-    }
-
-    .header {
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .radio-circle {
-      display: flex;
-      justify-content: center;
-    }
-
-    .radio-circle input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      width: 1px; height: 1px;
-      margin: -1px; border: 0; padding: 0;
-      clip: rect(0 0 0 0); clip-path: inset(50%);
       overflow: hidden;
-    }
-
-    .radio-circle input[type="radio"]:focus + label {
-      outline: 2px solid #0067c5;
-      outline-offset: 2px;
-    }
-
-    .radio-circle label {
-      width: 35px;
-      height: 25px;
-      border-radius: 50%;
-      border: 2px solid #333;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      flex-direction: row;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      transition: box-shadow 0.2s;
     }
 
-    .radio-circle input[value="good"] + label { border-color: #000000; }
-    .radio-circle input[value="good"]:checked + label { background-color: #28a745; border-color: #000000; }
-    .radio-circle input[value="fair"] + label { border-color: #000000; }
-    .radio-circle input[value="fair"]:checked + label { background-color: #ffc107; border-color: #000000; }
-    .radio-circle input[value="poor"] + label { border-color: #000000; }
-    .radio-circle input[value="poor"]:checked + label { background-color: #c50000; border-color: #000000; }
-    .radio-circle input[value="na"] + label { border-color: #333; }
-    .radio-circle input[value="na"]:checked + label { background-color: #333; border-color: #333; }
-
-    .text-input {
-      grid-column: 2 / 6;
+    .item-card:hover {
+      box-shadow: 0 3px 10px rgba(0,0,0,0.13);
     }
 
-    .text-input textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 5px;
-      resize: none;
-      min-height: 50px;
-      max-width: 100%;
-      min-width: 100%;
-      overflow: hidden;
-      font-size: 1rem;
+    /* Left color strip */
+    .card-strip {
+      width: 7px;
+      min-width: 7px;
+      background-color: #e0e0e0;
+      transition: background-color 0.25s ease;
+      flex-shrink: 0;
     }
 
-    .merge-rows {
-      grid-row: span 2;
+    .card-strip.strip-good { background-color: #28a745; }
+    .card-strip.strip-fair { background-color: #ffc107; }
+    .card-strip.strip-poor { background-color: #c50000; }
+    .card-strip.strip-na   { background-color: #555555; }
+
+    /* Card content area */
+    .card-body {
+      flex: 1;
+      padding: 12px 14px 12px 14px;
       display: flex;
-      align-items: flex-start;
-      height: 100%;
+      flex-direction: column;
+      gap: 10px;
       min-width: 0;
-      overflow: hidden;
+    }
+
+    /* Label row */
+    .card-label {
+      font-size: 0.97rem;
+      font-weight: 600;
+      color: #222;
       word-break: break-word;
     }
 
-    /* ── Editable "Other" label textarea ── */
+    /* Rating buttons row */
+    .rating-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .rating-btn {
+      flex: 0 0 auto;
+      width: 90px;
+      padding: 7px 6px;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      background: #f5f5f5;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.1s;
+      color: #555;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+
+    @media (max-width: 600px) {
+      .rating-buttons {
+        justify-content: stretch;
+      }
+      .rating-btn {
+        flex: 1 1 0;
+        width: auto;
+      }
+    }
+
+    .rating-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    }
+
+    .rating-btn.btn-good { border-color: #28a745; color: #28a745; }
+    .rating-btn.btn-good.selected { background: #28a745; color: #fff; border-color: #28a745; }
+
+    .rating-btn.btn-fair { border-color: #ffc107; color: #b38600; }
+    .rating-btn.btn-fair.selected { background: #ffc107; color: #fff; border-color: #ffc107; }
+
+    .rating-btn.btn-poor { border-color: #c50000; color: #c50000; }
+    .rating-btn.btn-poor.selected { background: #c50000; color: #fff; border-color: #c50000; }
+
+    .rating-btn.btn-na { border-color: #888; color: #666; }
+    .rating-btn.btn-na.selected { background: #555; color: #fff; border-color: #555; }
+
+    /* Notes textarea */
+    .card-notes {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      border: 1.5px solid #d0d0d0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: Arial, sans-serif;
+      resize: none;
+      min-height: 48px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+      background: #fafafa;
+    }
+
+    .card-notes:focus {
+      outline: none;
+      border-color: #0067c5;
+      background: #fff;
+    }
+
+    /* Photo row */
+    .card-photo-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-thumbs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .photo-thumb {
+      display: block;
+      border-radius: 7px;
+      border: 1px solid #ccc;
+      object-fit: cover;
+      width: 90px;
+      height: 90px;
+      cursor: pointer;
+    }
+
+    /* ── Other label editable textarea ── */
     .other-label-input {
       width: 100%;
       box-sizing: border-box;
-      font-size: 1rem;
+      font-size: 0.97rem;
+      font-weight: 600;
       font-family: Arial, sans-serif;
       border: none;
       border-bottom: 1.5px dashed #0067c5;
       background: transparent;
-      color: #111;
+      color: #222;
       padding: 2px 2px;
       outline: none;
-      min-width: 0;
       resize: none;
       overflow: hidden;
       min-height: 1.4em;
@@ -167,11 +213,12 @@
     .other-label-input::placeholder {
       color: #999;
       font-style: italic;
+      font-weight: normal;
     }
 
     .other-label-input:focus {
       border-bottom-color: #004c93;
-      background: rgba(0, 103, 197, 0.05);
+      background: rgba(0, 103, 197, 0.04);
       border-radius: 3px 3px 0 0;
     }
 
@@ -183,16 +230,45 @@
       }
     }
 
+    /* ── General input rounding ── */
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      border-radius: 8px;
+    }
+
     @media print {
       body {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .grid-container-no-color, .grid-container-yes-color {
+      .item-card {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 8px;
+      }
+      .card-strip {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
       .no-print { display: none !important; }
+
+      .card-photo-row .card-thumbs {
+        display: flex !important;
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+      }
+
+      .photo-thumb {
+        width: auto !important;
+        height: auto !important;
+        max-height: 160px !important;
+        object-fit: contain !important;
+        border: none !important;
+      }
     }
 
     .section {
@@ -224,17 +300,9 @@
       height: 2px;
       background-color: #333;
       margin: 0;
-    }
-
-    .divider-1 {
-      border: 0;
-      height: 1px;
-      background-color: #333;
-      margin: 0;
-    }
-
-    .headers-row {
-      background: #f1f1f1;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     :root {
@@ -254,11 +322,11 @@
       max-width: 600px;
       margin: 20px auto 40px auto;
       padding: 14px 16px;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       font-size: 0.95rem;
       line-height: 1.4;
-      background: #f9fbff;
+      background: #ffffff;
       border: 1px solid #e2e8f5;
     }
 
@@ -284,7 +352,7 @@
       background-color: #0067c5;
       color: white;
       text-decoration: none;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
     }
@@ -308,65 +376,24 @@
     }
 
     .photo-button {
-      font-size: 14px;
-      padding: 6px 10px;
-      border-radius: 5px;
-      margin-bottom: 8px;
-    }
-
-    .photo-thumb {
-      display: block;
-      margin-top: 6px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      object-fit: cover;
-      max-width: 100px;
-      max-height: 100px;
-    }
-
-    @media print {
-      [id*="_thumbWrap"] {
-        display: flex !important;
-        gap: 10px !important;
-        width: 100% !important;
-        grid-column: 1 / -1 !important;
-        justify-content: left !important;
-      }
-
-      .photo-thumb {
-        flex: 1 1 auto !important;
-        height: auto !important;
-        width: auto !important;
-        max-height: 300px !important;
-        object-fit: contain !important;
-        border: none !important;
-      }
-
-      @supports selector(:has(*)) {
-        [id*="_thumbWrap"]:has(.photo-thumb:first-child:last-child) .photo-thumb {
-          max-width: 100% !important;
-        }
-        [id*="_thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(2)) .photo-thumb {
-          max-width: 80% !important;
-        }
-        [id*="_thumbWrap"]:has(.photo-thumb:first-child:nth-last-child(3)) .photo-thumb {
-          max-width: 40% !important;
-        }
-      }
+      font-size: 13px;
+      padding: 7px 12px;
+      border-radius: 7px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .photo-delete {
-      font-size: 14px;
-      padding: 6px 10px;
-      margin-left: 6px;
+      font-size: 13px;
+      padding: 7px 10px;
       background-color: #c50000;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 7px;
       cursor: pointer;
       line-height: 1;
       display: none;
-      vertical-align: top;
+      flex-shrink: 0;
     }
 
     .photo-delete:hover { background-color: #930000; }
@@ -374,7 +401,7 @@
     .clear-button {
       font-size: 14px;
       padding: 6px 10px;
-      border-radius: 5px;
+      border-radius: 8px;
       background-color: #c50000;
       color: white;
     }
@@ -551,7 +578,7 @@
       .property-info-card {
         display: block !important;
         border: 1px solid #ccc;
-        border-radius: 8px;
+        border-radius: 12px;
         padding: 14px 16px;
         margin: 0 auto 20px auto;
         max-width: 600px;
@@ -586,6 +613,22 @@
       .property-info-card input[type="date"]::-webkit-calendar-picker-indicator {
         display: none !important;
       }
+
+      /* Hide N/A cards on print */
+      .item-card.rated-na {
+        display: none !important;
+      }
+
+      /* Hide unrated cards with no comment on print */
+      .item-card.print-hide-unrated {
+        display: none !important;
+      }
+
+      /* Hide empty notes textarea on print */
+      .card-notes:placeholder-shown,
+      .card-notes.print-hide-notes {
+        display: none !important;
+      }
     }
 
     @media (max-width: 600px) {
@@ -614,7 +657,7 @@
     #switchTypeModalBox,
     #missingFieldsModalBox {
       background: #fff;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 28px 28px 22px 28px;
       max-width: 420px;
       width: calc(100% - 40px);
@@ -660,7 +703,7 @@
       background: #0067c5;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 10px 20px;
       font-size: 1rem;
       cursor: pointer;
@@ -676,7 +719,7 @@
       background: #fff;
       color: #c50000;
       border: 2px solid #c50000;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 10px 20px;
       font-size: 1rem;
       cursor: pointer;
@@ -696,7 +739,7 @@
     /* ── Custom Picker Modal ── */
     #customPickerModalBox {
       background: #fff;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 28px 28px 22px 28px;
       max-width: 500px;
       width: calc(100% - 40px);
@@ -731,7 +774,7 @@
       display: flex;
       align-items: center;
       padding: 10px 12px;
-      border-radius: 6px;
+      border-radius: 8px;
       margin-bottom: 6px;
       background: #f5f8ff;
       border: 1.5px solid #d0dfff;
@@ -799,7 +842,7 @@
       background-color: #0067c5;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       margin-top: 4px;
     }
@@ -809,7 +852,7 @@
       display: none;
       font-size: 14px;
       padding: 7px 14px;
-      border-radius: 5px;
+      border-radius: 7px;
       background-color: #0067c5;
       color: white;
       border: none;
@@ -820,13 +863,6 @@
 
     @media print {
       #editCustomSectionsBtn { display: none !important; }
-    }
-
-    @media print {
-      .grid-container-no-color:has(input[value="na"]:checked),
-      .grid-container-yes-color:has(input[value="na"]:checked) {
-        display: none !important;
-      }
     }
 
     #updateModal {
@@ -843,7 +879,7 @@
 
     #updateModalBox {
       background: #fff;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 28px 28px 22px 28px;
       max-width: 420px;
       width: calc(100% - 40px);
@@ -871,7 +907,7 @@
       background: #0067c5;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 10px 28px;
       font-size: 1rem;
       cursor: pointer;
@@ -900,7 +936,7 @@
   <div class="info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
     <div>
       <label for="propertyType" style="font-size:1rem; font-weight:bold;">Property Type:*</label><br>
-      <select id="propertyType" name="propertyType" style="width:100%; font-size: 1rem; padding: 2px;">
+      <select id="propertyType" name="propertyType" style="width:100%; font-size: 1rem; padding: 6px; border: 1.5px solid #ccc; border-radius: 8px;">
         <option value="">-- Select Type --</option>
         <option value="Office">Office</option>
         <option value="Retail">Retail</option>
@@ -910,15 +946,15 @@
     </div>
     <div>
       <label for="property" style="font-size:1rem; font-weight:bold;">Property Name:*</label><br>
-      <input type="text" id="property" name="property" style="width:100%; box-sizing:border-box; font-size: 1rem;" class="save-text" maxlength="30">
+      <input type="text" id="property" name="property" style="width:100%; box-sizing:border-box; font-size: 1rem; padding: 6px; border: 1.5px solid #ccc; border-radius: 8px;" class="save-text" maxlength="30">
     </div>
     <div>
       <label for="propertyManager" style="font-size:1rem; font-weight:bold;">Your Name:*</label><br>
-      <input type="text" id="propertyManager" name="propertyManager" style="width:100%; box-sizing:border-box; font-size: 1rem;" class="save-text" maxlength="30">
+      <input type="text" id="propertyManager" name="propertyManager" style="width:100%; box-sizing:border-box; font-size: 1rem; padding: 6px; border: 1.5px solid #ccc; border-radius: 8px;" class="save-text" maxlength="30">
     </div>
     <div>
       <label for="date" style="font-size:1rem; font-weight:bold;">Inspection Date:*</label><br>
-      <input type="date" id="date" name="date" style="width:100%; box-sizing:border-box; font-size: 1rem;" class="save-text">
+      <input type="date" id="date" name="date" style="width:100%; box-sizing:border-box; font-size: 1rem; padding: 6px; border: 1.5px solid #ccc; border-radius: 8px;" class="save-text">
     </div>
   </div>
 </div>
@@ -947,7 +983,6 @@
   </div>
 </div>
 
-<hr class="divider-1 no-print">
 <div class="made-by no-print">
   Made by Adam - v<span id="footerVersion"></span> - 2026
 </div>
@@ -1206,25 +1241,29 @@
     return node;
   }
 
-  function buildRatingHeaderRow() {
-    return el("div", { className: "grid-container-no-color headers-row" }, [
-      el("div", { className: "header" }, ""),
-      el("div", { className: "header" }, "Good"),
-      el("div", { className: "header" }, "Fair"),
-      el("div", { className: "header" }, "Poor"),
-      el("div", { className: "header" }, "N/A"),
-    ]);
-  }
-
+  // ── Build a card-style inspection item ──
   function buildItemRow(globalIndex, label, prefix) {
-    const gridClass = globalIndex % 2 === 0 ? "grid-container-no-color" : "grid-container-yes-color";
-    const name      = prefix + "_radio"    + globalIndex;
-    const photoKey  = prefix + "_photo"    + globalIndex;
-    const txtId     = prefix + "_textarea" + globalIndex;
-    const labelKey  = prefix + "_label"    + globalIndex;
+    const photoKey = prefix + "_photo"    + globalIndex;
+    const txtId    = prefix + "_textarea" + globalIndex;
+    const labelKey = prefix + "_label"    + globalIndex;
+    const radioName = prefix + "_radio"   + globalIndex;
 
-    // Label cell: editable textarea if "Other", plain text otherwise
-    let labelCell;
+    // ── Card wrapper ──
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.id = prefix + "_card" + globalIndex;
+
+    // ── Left color strip ──
+    const strip = document.createElement("div");
+    strip.className = "card-strip";
+    strip.id = prefix + "_strip" + globalIndex;
+
+    // ── Card body ──
+    const body = document.createElement("div");
+    body.className = "card-body";
+
+    // ── Label ──
+    let labelEl;
     if (label === "Other") {
       const savedLabel = localStorage.getItem(labelKey) || "";
       const labelInput = document.createElement("textarea");
@@ -1235,73 +1274,128 @@
       labelInput.setAttribute("data-labelkey", labelKey);
       labelInput.value = savedLabel;
       labelInput.rows  = 1;
-      // Auto-expand as user types
       labelInput.addEventListener("input", function() {
         this.style.height = "auto";
         this.style.height = this.scrollHeight + "px";
       });
-      // Set correct initial height after first render
       requestAnimationFrame(function() {
         labelInput.style.height = "auto";
         labelInput.style.height = labelInput.scrollHeight + "px";
       });
-      labelCell = el("div", { className: "merge-rows" }, [labelInput]);
+      labelEl = document.createElement("div");
+      labelEl.className = "card-label";
+      labelEl.appendChild(labelInput);
     } else {
-      labelCell = el("div", { className: "merge-rows" }, label);
+      labelEl = document.createElement("div");
+      labelEl.className = "card-label";
+      labelEl.textContent = label;
     }
+    body.appendChild(labelEl);
 
-    return el("div", { className: gridClass }, [
-      labelCell,
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: prefix + "_good" + globalIndex, name: name, value: "good", className: "save-radio", "data-prefix": prefix }),
-        el("label", { for: prefix + "_good" + globalIndex, "aria-label": "Good" })
-      ]),
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: prefix + "_fair" + globalIndex, name: name, value: "fair", className: "save-radio", "data-prefix": prefix }),
-        el("label", { for: prefix + "_fair" + globalIndex, "aria-label": "Fair" })
-      ]),
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: prefix + "_poor" + globalIndex, name: name, value: "poor", className: "save-radio", "data-prefix": prefix }),
-        el("label", { for: prefix + "_poor" + globalIndex, "aria-label": "Poor" })
-      ]),
-      el("div", { className: "radio-circle" }, [
-        el("input", { type: "radio", id: prefix + "_na" + globalIndex, name: name, value: "na", className: "save-radio", "data-prefix": prefix }),
-        el("label", { for: prefix + "_na" + globalIndex, "aria-label": "Not applicable" })
-      ]),
-      el("div", { className: "text-input" }, [
-        el("textarea", {
-          id: txtId,
-          className: "save-text",
-          placeholder: "Enter details here"
-        })
-      ]),
-      el("div", { className: "text-input" }, [
-        el("input", {
-          type: "file",
-          accept: "image/jpeg, image/png, image/heic, image/heif",
-          id: prefix + "_photo" + globalIndex,
-          className: "no-print",
-          style: "display:none",
-          multiple: true,
-          "data-photokey": photoKey
-        }),
-        el("button", {
-          type: "button",
-          className: "action-button photo-button no-print",
-          onclick: "document.getElementById('" + prefix + "_photo" + globalIndex + "').click()"
-        }, "Upload Picture"),
-        el("button", {
-          type: "button",
-          id: prefix + "_delete" + globalIndex,
-          className: "photo-delete no-print",
-          onclick: "deletePhoto('" + prefix + "', " + globalIndex + ")"
-        }, "X"),
-        el("div", {
-          id: prefix + "_thumbWrap" + globalIndex,
-          style: "display:flex; gap:6px; flex-wrap:wrap;"
-        })
-      ])
-    ]);
+    // ── Rating buttons ──
+    const ratings = [
+      { value: "good", label: "Good",  cls: "btn-good" },
+      { value: "fair", label: "Fair",  cls: "btn-fair" },
+      { value: "poor", label: "Poor",  cls: "btn-poor" },
+      { value: "na",   label: "N/A",   cls: "btn-na"   },
+    ];
+
+    const ratingRow = document.createElement("div");
+    ratingRow.className = "rating-buttons";
+
+    ratings.forEach(function(r) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "rating-btn " + r.cls;
+      btn.textContent = r.label;
+      btn.setAttribute("data-value", r.value);
+      btn.setAttribute("data-index", globalIndex);
+      btn.setAttribute("data-prefix", prefix);
+      btn.setAttribute("data-name", radioName);
+
+      btn.addEventListener("click", function() {
+        // Deselect all in this group
+        ratingRow.querySelectorAll(".rating-btn").forEach(function(b) {
+          b.classList.remove("selected");
+        });
+        btn.classList.add("selected");
+
+        // Save to localStorage
+        localStorage.setItem(radioName, r.value);
+
+        // Update strip color
+        strip.className = "card-strip strip-" + r.value;
+
+        // Mark card for print hide if N/A
+        if (r.value === "na") {
+          card.classList.add("rated-na");
+        } else {
+          card.classList.remove("rated-na");
+        }
+
+        updateAllProgress();
+      });
+
+      ratingRow.appendChild(btn);
+    });
+    body.appendChild(ratingRow);
+
+    // ── Notes textarea ──
+    const notes = document.createElement("textarea");
+    notes.id = txtId;
+    notes.className = "card-notes save-text";
+    notes.placeholder = "Enter details here";
+    body.appendChild(notes);
+
+    // ── Photo row ──
+    const photoRow = document.createElement("div");
+    photoRow.className = "card-photo-row";
+
+    // Upload button
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/jpeg, image/png, image/heic, image/heif";
+    fileInput.id = prefix + "_photo" + globalIndex;
+    fileInput.className = "no-print";
+    fileInput.style.display = "none";
+    fileInput.multiple = true;
+    fileInput.setAttribute("data-photokey", photoKey);
+
+    const uploadBtn = document.createElement("button");
+    uploadBtn.type = "button";
+    uploadBtn.className = "action-button photo-button no-print";
+    uploadBtn.textContent = "Upload Picture (0/3)";
+    uploadBtn.onclick = function() { fileInput.click(); };
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.id = prefix + "_delete" + globalIndex;
+    deleteBtn.className = "photo-delete no-print";
+    deleteBtn.textContent = "X Delete";
+    deleteBtn.onclick = function() { deletePhoto(prefix, globalIndex); };
+
+    const thumbWrap = document.createElement("div");
+    thumbWrap.id = prefix + "_thumbWrap" + globalIndex;
+    thumbWrap.className = "card-thumbs";
+
+    // Left column: buttons
+    const btnCol = document.createElement("div");
+    btnCol.style.display = "flex";
+    btnCol.style.flexDirection = "column";
+    btnCol.style.gap = "6px";
+    btnCol.style.alignItems = "flex-start";
+    btnCol.appendChild(fileInput);
+    btnCol.appendChild(uploadBtn);
+    btnCol.appendChild(deleteBtn);
+
+    photoRow.appendChild(btnCol);
+    photoRow.appendChild(thumbWrap);
+    body.appendChild(photoRow);
+
+    card.appendChild(strip);
+    card.appendChild(body);
+
+    return card;
   }
 
   function buildSection(section, startIndex, prefix) {
@@ -1327,8 +1421,6 @@
     const sticky = el("div", { className: "section-sticky" }, [
       titleContainer,
       el("hr", { className: "divider-2" }),
-      buildRatingHeaderRow(),
-      el("hr", { className: "divider-1" }),
     ]);
 
     sectionEl.appendChild(sticky);
@@ -1376,10 +1468,22 @@
   // LOAD SAVED DATA
   // ================================================================
   function loadSavedDataForType(prefix) {
-    // Restore radio selections
-    document.querySelectorAll(".save-radio[data-prefix='" + prefix + "']").forEach(function(radio) {
-      const savedValue = localStorage.getItem(radio.name);
-      if (savedValue && radio.value === savedValue) radio.checked = true;
+    // Restore rating button selections
+    document.querySelectorAll(".rating-btn[data-prefix='" + prefix + "']").forEach(function(btn) {
+      const name  = btn.getAttribute("data-name");
+      const val   = btn.getAttribute("data-value");
+      const saved = localStorage.getItem(name);
+      if (saved && val === saved) {
+        btn.classList.add("selected");
+        const index = btn.getAttribute("data-index");
+        const strip = document.getElementById(prefix + "_strip" + index);
+        if (strip) strip.className = "card-strip strip-" + saved;
+        const card = document.getElementById(prefix + "_card" + index);
+        if (card) {
+          if (saved === "na") card.classList.add("rated-na");
+          else card.classList.remove("rated-na");
+        }
+      }
     });
 
     // Restore textarea notes
@@ -1393,7 +1497,7 @@
       }
     });
 
-    // Restore custom "Other" label text and height
+    // Restore custom "Other" label text
     document.querySelectorAll(".save-label").forEach(function(input) {
       if (!input.id || !input.id.startsWith(prefix + "_label")) return;
       const savedLabel = localStorage.getItem(input.id);
@@ -1416,11 +1520,6 @@
         const img = document.createElement("img");
         img.src = src;
         img.className = "photo-thumb";
-        img.style.width = "100px";
-        img.style.height = "100px";
-        img.style.objectFit = "cover";
-        img.style.flex = "0 0 100px";
-        img.style.cursor = "pointer";
         img.onclick = (function(pi) {
           return function() { openPhotoModal(prefix, index, pi); };
         })(photoIndex);
@@ -1435,13 +1534,6 @@
   // ================================================================
   // SAVE LISTENERS
   // ================================================================
-  document.addEventListener("change", function(e) {
-    if (e.target.classList.contains("save-radio")) {
-      localStorage.setItem(e.target.name, e.target.value);
-      updateAllProgress();
-    }
-  });
-
   document.addEventListener("input", function(e) {
     if (e.target.classList.contains("save-text") && e.target.id) {
       localStorage.setItem(e.target.id, e.target.value);
@@ -1461,9 +1553,8 @@
 
     let completed = 0;
     for (let i = startIndex; i < startIndex + itemCount; i++) {
-      const name   = prefix + "_radio" + i;
-      const radios = document.querySelectorAll('input[name="' + name + '"]');
-      if (Array.from(radios).some(function(r) { return r.checked; })) completed++;
+      const name = prefix + "_radio" + i;
+      if (localStorage.getItem(name)) completed++;
     }
 
     const percentage  = itemCount > 0 ? Math.round((completed / itemCount) * 100) : 0;
@@ -1489,9 +1580,8 @@
     sections.forEach(function(sec) {
       sec.items.forEach(function() {
         total++;
-        const name   = type + "_radio" + globalIndex;
-        const radios = document.querySelectorAll('input[name="' + name + '"]');
-        if (Array.from(radios).some(function(r) { return r.checked; })) completed++;
+        const name = type + "_radio" + globalIndex;
+        if (localStorage.getItem(name)) completed++;
         globalIndex++;
       });
     });
@@ -1570,6 +1660,13 @@
   });
 
   function executeSwitchType() {
+    if (_pendingEditCustom) {
+      _pendingEditCustom = false;
+      document.querySelector("#switchTypeModalBox p").textContent =
+        "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
+      openCustomPickerModal(true);
+      return;
+    }
     const newType = _pendingSwitchType;
     _pendingSwitchType = null;
     if (newType === null) return;
@@ -1701,6 +1798,8 @@
   // ================================================================
   // EDIT CUSTOM SECTIONS BUTTON
   // ================================================================
+  let _pendingEditCustom = false;
+
   document.getElementById("editCustomSectionsBtn").addEventListener("click", function() {
     let hasData = false;
     for (let i = 0; i < localStorage.length; i++) {
@@ -1723,20 +1822,6 @@
       openCustomPickerModal(true);
     }
   });
-
-  let _pendingEditCustom = false;
-
-  const _origExecuteSwitchType = executeSwitchType;
-  window.executeSwitchType = function() {
-    if (_pendingEditCustom) {
-      _pendingEditCustom = false;
-      document.querySelector("#switchTypeModalBox p").textContent =
-        "Switching property type may cause some of your current inspection data to be lost. Are you sure you want to switch?";
-      openCustomPickerModal(true);
-      return;
-    }
-    _origExecuteSwitchType();
-  };
 
   const cancelBtn = document.querySelector("#switchTypeModalBox .btn-go-back");
   cancelBtn.addEventListener("click", function() {
@@ -1814,7 +1899,13 @@
   function executeClearAll() {
     const currentType = localStorage.getItem("propertyType") || "";
 
-    document.querySelectorAll(".save-radio").forEach(function(r) { r.checked = false; });
+    // Reset rating buttons
+    document.querySelectorAll(".rating-btn").forEach(function(btn) { btn.classList.remove("selected"); });
+    // Reset strips
+    document.querySelectorAll(".card-strip").forEach(function(s) { s.className = "card-strip"; });
+    // Reset card rated-na class
+    document.querySelectorAll(".item-card").forEach(function(c) { c.classList.remove("rated-na"); });
+
     document.querySelectorAll(".save-text").forEach(function(area) { area.value = ""; area.style.height = ""; });
     document.querySelectorAll(".save-label").forEach(function(input) { input.value = ""; input.style.height = ""; });
 
@@ -1901,14 +1992,10 @@
     let globalIndex = 0;
     for (let s = 0; s < sections.length; s++) {
       for (let i = 0; i < sections[s].items.length; i++) {
-        const name   = type + "_radio" + globalIndex;
-        const radios = document.querySelectorAll('input[name="' + name + '"]');
-        if (!Array.from(radios).some(function(r) { return r.checked; })) {
-          const firstRadio = document.getElementById(type + "_good" + globalIndex);
-          if (firstRadio) {
-            firstRadio.closest(".grid-container-no-color, .grid-container-yes-color")
-              .scrollIntoView({ behavior: "smooth", block: "center" });
-          }
+        const name = type + "_radio" + globalIndex;
+        if (!localStorage.getItem(name)) {
+          const card = document.getElementById(type + "_card" + globalIndex);
+          if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
           return;
         }
         globalIndex++;
@@ -1954,6 +2041,45 @@
 
     window.print();
   }
+
+  // ── Tag empty notes before printing, untag after ──
+  // Also hide cards with no rating AND no comment
+  window.addEventListener("beforeprint", function() {
+    document.querySelectorAll(".card-notes").forEach(function(ta) {
+      if (!ta.value.trim()) ta.classList.add("print-hide-notes");
+    });
+    document.querySelectorAll(".item-card").forEach(function(card) {
+      const notes = card.querySelector(".card-notes");
+      const hasComment = notes && notes.value.trim().length > 0;
+      const hasPhoto = card.querySelector(".card-thumbs img") !== null;
+      const hasRating = card.querySelector(".rating-btn.selected") !== null;
+      const isNA = card.classList.contains("rated-na");
+      const hasContent = hasComment || hasPhoto;
+
+      // N/A with a comment or photo — show it (temporarily remove rated-na)
+      if (isNA && hasContent) {
+        card.classList.remove("rated-na");
+        card.classList.add("print-show-na-comment");
+        return;
+      }
+      // No rating, no comment, no photo — hide
+      if (!hasRating && !hasContent) card.classList.add("print-hide-unrated");
+    });
+  });
+
+  window.addEventListener("afterprint", function() {
+    document.querySelectorAll(".card-notes").forEach(function(ta) {
+      ta.classList.remove("print-hide-notes");
+    });
+    document.querySelectorAll(".item-card").forEach(function(card) {
+      card.classList.remove("print-hide-unrated");
+      // Restore rated-na for cards that were temporarily shown
+      if (card.classList.contains("print-show-na-comment")) {
+        card.classList.remove("print-show-na-comment");
+        card.classList.add("rated-na");
+      }
+    });
+  });
 </script>
 
 <!-- ================================================================ -->
@@ -1963,10 +2089,6 @@
   const progressWrap = document.getElementById("photoProgressWrapper");
   const progressBar  = document.getElementById("photoProgressBar");
 
-  // ── Detect iOS (iPhone / iPad) ──────────────────────────────────
-  // On iOS, Safari can decode HEIC natively via canvas, so we skip
-  // heic2any entirely. Using heic2any inside Mobile Safari causes it
-  // to hang or silently drop photos.
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                 (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
@@ -1994,8 +2116,13 @@
     const photoKey    = prefix + "_photo" + index;
     const saved       = JSON.parse(localStorage.getItem(photoKey) || "[]");
     const fileInputId = prefix + "_photo" + index;
-    const button      = document.querySelector("button[onclick*=\"'" + fileInputId + "'\"].photo-button");
-    const count       = (countOverride !== undefined) ? countOverride : saved.length;
+    const button      = document.querySelector("button[onclick*=\"'" + fileInputId + "'\"].photo-button") ||
+                        (function() {
+                          const fi = document.getElementById(fileInputId);
+                          if (!fi) return null;
+                          return fi.nextElementSibling;
+                        })();
+    const count = (countOverride !== undefined) ? countOverride : saved.length;
 
     if (button) {
       if (count === 0) {
@@ -2011,40 +2138,28 @@
     }
   }
 
-  // ── Process a single File object into a compressed base64 JPEG ──
-  // Returns a Promise that resolves to a base64 data URL string,
-  // or resolves to null if the file cannot be processed.
   function processImageFile(file) {
     return new Promise(function(resolve) {
-
-      // ── HEIC/HEIF handling ──────────────────────────────────────
       const isHeic = file.type === "image/heic" ||
                      file.type === "image/heif"  ||
                      file.name.toLowerCase().endsWith(".heic") ||
                      file.name.toLowerCase().endsWith(".heif");
 
       if (isHeic && !isIOS) {
-        // Desktop browser: use heic2any to convert first, then compress
         heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 })
           .then(function(convertedBlob) {
             compressBlob(new File([convertedBlob], "converted.jpg", { type: "image/jpeg" }), resolve);
           })
           .catch(function() {
-            // heic2any failed on desktop — try passing it straight to
-            // the canvas anyway (unlikely to work but worth a shot)
             compressBlob(file, resolve);
           });
         return;
       }
 
-      // ── All other formats (JPEG, PNG, HEIF on iOS, etc.) ────────
-      // iOS Safari can decode HEIC natively via FileReader + canvas,
-      // so we skip heic2any entirely and let the browser handle it.
       compressBlob(file, resolve);
     });
   }
 
-  // ── Draw a File/Blob onto a canvas and return a compressed JPEG ──
   function compressBlob(file, resolve) {
     const reader = new FileReader();
     reader.onload = function(event) {
@@ -2065,17 +2180,13 @@
         canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
         resolve(canvas.toDataURL("image/jpeg", 0.8));
       };
-      img.onerror = function() {
-        // Canvas could not decode the image — skip it gracefully
-        resolve(null);
-      };
+      img.onerror = function() { resolve(null); };
       img.src = event.target.result;
     };
     reader.onerror = function() { resolve(null); };
     reader.readAsDataURL(file);
   }
 
-  // ── File input change handler ────────────────────────────────────
   document.addEventListener("change", async function(e) {
     if (e.target.type !== "file" || !e.target.id.includes("_photo")) return;
 
@@ -2100,26 +2211,16 @@
 
     for (let file of files) {
       const compressed = await processImageFile(file);
-
-      if (!compressed) {
-        // Processing failed for this file — skip silently
-        continue;
-      }
+      if (!compressed) continue;
 
       existingPhotos.push(compressed);
       try {
         localStorage.setItem(photoKey, JSON.stringify(existingPhotos));
-      } catch (storageErr) {
-      }
+      } catch (storageErr) {}
 
       const imgEl = document.createElement("img");
-      imgEl.src       = compressed;
+      imgEl.src = compressed;
       imgEl.className = "photo-thumb";
-      imgEl.style.width      = "100px";
-      imgEl.style.height     = "100px";
-      imgEl.style.objectFit  = "cover";
-      imgEl.style.flex       = "0 0 100px";
-      imgEl.style.cursor     = "pointer";
       const photoIndex = existingPhotos.length - 1;
       imgEl.onclick = (function(pi) {
         return function() { openPhotoModal(prefix, index, pi); };
@@ -2130,7 +2231,6 @@
       if (deleteBtn) deleteBtn.style.display = "inline-block";
 
       updatePhotoButton(prefix, index, existingPhotos.length);
-
     }
 
     finishProgress();
@@ -2143,12 +2243,11 @@
     const fileInput = document.getElementById(prefix + "_photo" + index);
     const deleteBtn = document.getElementById(prefix + "_delete" + index);
 
-    if (wrap)      wrap.innerHTML   = "";
-    if (fileInput) fileInput.value  = "";
+    if (wrap)      wrap.innerHTML  = "";
+    if (fileInput) fileInput.value = "";
     localStorage.removeItem(photoKey);
     if (deleteBtn) deleteBtn.style.display = "none";
     updatePhotoButton(prefix, index, 0);
-
   }
 </script>
 
@@ -2198,7 +2297,7 @@
   document.addEventListener("keydown", function(e) {
     const modal = document.getElementById("photoModal");
     if (modal.style.display === "block") {
-      if (e.key === "Escape")       closePhotoModal();
+      if (e.key === "Escape")        closePhotoModal();
       else if (e.key === "ArrowLeft")  changePhoto(-1);
       else if (e.key === "ArrowRight") changePhoto(1);
     }
@@ -2227,18 +2326,18 @@
 </div>
 
 <script>
-  // ================================================================
-  // UPDATE NOTIFICATION
-  // ================================================================
-  const CURRENT_VERSION = "1.12";
+  const CURRENT_VERSION = "1.13";
 
   document.getElementById("footerVersion").textContent = CURRENT_VERSION;
 
   const VERSION_NOTES = {
     [CURRENT_VERSION]: `<strong>v${CURRENT_VERSION}</strong><br><br>
-    • N/A inspection items are now hidden when printing/saving to PDF<br>
-    • New update notifications so you know what's changed<br>
-    • Changed the span of all modal notification pop ups so that don't over flow on mobile<br>
+    • Inspection items are now displayed as cards for easier reading<br>
+    • Rating options are now colorful text buttons (Good / Fair / Poor / N/A)<br>
+    • A colored stripe on the left of each card shows the selected rating at a glance<br>
+    • Notes text box now spans the full width of each card<br>
+    • Upload Picture button is now left-aligned on each card<br>
+    • All text inputs now have rounded edges<br>
     `
   };
 
@@ -2262,9 +2361,6 @@
   });
 </script>
 
-<!-- ================================================================ -->
-<!-- SERVICE WORKER -->
-<!-- ================================================================ -->
 <script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
